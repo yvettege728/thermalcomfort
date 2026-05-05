@@ -1,6 +1,6 @@
-# Gund Thermal Commons · Model Methodology
+# Model Methodology
 
-**VIS 2478 · Project 3 · Wightman / Ge / Lock / [Yvette]**
+**VIS 2478 · Project 3 · Wightman / Ge / Lock **
 
 A complete reference of every formula, parameter, and judgment rule used in the model — written so any number on the dashboard can be traced to its source in under a minute.
 
@@ -188,68 +188,11 @@ ROI(S03) = (130,000 h × $51.14) ÷ $140,000
 
 **The strategic framing:** "S02 is the proposal that maximizes both financial efficiency AND political coalition. S03 achieves higher comfort impact but at the cost of institutional friction and reduced ROI per dollar."
 
----
-
-## 3 · The judgment rules (where we made calls)
-
-These are not formulas — they are **designed parameters** that encode our position. In defense, do not pretend they are derived; defend them as choices.
-
-### 3.1 · The tuition-hour anchor as a numerator
-
-**The choice:** Translate hours of discomfort into tuition dollars rather than energy savings.
-
-**Why this is defensible:**
-- Steam savings (~$3k/yr) is real but trivial. Using it as the numerator means the project costs more than it saves and would not get approved.
-- Tuition value recovered names what is **actually being lost** in the current state — paid-for studio time that is unusable due to thermal discomfort.
-- It reframes thermal comfort from an operations expense into a **tuition fulfillment** issue, which is the language Dean-level decision makers use.
-
-**Why it is attackable:**
-- Tuition is paid regardless. Critics will say "no money is actually recovered — students still pay $90k whether or not they're cold."
-- **Counter:** the framing is institutional value, not cash flow. A school that delivers paid-for studio time at 88% utilization vs. 100% has a real fulfillment gap, even if no dollars move.
-
-### 3.2 · The −2 to +2 impact scale and 0 / 0.5 / 1 care weights
-
-**The choice:** Discretize stakeholder politics into a 5-step impact scale × 3-step care weights.
-
-**Why this is defensible:**
-- The scale is meant to encode **directional and magnitude judgments**, not measure them. It makes the political reasoning **legible and contestable** rather than hidden.
-- Three-step care weights (low / mid / high) prevent false precision — we do not claim to know that Faculty cares about Comfort 0.73 vs 0.79.
-
-**Why it is attackable:**
-- The values were assigned by the team based on stakeholder interviews and inference, not by surveying stakeholders directly. Different teams would assign different values.
-- **Counter:** the model's value is in making the assignments **visible and editable** — the heatmap is a discussion tool, not an oracle. A reviewer who disagrees with a cell can change it and rerun the coalition total.
-
-### 3.3 · The cumulative phase structure (P1 ⊂ P2 ⊂ P3)
-
-**The choice:** Phases are cumulative, not alternative — P2 includes everything in P1, P3 includes everything in P1 and P2.
-
-**Why this is defensible:**
-- Each phase **builds the conditions** for the next. P3 (Thermal Council) cannot function without the data infrastructure from P1 and the participation norms from P2.
-- A non-cumulative framing would make P3 "Governing" land in an environment with no sensing or voicing — which is the failure mode of conventional governance interventions.
-
-**Why it is attackable:**
-- A reviewer might ask: "Could P3 work *without* P2? Direct governance without crowd voting?" — i.e. is P2 essential or just a sequencing convenience?
-- **Honest answer:** P2 is essential because the council needs **legitimacy of representation** that only comes from visible participation data. Without P2, the council is just another committee.
-
-### 3.4 · "Comfort hours" as the unit, not "thermal complaints resolved"
-
-**The choice:** Aggregate the model's output as comfort hours, not as ticket count.
-
-**Why this is defensible:**
-- Comfort hours is a **continuous, integrable** measure. It captures both how many people are affected and how long the discomfort lasts.
-- Ticket count rewards **complaint generation**, which is exactly the dynamic we want to displace.
-
-**Why it is attackable:**
-- Comfort hours is itself a constructed unit; we don't actually measure each occupant's comfort each hour.
-- **Counter:** It is a **modeled** quantity, computed from voting data × time × occupancy. We claim the model, not the measurement.
-
----
-
-## 4 · Behind the numbers: Data sources and epistemic limits
+## 3 · Behind the numbers: Data sources and epistemic limits
 
 This section does two things: (1) reveals where every input comes from, and (2) is honest about what the model does and does not claim. These go together — a number's credibility depends on its source.
 
-### 4.1 · The data sources (where numbers come from)
+### 3.1 · The data sources (where numbers come from)
 
 | Input | Source | Status | Confidence |
 |---|---|---|---|
@@ -272,7 +215,7 @@ This section does two things: (1) reveals where every input comes from, and (2) 
 - **Medium confidence (yellow zone):** Stakeholder interviews; effect ranges from literature; closure efficiency
 - **Low confidence (red zone):** Coalition scores; implementation costs; occupant count
 
-### 4.2 · What the model claims
+### 3.2 · What the model claims
 
 The model makes four main **positive claims**:
 
@@ -288,7 +231,7 @@ The model makes four main **positive claims**:
 
 4. **Phases are cumulative and necessary** — P3 (Thermal Council) cannot function without the data and participation infrastructure from P1 and P2.
 
-### 4.3 · What the model does NOT claim
+### 3.3 · What the model does NOT claim
 
 1. **Exact effect sizes.** All metric deltas are ranges, not point estimates. A slider = 100% in Phase 2 produces M03 improvement in the −200 to −290 second band, not a single value.
 
@@ -299,74 +242,3 @@ The model makes four main **positive claims**:
 4. **That the model is predictive in a frequentist sense.** It is a **structured projection** under stated assumptions. It is not a forecast with 95% confidence intervals. It answers "if we deploy S02 with 100% fidelity, what is a plausible outcome?" not "what will happen in 2027?"
 
 5. **That steam savings is the primary benefit.** The argument is comfort, with energy as a side benefit. Using steam savings as the numerator produces ~0.04:1 ROI, which would not justify the project.
-
-### 4.4 · Known weaknesses (own them in defense)
-
-**Weakness 1: M05 trust drifts negative in P2 and P3**
-
-The effect matrix shows M05 deltas of −1 to −2 (Phase 2) and −3 to −8 (Phase 3). This means "expressed institutional trust decreases."
-
-**Why this is counterintuitive:**
-A reviewer's first reaction: "You're lowering people's trust in the institution? That's bad!"
-
-**Why this is actually defensible:**
-The model assumes that **participation raises expectations**. Once students and staff have a voice in the Thermal Council, they become more critical of the institution's overall responsiveness — not just thermal comfort, but resource allocation, transparency, speed of decision-making. Expressed trust drops because **critical engagement rises**. This is consistent with theories of institutional legitimacy: legitimacy requires both performance *and* critical accountability. The dashboard and council create conditions for the latter, which appears (in surveys) as **lower expressed trust but higher participatory legitimacy**.
-
-**How to defend this in Q&A:**
-"M05 captures expressed trust via survey items. When we give people voice in governance, their expectations rise faster than institutions can meet them. So expressed trust can dip while participatory legitimacy increases. This is a sign the system is working — it has enabled people to be more critically engaged with the institution."
-
-**Weakness 2: Coalition scores are inferred, not surveyed**
-
-The 8 × 3 score matrix comes from three interviews, not a formal stakeholder survey. Different teams would produce different matrices.
-
-**How to defend this:**
-"The coalition matrix is not meant to be accurate; it's meant to be **legible and contestable**. Its value is showing that S02 has no veto-strength opposition. If you disagree with a cell — say, you think Facilities is −2 instead of 0 — you can change it and recompute the coalition total. The matrix is a discussion tool, not an oracle. It shows the *logic* of political viability, not a fact."
-
-**Weakness 3: Implementation costs are estimated, not bid**
-
-$80k for S02 and $140k for S03 are bottom-up estimates, not contractor quotes. Real procurement could move these numbers.
-
-**How to defend this:**
-"The costs are defensible as order-of-magnitude estimates: QR hardware (~$15k), dashboard hosting (~$5k/yr × 3 yr), council facilitation (~$20k/yr). S03 adds BAS integration (~$30k) and cross-school coordination (~$30k/yr). The important point: even at 2× cost ($160k for S02), the 64:1 ROI drops to 32:1, still very strong. The model is robust to cost uncertainty."
-
-**Weakness 4: Occupant count (500) is rough and unvalidated**
-
-The monthly hours calculation (500 × 7 h/wk × 4.3 wk/mo × 56%) depends on a ballpark occupant estimate. Gund could have 350 or 700 regular occupants depending on how you count.
-
-**How to defend this:**
-"The 500 is an order-of-magnitude working number from Securitas observations and class schedules. It needs institutional confirmation. Importantly, ROI scales linearly with occupant count — if actual occupancy is 700, the hours and ROI both scale up proportionally. This is not a fragile assumption."
-
-**Weakness 5: The 56% closure efficiency is modeled, not measured from Gund**
-
-We don't have real data on how many Gund occupants would participate in the QR vote or how many votes would trigger actual facilities response.
-
-**How to defend this:**
-See the companion document `56_percent_anchor.md`, which anchors 56% in four streams of behavioral intervention literature. The number is conservative; actual closure could be 65–70% with strong institutional commitment. Even at 40%, ROI stays >30:1.
-
-### 4.5 · Epistemic posture (what to say when cornered)
-
-If a reviewer asks: "How confident are you in these numbers?" — here is a tier-based answer:
-
-> "High confidence (80–90%): The baselines from our P2 survey and institutional data sources. We directly measured the perception gap at −4.1°F and found 70% isolation.
->
-> Medium confidence (50–70%): The effect ranges from Phase 1–3. These are literature-anchored but not Gund-tested. They represent plausible deltas based on feedback intervention science and change management, not predictions.
->
-> Low confidence (30–50%): The specific coalition scores and implementation costs. These are team inference and estimates. Their value is in showing the **structure of the argument** — why S02 wins over S01 and S03 — not in their precision.
->
-> What I'm very confident about: If you implement S02 with reasonable fidelity, comfort hours will increase, isolation will decrease, and response time will drop. The specific magnitudes could be off by 20–30%, but the direction and the order are defensible. That's what matters for decision-making."
-
----
-
-## 5 · The defense one-liner
-
-> "The model has four formulas and three judgment rules. The formulas — tuition anchor, metric projection, coalition score, ROI — are mechanical and reproducible. The judgment rules — what we put in the numerator, how we discretize stakeholder politics, why phases are cumulative, and why we measure feedback-loop metrics instead of comfort — are choices we are accountable for. 
->
-> Every number on the dashboard traces back to one of those four formulas applied to one of those three judgment rules. High-confidence inputs come from our P2 survey and institutional data. Medium-confidence inputs come from literature-anchored effect ranges and stakeholder interviews. Low-confidence inputs (coalition scores, costs) are estimates whose value is in showing the **structure of the argument**, not in their precision.
->
-> The key claim: if you deploy S02 (Sensing + Voicing) with reasonable fidelity, the comfort hours recovered will be on the order of $5M at 64:1 ROI, and the political coalition will have no veto-strength opposition. S03 creates more comfort hours but at higher cost, lower ROI, and fatal coalition loss (Facilities opposition). This is why S02 is recommended.
->
-> There is no hidden math."
-
----
-
-*Last updated: defense-prep cycle. Use alongside `about.html` §06 and `shared.js`.*
