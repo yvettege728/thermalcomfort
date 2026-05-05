@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DECISION · Gund Thermal Commons</title>
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="dot"></span> Gund Thermal Commons</div>
+  <div class="center" id="mode-switch-mount"></div>
+  <div class="right">
+    <a href="about.html" class="about-link">About</a>
+  </div>
+</header>
+
+<div class="mode-banner decision">
+  <div>Viewing as · DECISION-MAKER · Strategic View</div>
+  <div class="right-meta">Period · Annual · 2025–26</div>
+</div>
+
+<main>
+
+  <!-- ============================================================
+       R2 HERO — 6-dimension strategic gauge
+       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">02</div>
+      <div class="title">Six dimensions · current state</div>
+      <div class="desc">Six lenses Harvard leadership already uses to evaluate any building investment. Numbers are baseline (no intervention). Sources cited per dimension.</div>
+    </div>
+
+    <div class="dim-gauge" id="dim-gauge">
+      <!-- rendered by JS -->
+    </div>
+  </section>
+
+  <!-- ============================================================
+       R3 DIAGNOSIS — coalition heatmap
+       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">03</div>
+      <div class="title">Stakeholder political payoff per scenario</div>
+      <div class="desc">Each cell = (stakeholder's care-weight on each dimension) × (scenario's impact on that dimension), summed and normalized to −3…+3. Computed, not asserted — see About §6 for the formula.</div>
+    </div>
+
+    <div class="card surface-0" style="overflow-x: auto;">
+      <table class="coalition-table" id="coalition-table">
+        <thead>
+          <tr>
+            <th class="left">Stakeholder</th>
+            <th>S01 Setpoint Policy</th>
+            <th class="featured">S02 Feedback Viz ★</th>
+            <th>S03 Participatory</th>
+          </tr>
+        </thead>
+        <tbody id="coalition-body">
+          <!-- rendered by JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size: 13px; color: var(--text-mid); margin-top: 12px;">
+      S02 wins on coalition arithmetic: no cell darker than 0, three stakeholders at +3, leaves Facilities at neutral. S03's higher ceiling is blocked by Facilities (−2 = veto risk).
+    </p>
+  </section>
+
+  <!-- ============================================================
+       R4 ACTION / WHAT IF — scenarios + sliders
+       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">04</div>
+      <div class="title">Test interventions</div>
+      <div class="desc">Three interventions stack into three phases. Drag the mix below to test partial deployments and watch the five outcome metrics shift.</div>
+    </div>
+
+    <div class="scenarios">
+      <div class="scenario-card">
+        <div class="num">S 01</div>
+        <div class="name">Setpoint Policy</div>
+        <div class="arch">Incremental · Top-down</div>
+        <div class="what">
+          University Campus Services tightens annual setpoint policy. No new sensors, no new interfaces.
+          <em>The system stays the same; the rules tighten.</em>
+        </div>
+        <div class="grid-meta">
+          <div class="gm"><div class="lbl">Disruption</div><div class="v">Low</div></div>
+          <div class="gm"><div class="lbl">Investment</div><div class="v">Minimal</div></div>
+          <div class="gm"><div class="lbl">Comfort</div><div class="v" style="color: var(--op-alert)">−2</div></div>
+          <div class="gm"><div class="lbl">Coalition</div><div class="v" style="color: var(--op-alert)">−4</div></div>
+        </div>
+      </div>
+
+      <div class="scenario-card featured">
+        <div class="featured-tag">↳ Recommended</div>
+        <div class="num">S 02</div>
+        <div class="name">Feedback Visualization</div>
+        <div class="arch">Mixed · Information-led</div>
+        <div class="what">
+          Public temperature stations + QR-based comfort polling + a building-wide thermal dashboard everyone can read.
+          <em>The thermostat becomes a piece of public infrastructure.</em>
+        </div>
+        <div class="grid-meta">
+          <div class="gm"><div class="lbl">Disruption</div><div class="v">Medium</div></div>
+          <div class="gm"><div class="lbl">Investment</div><div class="v">Modest</div></div>
+          <div class="gm"><div class="lbl">Comfort</div><div class="v" style="color: #4FBB8E">+2</div></div>
+          <div class="gm"><div class="lbl">Coalition</div><div class="v" style="color: var(--brand-orange)">+12</div></div>
+        </div>
+      </div>
+
+      <div class="scenario-card">
+        <div class="num">S 03</div>
+        <div class="name">Participatory Governance</div>
+        <div class="arch">Transformational · Bottom-up</div>
+        <div class="what">
+          Standing Thermal Council with student / faculty / facilities reps. Setpoints set deliberatively, tested via RCT.
+          <em>The thermostat becomes a venue for collective decision-making.</em>
+        </div>
+        <div class="grid-meta">
+          <div class="gm"><div class="lbl">Disruption</div><div class="v">High</div></div>
+          <div class="gm"><div class="lbl">Investment</div><div class="v">Coordination</div></div>
+          <div class="gm"><div class="lbl">Comfort</div><div class="v" style="color: #4FBB8E">+2</div></div>
+          <div class="gm"><div class="lbl">Coalition</div><div class="v" style="color: #C0DD97">+7</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="whatif">
+      <div class="controls-card">
+        <h3>Intervention mix</h3>
+        <div class="sub">
+          Three interventions, deployed cumulatively into three phases.
+          <strong>Phase 1</strong> = Sensing only · <strong>Phase 2</strong> = Sensing + Voicing · <strong>Phase 3</strong> = Sensing + Voicing + Governing.
+          Drag any slider 0–100% to test partial deployments.
+        </div>
+
+        <div class="phase">
+          <div class="row">
+            <div class="name"><span class="n">i 01</span>Sensing</div>
+            <div class="pct"><span id="p1-val">100</span>%</div>
+          </div>
+          <div class="desc">Public temperature stations on every tray. Data exists where people can see it. <em>Drives Phase 1.</em></div>
+          <input type="range" min="0" max="100" value="100" class="slider" id="p1">
+        </div>
+
+        <div class="phase">
+          <div class="row">
+            <div class="name"><span class="n">i 02</span>Voicing</div>
+            <div class="pct"><span id="p2-val">100</span>%</div>
+          </div>
+          <div class="desc">QR-coded 1-tap comfort vote + live aggregate readout + public dashboard. Friction drops, plurality becomes visible. <em>Adds onto Sensing → Phase 2.</em></div>
+          <input type="range" min="0" max="100" value="100" class="slider" id="p2">
+        </div>
+
+        <div class="phase">
+          <div class="row">
+            <div class="name"><span class="n">i 03</span>Governing</div>
+            <div class="pct"><span id="p3-val">0</span>%</div>
+          </div>
+          <div class="desc">Standing Thermal Council with public deliberation; setpoints set via stepped-wedge RCT. <em>Adds onto Sensing + Voicing → Phase 3.</em></div>
+          <input type="range" min="0" max="100" value="0" class="slider" id="p3">
+        </div>
+
+        <div class="presets">
+          <button class="preset" data-p1="0" data-p2="0" data-p3="0">Status Quo</button>
+          <button class="preset" data-p1="100" data-p2="0" data-p3="0">Phase 1 only</button>
+          <button class="preset is-active" data-p1="100" data-p2="100" data-p3="0">Phase 2 (S 02 ★)</button>
+          <button class="preset" data-p1="100" data-p2="100" data-p3="100">Phase 3 (S 03)</button>
+        </div>
+      </div>
+
+      <div class="predictions-card">
+        <h3>Projected metrics</h3>
+        <div class="sub">Five outcome metrics (M01–M05) that move when you drag the interventions. Each shows a <em>range</em> (low/high estimate) — projections are arguments, not predictions. Source equations in About §6.</div>
+
+        <div class="metric-row" data-metric="M1">
+          <div class="name"><span class="code">M01</span>Perception–Ambient Gap<span class="sub">how off felt vs ambient</span></div>
+          <div class="now-val"><div class="lbl">Now</div><div class="v">−4.1°F</div></div>
+          <div class="range-bar" data-axis-min="-6" data-axis-max="0" data-baseline="-4.12">
+            <div class="range-fill"></div>
+            <div class="range-baseline" style="left:31.3%"></div>
+            <div class="range-current"></div>
+          </div>
+          <div class="future"><div class="lbl">Projected</div><div class="v" id="m1-num">—</div><div class="range-text" id="m1-range">—</div></div>
+        </div>
+
+        <div class="metric-row" data-metric="M2">
+          <div class="name"><span class="code">M02</span>Isolation Index<span class="sub">% who think they're the only one</span></div>
+          <div class="now-val"><div class="lbl">Now</div><div class="v">70%</div></div>
+          <div class="range-bar" data-axis-min="0" data-axis-max="100" data-baseline="70">
+            <div class="range-fill"></div>
+            <div class="range-baseline" style="left:70%"></div>
+            <div class="range-current"></div>
+          </div>
+          <div class="future"><div class="lbl">Projected</div><div class="v" id="m2-num">—</div><div class="range-text" id="m2-range">—</div></div>
+        </div>
+
+        <div class="metric-row" data-metric="M3">
+          <div class="name"><span class="code">M03</span>Friction-to-Voice<span class="sub">time to submit one signal</span></div>
+          <div class="now-val"><div class="lbl">Now</div><div class="v">5 min</div></div>
+          <div class="range-bar" data-axis-min="0" data-axis-max="300" data-baseline="300">
+            <div class="range-fill"></div>
+            <div class="range-baseline" style="left:100%"></div>
+            <div class="range-current"></div>
+          </div>
+          <div class="future"><div class="lbl">Projected</div><div class="v" id="m3-num">—</div><div class="range-text" id="m3-range">—</div></div>
+        </div>
+
+        <div class="metric-row" data-metric="M4">
+          <div class="name"><span class="code">M04</span>Loop Closure Time<span class="sub">days from signal to action</span></div>
+          <div class="now-val"><div class="lbl">Now</div><div class="v">18 d</div></div>
+          <div class="range-bar" data-axis-min="0" data-axis-max="20" data-baseline="18">
+            <div class="range-fill"></div>
+            <div class="range-baseline" style="left:90%"></div>
+            <div class="range-current"></div>
+          </div>
+          <div class="future"><div class="lbl">Projected</div><div class="v" id="m4-num">—</div><div class="range-text" id="m4-range">—</div></div>
+        </div>
+
+        <div class="metric-row" data-metric="M5">
+          <div class="name"><span class="code">M05</span>Steam Index<span class="sub">co-benefit, not the goal</span></div>
+          <div class="now-val"><div class="lbl">Now</div><div class="v">100</div></div>
+          <div class="range-bar" data-axis-min="80" data-axis-max="105" data-baseline="100">
+            <div class="range-fill"></div>
+            <div class="range-baseline" style="left:80%"></div>
+            <div class="range-current"></div>
+          </div>
+          <div class="future"><div class="lbl">Projected</div><div class="v" id="m5-num">—</div><div class="range-text" id="m5-range">—</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       R5 CONSEQUENCE — annual ROI for S02 vs S03 end-state
+       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">05</div>
+      <div class="title">Annual outlook · S 02 (recommended) vs S 03 (full deployment)</div>
+      <div class="desc">What recovered comfort hours look like once Phase 2 holds steady, and what extending into Phase 3 (governing) adds. Tuition opportunity cost as the anchor.</div>
+    </div>
+
+    <div class="consequence">
+      <div class="eyebrow">Annual outlook · S 02 (Phase 2 · recommended)</div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          Comfort hours recovered annually
+          <span class="small">~500 GSD users × ~7 h/wk × ~30 weeks/yr × ~95% loop-closure once Phase 2 stable.</span>
+        </div>
+        <div class="value" id="dec-hours">100,000 h</div>
+      </div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          Tuition value recovered
+          <span class="small">Recovered hours × $51.14/hr (= $90k tuition ÷ 10mo ÷ 22d ÷ 8h).</span>
+        </div>
+        <div class="value" id="dec-value">$5.1M</div>
+      </div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          Implementation cost
+          <span class="small">Sensor hardware + dashboard build + first-year support. One-time + small recurring.</span>
+        </div>
+        <div class="value" id="dec-cost">$80k</div>
+      </div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          ROI ratio
+          <span class="small">Tuition value recovered ÷ implementation cost. The number that travels in Dean-level memos.</span>
+        </div>
+        <div class="value" id="dec-roi">63 : 1</div>
+      </div>
+      <div class="footer-line">
+        This is not an energy proposal. The energy savings are real but small (~$3k/year). The argument is comfort: thousands of paid-for hours are currently unusable, and that's the asset being recovered.
+      </div>
+    </div>
+
+    <div class="consequence" style="margin-top: 24px;">
+      <div class="eyebrow">If we go all the way · S 03 (Phase 3 · governing)</div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          Comfort hours recovered annually
+          <span class="small">Council deliberation + stepped-wedge RCT closes the long-tail signals Phase 2 misses (~30% lift over S02).</span>
+        </div>
+        <div class="value" id="dec-s03-hours">130,000 h</div>
+      </div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          Tuition value recovered
+          <span class="small">Same $51.14/hr anchor.</span>
+        </div>
+        <div class="value" id="dec-s03-value">$6.6M</div>
+      </div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          Implementation cost
+          <span class="small">Phase 2 cost + standing council operating budget + RCT facilitation.</span>
+        </div>
+        <div class="value" id="dec-s03-cost">$140k</div>
+      </div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          ROI ratio
+          <span class="small">Lower than S02, but adds non-monetary returns: institutional capacity, faculty/student governance experience, exportable model.</span>
+        </div>
+        <div class="value" id="dec-s03-roi">47 : 1</div>
+      </div>
+      <div class="footer-line">
+        S 03 is not "S 02 plus more money." It is S 02 plus a permanent capacity for the institution to hear itself. The dollar ROI is lower; the political durability is higher. See About §7 for the M48 end-state across all eight stakeholders.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div>VIS 2478 · Wightman · Ge · Lock</div>
+  <div>Decision view · <a href="decision.html">decision.html</a></div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+// =========================================================================
+// DECISION MODE LOGIC
+// =========================================================================
+
+document.getElementById('mode-switch-mount').innerHTML = renderModeSwitch('decision');
+
+// ---- 6-dim gauge --------------------------------------------------------
+function renderDimGauge() {
+  const html = Object.entries(SAMPLE.decision.dimensions).map(([name, d]) => `
+    <div class="dim-cell">
+      <div class="dim-name">${name}</div>
+      <div class="dim-val">${d.val}</div>
+      <div class="dim-trend ${d.trend}">${d.trendLabel}</div>
+    </div>
+  `).join('');
+  document.getElementById('dim-gauge').innerHTML = html;
+}
+renderDimGauge();
+
+// ---- coalition heatmap --------------------------------------------------
+function renderCoalition() {
+  const sh = SAMPLE.decision.stakeholders;
+  let html = '';
+  for (const s of sh) {
+    html += `<tr>
+      <td class="row-label">${s.name}</td>
+      <td class="${scoreClass(s.scores[0])}">${s.scores[0] > 0 ? '+' : ''}${s.scores[0]}</td>
+      <td class="${scoreClass(s.scores[1])} featured-col">${s.scores[1] > 0 ? '+' : ''}${s.scores[1]}</td>
+      <td class="${scoreClass(s.scores[2])}">${s.scores[2] > 0 ? '+' : ''}${s.scores[2]}</td>
+    </tr>`;
+  }
+  // totals row
+  const totals = [0,0,0];
+  for (const s of sh) for (let i = 0; i < 3; i++) totals[i] += s.scores[i];
+  html += `<tr class="total">
+    <td class="row-label" style="font-weight: 700;">Coalition total</td>
+    <td class="${scoreClass(totals[0])}">${totals[0]}</td>
+    <td class="${scoreClass(totals[1])} featured-col">+${totals[1]}</td>
+    <td class="${scoreClass(totals[2])}">+${totals[2]}</td>
+  </tr>`;
+  document.getElementById('coalition-body').innerHTML = html;
+}
+renderCoalition();
+
+// ---- WHAT IF sliders + metric updates ----------------------------------
+function whatifUpdate() {
+  const p1 = +document.getElementById('p1').value;
+  const p2 = +document.getElementById('p2').value;
+  const p3 = +document.getElementById('p3').value;
+  document.getElementById('p1-val').textContent = p1;
+  document.getElementById('p2-val').textContent = p2;
+  document.getElementById('p3-val').textContent = p3;
+
+  const r = whatifCompute(p1, p2, p3);
+  for (const m of ['M1','M2','M3','M4','M5']) {
+    const [lo, hi, mid] = r[m];
+    const row = document.querySelector(`.metric-row[data-metric="${m}"]`);
+    const min = +row.querySelector('.range-bar').dataset.axisMin;
+    const max = +row.querySelector('.range-bar').dataset.axisMax;
+    const baseline = +row.querySelector('.range-bar').dataset.baseline;
+
+    const fill    = row.querySelector('.range-fill');
+    const current = row.querySelector('.range-current');
+    const numEl   = row.querySelector(`#${m.toLowerCase()}-num`);
+    const rangeEl = row.querySelector(`#${m.toLowerCase()}-range`);
+
+    const loPct  = pctOnAxis(lo, min, max);
+    const hiPct  = pctOnAxis(hi, min, max);
+    const midPct = pctOnAxis(mid, min, max);
+    fill.style.left  = loPct + '%';
+    fill.style.width = (hiPct - loPct) + '%';
+    current.style.left = midPct + '%';
+
+    numEl.textContent   = metricFmt(m, mid);
+    rangeEl.textContent = metricFmt(m, lo) + ' to ' + metricFmt(m, hi);
+  }
+
+  // preset highlight
+  document.querySelectorAll('.preset').forEach(b => {
+    const match = +b.dataset.p1 === p1 && +b.dataset.p2 === p2 && +b.dataset.p3 === p3;
+    b.classList.toggle('is-active', match);
+  });
+}
+['p1','p2','p3'].forEach(id => {
+  document.getElementById(id).addEventListener('input', whatifUpdate);
+});
+document.querySelectorAll('.preset').forEach(b => {
+  b.addEventListener('click', () => {
+    document.getElementById('p1').value = b.dataset.p1;
+    document.getElementById('p2').value = b.dataset.p2;
+    document.getElementById('p3').value = b.dataset.p3;
+    whatifUpdate();
+  });
+});
+whatifUpdate();
+
+// ---- R5 annual consequence ---------------------------------------------
+function renderDecConsequence() {
+  // S02 (recommended)
+  const h = SAMPLE.decision.annual_hours_projected;
+  const value = dollarsFromHours(h);
+  const cost  = SAMPLE.decision.implementation_cost;
+  const roi   = (value / cost).toFixed(0);
+  document.getElementById('dec-hours').textContent = h.toLocaleString() + ' h';
+  document.getElementById('dec-value').textContent = fmtDollars(value);
+  document.getElementById('dec-cost').textContent  = fmtDollars(cost);
+  document.getElementById('dec-roi').textContent   = roi + ' : 1';
+
+  // S03 (full deployment, includes governing)
+  const h3 = SAMPLE.decision.s03_annual_hours_projected;
+  const v3 = dollarsFromHours(h3);
+  const c3 = SAMPLE.decision.s03_implementation_cost;
+  const r3 = (v3 / c3).toFixed(0);
+  document.getElementById('dec-s03-hours').textContent = h3.toLocaleString() + ' h';
+  document.getElementById('dec-s03-value').textContent = fmtDollars(v3);
+  document.getElementById('dec-s03-cost').textContent  = fmtDollars(c3);
+  document.getElementById('dec-s03-roi').textContent   = r3 + ' : 1';
+}
+renderDecConsequence();
+</script>
+
+</body>
+</html>

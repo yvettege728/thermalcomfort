@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About · Gund Thermal Commons</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ------- about page additions ------- */
+.about-body { max-width: 920px; }
+
+.about-body h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.about-body h2 .num {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-low);
+  letter-spacing: 0.10em;
+}
+
+/* ----- play-flow (How votes turn into action) ----- */
+.flow-stage {
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 22px;
+  margin: 18px 0 8px;
+}
+.flow-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.flow-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: var(--brand-orange);
+  color: #000;
+  font-family: var(--font-h);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.flow-play:hover { filter: brightness(1.1); }
+.flow-play .triangle {
+  width: 0; height: 0;
+  border-left: 8px solid #000;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+.flow-progress {
+  flex: 1;
+  font-family: var(--font-h);
+  font-size: 11px;
+  color: var(--text-mid);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+.flow-steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.flow-step {
+  position: relative;
+  padding: 14px 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.4s, border-color 0.4s, transform 0.4s, color 0.4s;
+}
+.flow-step:hover { border-color: var(--text-mid); }
+.flow-step.active {
+  background: var(--brand-orange);
+  border-color: var(--brand-orange);
+  color: #000;
+  transform: translateY(-3px);
+}
+.flow-step .stepnum {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+.flow-step .steplabel {
+  font-family: var(--font-h);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.flow-step .stepmode {
+  margin-top: 4px;
+  font-size: 10px;
+  font-family: var(--font-h);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.flow-detail {
+  background: var(--surface-0);
+  padding: 18px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  min-height: 110px;
+}
+.flow-detail .what {
+  font-family: var(--font-h);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--brand-orange);
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+.flow-detail .desc {
+  font-size: 13px;
+  color: var(--text-hi);
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+.flow-detail .meta {
+  font-family: var(--font-h);
+  font-size: 11px;
+  color: var(--text-mid);
+  letter-spacing: 0.06em;
+}
+
+/* ----- mechanisms diagram ----- */
+.mech-diagram {
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 24px;
+  margin: 18px 0 8px;
+  overflow-x: auto;
+}
+.mech-diagram svg { width: 100%; min-width: 720px; height: auto; display: block; }
+
+/* ----- formula blocks ----- */
+.formula {
+  background: var(--surface-1);
+  border-left: 3px solid var(--brand-orange);
+  padding: 18px 22px;
+  margin: 16px 0;
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-hi);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  overflow-x: auto;
+}
+.formula .var       { color: var(--brand-orange); }
+.formula .op        { color: var(--text-mid); margin: 0 4px; }
+.formula .const     { color: #5CB0FF; }
+.formula .label     {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-h);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+.formula .comment {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-mid);
+  font-style: italic;
+}
+
+.subhead {
+  font-family: var(--font-h);
+  color: var(--brand-orange);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 14px;
+  margin-top: 28px;
+  margin-bottom: 8px;
+}
+
+/* ----- model architecture (re-styled to match project design system) ----- */
+.arch-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 18px 0 8px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.arch-layer {
+  background: var(--surface-1);
+  padding: 18px 22px;
+  position: relative;
+  transition: background 0.2s;
+}
+.arch-layer:hover {
+  background: var(--surface-2);
+}
+.arch-layer.arch-final {
+  background: #0a0a0a;
+  border-top: 1px solid var(--brand-orange);
+}
+.arch-layer.arch-final:hover {
+  background: #111;
+}
+.arch-layer .arch-title {
+  font-family: var(--font-h);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brand-orange);
+  margin-bottom: 8px;
+}
+.arch-layer.arch-final .arch-title {
+  color: var(--brand-orange);
+}
+.arch-layer .arch-content {
+  font-family: var(--font-h);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  line-height: 1.55;
+  color: var(--text-hi);
+  margin-bottom: 6px;
+}
+.arch-layer .arch-source {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-style: italic;
+  color: var(--text-low);
+  line-height: 1.5;
+}
+.arch-layer .arch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 4px;
+}
+.arch-layer .arch-list-row {
+  display: grid;
+  grid-template-columns: 56px 220px 1fr;
+  gap: 14px;
+  align-items: baseline;
+  font-size: 13px;
+  line-height: 1.45;
+  padding: 8px 0;
+  border-top: 1px dashed var(--line);
+}
+.arch-layer .arch-list-row:first-child { border-top: none; padding-top: 4px; }
+.arch-layer .arch-list-row .arch-tag {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--brand-orange);
+}
+.arch-layer .arch-list-row .arch-name {
+  font-family: var(--font-h);
+  font-weight: 500;
+  color: var(--text-hi);
+}
+.arch-layer .arch-list-row .arch-detail {
+  font-size: 11px;
+  font-style: italic;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+.arch-row-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--line);
+}
+.arch-half { padding: 18px 22px; }
+
+@media (max-width: 720px) {
+  .arch-row-pair { grid-template-columns: 1fr; }
+  .arch-layer .arch-list-row { grid-template-columns: 56px 1fr; }
+  .arch-layer .arch-list-row .arch-detail { grid-column: 1 / -1; padding-left: 70px; }
+}
+
+/* ----- TOC navigation ----- */
+.toc-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 0;
+  margin-bottom: 28px;
+}
+.toc-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.toc-item {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 6px 14px 6px 0;
+  margin-right: 14px;
+  border-right: 1px solid var(--line);
+  font-family: var(--font-h);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--text-mid);
+  transition: color 0.2s;
+  text-decoration: none;
+}
+.toc-item:last-child { border-right: none; margin-right: 0; }
+.toc-item:hover { color: var(--brand-orange); }
+.toc-item.is-active { color: var(--text-hi); }
+.toc-item .toc-num {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 10px;
+  color: var(--brand-orange);
+  letter-spacing: 0.10em;
+}
+.toc-item .toc-label {
+  font-weight: 500;
+}
+@media (max-width: 720px) {
+  .toc-list { gap: 4px; }
+  .toc-item { padding: 6px 10px 6px 0; margin-right: 8px; font-size: 10px; }
+  .toc-item .toc-label { display: none; }
+}
+
+/* ----- Theory of Change swimlane (interactive) ----- */
+.swim-wrap {
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 22px;
+  margin: 18px 0 8px;
+}
+.swim-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-h);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--text-mid);
+}
+.swim-legend .lg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.swim-legend .lg-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.swim-legend .lg-ring {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--brand-orange);
+  box-sizing: border-box;
+}
+.swim-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.swim-svg .lane-label-major {
+  font-family: var(--font-h);
+  font-weight: 500;
+  font-size: 12px;
+  fill: var(--text-hi);
+}
+.swim-svg .lane-label-minor {
+  font-family: var(--font-body);
+  font-size: 10px;
+  fill: var(--text-low);
+}
+.swim-svg .timeline-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  fill: var(--text-mid);
+}
+.swim-svg .phase-label {
+  font-family: var(--font-h);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.swim-svg .group-label {
+  font-family: var(--font-h);
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  fill: var(--text-low);
+}
+.swim-svg .lane-line { stroke: var(--line); stroke-width: 0.5; }
+.swim-svg .grid-line { stroke: var(--line); stroke-width: 0.5; stroke-dasharray: 2 4; opacity: 0.5; }
+.swim-svg .group-divider { stroke: var(--line); stroke-width: 0.5; opacity: 0.6; }
+.swim-svg .swim-dot {
+  cursor: pointer;
+  transition: r 0.2s, opacity 0.2s;
+}
+.swim-svg .swim-dot:hover { opacity: 0.85; }
+.swim-svg .swim-dot.is-active {
+  stroke: var(--brand-orange);
+  stroke-width: 2;
+}
+.swim-svg .risk-ring {
+  fill: none;
+  stroke: var(--brand-orange);
+  stroke-width: 1;
+  pointer-events: none;
+}
+.swim-svg .risk-label {
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  fill: var(--brand-orange);
+}
+.swim-svg .does-not-exist {
+  fill: var(--line);
+  opacity: 0.5;
+}
+.swim-svg .does-not-exist-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-style: italic;
+  fill: var(--text-low);
+}
+.swim-detail {
+  margin-top: 18px;
+  padding: 16px 18px;
+  background: var(--surface-2);
+  border-left: 2px solid var(--brand-orange);
+  border-radius: 2px;
+  min-height: 100px;
+  transition: background 0.2s;
+}
+.swim-detail.is-empty {
+  border-left-color: var(--line);
+}
+.swim-detail .sd-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.swim-detail .sd-actor {
+  font-family: var(--font-h);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-hi);
+  letter-spacing: 0.02em;
+}
+.swim-detail .sd-time {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  color: var(--brand-orange);
+}
+.swim-detail .sd-phase {
+  font-family: var(--font-h);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-low);
+}
+.swim-detail .sd-row {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 12px;
+  font-size: 12px;
+  line-height: 1.55;
+  padding: 4px 0;
+}
+.swim-detail .sd-row .sd-key {
+  font-family: var(--font-h);
+  font-size: 10px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--text-low);
+  padding-top: 1px;
+}
+.swim-detail .sd-row .sd-val {
+  color: var(--text-hi);
+}
+.swim-detail .sd-row.is-risk .sd-val {
+  color: var(--brand-orange);
+}
+.swim-detail .sd-empty {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--text-low);
+}
+
+/* ----- references ----- */
+.refs-cluster {
+  margin-top: 14px;
+}
+.refs-cluster h3 {
+  font-family: var(--font-h);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--brand-orange);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  margin: 22px 0 10px;
+}
+.ref-item {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 18px;
+  align-items: baseline;
+}
+.ref-item:first-of-type { border-top: none; padding-top: 4px; }
+.ref-item .citation {
+  font-size: 13px;
+  color: var(--text-hi);
+  line-height: 1.5;
+}
+.ref-item .citation .author { font-weight: 600; }
+.ref-item .citation .year { color: var(--text-mid); }
+.ref-item .citation .title { color: var(--text-mid); font-style: italic; }
+.ref-item .applied {
+  font-size: 12px;
+  color: var(--text-mid);
+  font-family: var(--font-h);
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  padding-left: 14px;
+  border-left: 2px solid var(--brand-orange);
+}
+
+@media (max-width: 720px) {
+  .flow-steps { grid-template-columns: repeat(2, 1fr); }
+  .ref-item { grid-template-columns: 1fr; gap: 8px; }
+  .ref-item .applied { padding-left: 0; padding-top: 8px; border-left: none; border-top: 2px solid var(--brand-orange); }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="dot"></span> Gund Thermal Commons</div>
+  <div class="center" id="mode-switch-mount"></div>
+  <div class="right">
+    <a href="index.html" class="about-link">← Back</a>
+  </div>
+</header>
+
+<nav class="toc-nav" aria-label="Section navigation">
+  <div class="about-body" style="padding: 0;">
+    <ul class="toc-list">
+      <li><a class="toc-item" href="#sec-01"><span class="toc-num">01</span><span class="toc-label">What is this</span></a></li>
+      <li><a class="toc-item" href="#sec-02"><span class="toc-num">02</span><span class="toc-label">Votes to action</span></a></li>
+      <li><a class="toc-item" href="#sec-03"><span class="toc-num">03</span><span class="toc-label">Theory of change</span></a></li>
+      <li><a class="toc-item" href="#sec-04"><span class="toc-num">04</span><span class="toc-label">Architecture</span></a></li>
+      <li><a class="toc-item" href="#sec-05"><span class="toc-num">05</span><span class="toc-label">Mechanisms</span></a></li>
+      <li><a class="toc-item" href="#sec-06"><span class="toc-num">06</span><span class="toc-label">Behind the numbers</span></a></li>
+      <li><a class="toc-item" href="#sec-07"><span class="toc-num">07</span><span class="toc-label">References</span></a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="about-body">
+
+  <h1>About this system</h1>
+  <p class="lead">Gund Thermal Commons is a feedback-driven dashboard for thermal governance at Harvard GSD. One platform, three role-specific views, one shared data layer.</p>
+
+  <!-- ============================================================
+       § 1 What is this?
+       ============================================================ -->
+  <h2 id="sec-01"><span class="num">01</span>What is this?</h2>
+  <p>
+    Gund Hall has a thermal problem. Not because the HVAC is broken — it works fine. The problem is that <strong>occupants can't signal discomfort cheaply</strong>, <strong>facilities can't see aggregated discomfort</strong>, and <strong>decision-makers don't see thermal as a tuition-value issue</strong>. The feedback loop is broken at every layer.
+  </p>
+  <p>
+    This system makes the invisible legible. It uses three role-specific surfaces — USER, OPERATOR, and DECISION — to give each person what they need to act, while keeping all three views connected to the same underlying data.
+  </p>
+
+  <!-- ============================================================
+       § 2 How votes turn into action  (interactive)
+       ============================================================ -->
+  <h2 id="sec-02"><span class="num">02</span>How votes turn into action</h2>
+  <p>
+    A complaint becomes data, data becomes action, action becomes visible, visibility becomes accountability. Press <strong>play</strong> to walk through one cycle, or click any step.
+  </p>
+
+  <div class="flow-stage">
+    <div class="flow-controls">
+      <button class="flow-play" id="flow-play"><span class="triangle"></span>Play</button>
+      <div class="flow-progress" id="flow-progress">5 steps · ~12 seconds</div>
+    </div>
+
+    <div class="flow-steps" id="flow-steps">
+      <div class="flow-step" data-step="0">
+        <div class="stepnum">01</div>
+        <div class="steplabel">Vote</div>
+        <div class="stepmode">USER</div>
+      </div>
+      <div class="flow-step" data-step="1">
+        <div class="stepnum">02</div>
+        <div class="steplabel">Aggregate</div>
+        <div class="stepmode">USER + OPERATOR</div>
+      </div>
+      <div class="flow-step" data-step="2">
+        <div class="stepnum">03</div>
+        <div class="steplabel">Act</div>
+        <div class="stepmode">OPERATOR</div>
+      </div>
+      <div class="flow-step" data-step="3">
+        <div class="stepnum">04</div>
+        <div class="steplabel">Loop closes</div>
+        <div class="stepmode">USER sees response</div>
+      </div>
+      <div class="flow-step" data-step="4">
+        <div class="stepnum">05</div>
+        <div class="steplabel">Annual roll-up</div>
+        <div class="stepmode">DECISION</div>
+      </div>
+    </div>
+
+    <div class="flow-detail" id="flow-detail">
+      <div class="what">Press play to begin.</div>
+      <div class="desc">Or click any step to jump to its explanation.</div>
+      <div class="meta">5 steps · 1 cycle · spans all 3 modes</div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       § 3 Theory of change  (NEW)
+       ============================================================ -->
+  <h2 id="sec-03"><span class="num">03</span>Theory of change</h2>
+  <p>
+    The proposal is not a switch — it is a 48-month transition. Three phases of organizational change, ten actors, each moving at a different pace. <strong>Phases are cumulative interventions, not separate experiments:</strong> Phase 1 deploys Sensing; Phase 2 keeps Sensing running and adds Voicing; Phase 3 keeps both and adds Governing. Click any dot to see what that actor is doing at that moment, what they perceive, and where the risk sits.
+  </p>
+
+  <div class="swim-wrap">
+    <div class="swim-legend">
+      <span class="lg-item"><span class="lg-dot" style="background:#888"></span> baseline</span>
+      <span class="lg-item"><span class="lg-dot" style="background:#185FA5"></span> phase 1 · sensing only</span>
+      <span class="lg-item"><span class="lg-dot" style="background:#0F6E56"></span> phase 2 · sensing + voicing</span>
+      <span class="lg-item"><span class="lg-dot" style="background:#9C5DD8"></span> phase 3 · sensing + voicing + governing</span>
+      <span class="lg-item"><span class="lg-ring"></span> risk point</span>
+      <span class="lg-item" style="margin-left:auto; font-style:italic;">click any dot for detail</span>
+    </div>
+
+    <svg class="swim-svg" viewBox="0 0 920 760" role="img" aria-labelledby="swim-title swim-desc">
+      <title id="swim-title">Theory of change swimlane</title>
+      <desc id="swim-desc">Ten stakeholder lanes mapped against a 48-month timeline showing actions, perceptions, and risk points across three phases of organizational change.</desc>
+
+      <line x1="240" y1="78" x2="240" y2="724" class="grid-line"/>
+      <line x1="320" y1="78" x2="320" y2="724" class="grid-line"/>
+      <line x1="400" y1="78" x2="400" y2="724" class="grid-line"/>
+      <line x1="480" y1="78" x2="480" y2="724" class="grid-line"/>
+      <line x1="560" y1="78" x2="560" y2="724" class="grid-line"/>
+      <line x1="640" y1="78" x2="640" y2="724" class="grid-line"/>
+      <line x1="720" y1="78" x2="720" y2="724" class="grid-line"/>
+      <line x1="800" y1="78" x2="800" y2="724" class="grid-line"/>
+      <line x1="880" y1="78" x2="880" y2="724" class="grid-line"/>
+
+      <text class="timeline-label" x="240" y="68" text-anchor="middle">M0</text>
+      <text class="timeline-label" x="320" y="68" text-anchor="middle">M3</text>
+      <text class="timeline-label" x="400" y="68" text-anchor="middle">M6</text>
+      <text class="timeline-label" x="480" y="68" text-anchor="middle">M9</text>
+      <text class="timeline-label" x="560" y="68" text-anchor="middle">M12</text>
+      <text class="timeline-label" x="640" y="68" text-anchor="middle">M18</text>
+      <text class="timeline-label" x="720" y="68" text-anchor="middle">M24</text>
+      <text class="timeline-label" x="800" y="68" text-anchor="middle">M36</text>
+      <text class="timeline-label" x="880" y="68" text-anchor="middle">M48</text>
+
+      <rect x="226" y="86" width="28" height="14" rx="2" fill="#888" opacity="0.18"/>
+      <text class="phase-label" x="240" y="96" text-anchor="middle" fill="#888">now</text>
+
+      <rect x="278" y="86" width="244" height="14" rx="2" fill="#185FA5" opacity="0.16"/>
+      <text class="phase-label" x="400" y="96" text-anchor="middle" fill="#185FA5">phase 1 · sensing only</text>
+
+      <rect x="538" y="86" width="180" height="14" rx="2" fill="#0F6E56" opacity="0.16"/>
+      <text class="phase-label" x="628" y="96" text-anchor="middle" fill="#0F6E56">phase 2 · + voicing</text>
+
+      <rect x="734" y="86" width="160" height="14" rx="2" fill="#9C5DD8" opacity="0.16"/>
+      <text class="phase-label" x="814" y="96" text-anchor="middle" fill="#9C5DD8">phase 3 · + governing</text>
+
+      <text class="group-label" x="220" y="128" text-anchor="end">DECISION</text>
+
+      <text class="lane-label-major" x="220" y="156" text-anchor="end">Ben Szalewicz</text>
+      <text class="lane-label-minor" x="220" y="170" text-anchor="end">facilities chief</text>
+      <line x1="226" y1="162" x2="894" y2="162" class="lane-line"/>
+      <circle class="swim-dot" cx="240" cy="162" r="5" fill="#888" data-actor="ben" data-time="M0"/>
+      <circle class="swim-dot" cx="320" cy="162" r="6" fill="#185FA5" data-actor="ben" data-time="M3"/>
+      <circle class="risk-ring" cx="320" cy="162" r="9.5"/>
+      <circle class="swim-dot" cx="400" cy="162" r="7" fill="#185FA5" data-actor="ben" data-time="M6"/>
+      <circle class="swim-dot" cx="480" cy="162" r="6" fill="#185FA5" data-actor="ben" data-time="M9"/>
+      <circle class="swim-dot" cx="560" cy="162" r="8" fill="#0F6E56" data-actor="ben" data-time="M12"/>
+      <circle class="swim-dot" cx="640" cy="162" r="6" fill="#0F6E56" data-actor="ben" data-time="M18"/>
+      <circle class="swim-dot" cx="720" cy="162" r="6" fill="#0F6E56" data-actor="ben" data-time="M24"/>
+      <circle class="swim-dot" cx="800" cy="162" r="7" fill="#9C5DD8" data-actor="ben" data-time="M36"/>
+      <circle class="swim-dot" cx="880" cy="162" r="7" fill="#9C5DD8" data-actor="ben" data-time="M48"/>
+
+      <text class="lane-label-major" x="220" y="194" text-anchor="end">Admin team</text>
+      <text class="lane-label-minor" x="220" y="208" text-anchor="end">GSD operations</text>
+      <line x1="226" y1="200" x2="894" y2="200" class="lane-line"/>
+      <circle class="swim-dot" cx="240" cy="200" r="4" fill="#888" data-actor="admin" data-time="M0"/>
+      <circle class="swim-dot" cx="320" cy="200" r="5" fill="#185FA5" data-actor="admin" data-time="M3"/>
+      <circle class="swim-dot" cx="400" cy="200" r="6" fill="#185FA5" data-actor="admin" data-time="M6"/>
+      <circle class="swim-dot" cx="480" cy="200" r="6" fill="#185FA5" data-actor="admin" data-time="M9"/>
+      <circle class="swim-dot" cx="560" cy="200" r="7" fill="#0F6E56" data-actor="admin" data-time="M12"/>
+      <circle class="swim-dot" cx="640" cy="200" r="7" fill="#0F6E56" data-actor="admin" data-time="M18"/>
+      <circle class="swim-dot" cx="720" cy="200" r="6" fill="#0F6E56" data-actor="admin" data-time="M24"/>
+      <circle class="swim-dot" cx="800" cy="200" r="7" fill="#9C5DD8" data-actor="admin" data-time="M36"/>
+      <circle class="swim-dot" cx="880" cy="200" r="6" fill="#9C5DD8" data-actor="admin" data-time="M48"/>
+
+      <line x1="60" y1="228" x2="894" y2="228" class="group-divider"/>
+      <text class="group-label" x="220" y="248" text-anchor="end">OPERATION</text>
+
+      <text class="lane-label-major" x="220" y="276" text-anchor="end">Mike Smith</text>
+      <text class="lane-label-minor" x="220" y="290" text-anchor="end">automation coord.</text>
+      <line x1="226" y1="282" x2="894" y2="282" class="lane-line"/>
+      <circle class="swim-dot" cx="240" cy="282" r="6" fill="#888" data-actor="mike" data-time="M0"/>
+      <circle class="swim-dot" cx="320" cy="282" r="7" fill="#185FA5" data-actor="mike" data-time="M3"/>
+      <circle class="risk-ring" cx="320" cy="282" r="11"/>
+      <text class="risk-label" x="320" y="262" text-anchor="middle">replacement risk</text>
+      <circle class="swim-dot" cx="400" cy="282" r="7" fill="#185FA5" data-actor="mike" data-time="M6"/>
+      <circle class="swim-dot" cx="480" cy="282" r="6" fill="#185FA5" data-actor="mike" data-time="M9"/>
+      <circle class="swim-dot" cx="560" cy="282" r="7" fill="#0F6E56" data-actor="mike" data-time="M12"/>
+      <circle class="swim-dot" cx="640" cy="282" r="7" fill="#0F6E56" data-actor="mike" data-time="M18"/>
+      <circle class="swim-dot" cx="720" cy="282" r="8" fill="#0F6E56" data-actor="mike" data-time="M24"/>
+      <circle class="swim-dot" cx="800" cy="282" r="8" fill="#9C5DD8" data-actor="mike" data-time="M36"/>
+      <circle class="swim-dot" cx="880" cy="282" r="8" fill="#9C5DD8" data-actor="mike" data-time="M48"/>
+
+      <text class="lane-label-major" x="220" y="314" text-anchor="end">Operating engineers</text>
+      <text class="lane-label-minor" x="220" y="328" text-anchor="end">field execution</text>
+      <line x1="226" y1="320" x2="894" y2="320" class="lane-line"/>
+      <circle class="swim-dot" cx="240" cy="320" r="4" fill="#888" data-actor="engineers" data-time="M0"/>
+      <circle class="swim-dot" cx="320" cy="320" r="5" fill="#185FA5" data-actor="engineers" data-time="M3"/>
+      <circle class="swim-dot" cx="400" cy="320" r="7" fill="#185FA5" data-actor="engineers" data-time="M6"/>
+      <circle class="risk-ring" cx="400" cy="320" r="10"/>
+      <circle class="swim-dot" cx="480" cy="320" r="6" fill="#185FA5" data-actor="engineers" data-time="M9"/>
+      <circle class="swim-dot" cx="560" cy="320" r="6" fill="#0F6E56" data-actor="engineers" data-time="M12"/>
+      <circle class="swim-dot" cx="640" cy="320" r="6" fill="#0F6E56" data-actor="engineers" data-time="M18"/>
+      <circle class="swim-dot" cx="720" cy="320" r="6" fill="#0F6E56" data-actor="engineers" data-time="M24"/>
+      <circle class="swim-dot" cx="800" cy="320" r="6" fill="#9C5DD8" data-actor="engineers" data-time="M36"/>
+      <circle class="swim-dot" cx="880" cy="320" r="6" fill="#9C5DD8" data-actor="engineers" data-time="M48"/>
+
+      <text class="lane-label-major" x="220" y="352" text-anchor="end">Custodial · security</text>
+      <text class="lane-label-minor" x="220" y="366" text-anchor="end">hidden experts</text>
+      <line x1="226" y1="358" x2="894" y2="358" class="lane-line"/>
+      <circle class="swim-dot" cx="240" cy="358" r="3" fill="#888" opacity="0.5" data-actor="custodial" data-time="M0"/>
+      <circle class="swim-dot" cx="320" cy="358" r="6" fill="#185FA5" data-actor="custodial" data-time="M3"/>
+      <circle class="swim-dot" cx="400" cy="358" r="4" fill="#185FA5" data-actor="custodial" data-time="M6"/>
+      <circle class="swim-dot" cx="480" cy="358" r="6" fill="#185FA5" data-actor="custodial" data-time="M9"/>
+      <circle class="swim-dot" cx="560" cy="358" r="5" fill="#0F6E56" data-actor="custodial" data-time="M12"/>
+      <circle class="swim-dot" cx="640" cy="358" r="5" fill="#0F6E56" data-actor="custodial" data-time="M18"/>
+      <circle class="swim-dot" cx="720" cy="358" r="6" fill="#0F6E56" data-actor="custodial" data-time="M24"/>
+      <circle class="swim-dot" cx="800" cy="358" r="7" fill="#9C5DD8" data-actor="custodial" data-time="M36"/>
+      <circle class="swim-dot" cx="880" cy="358" r="6" fill="#9C5DD8" data-actor="custodial" data-time="M48"/>
+
+      <line x1="60" y1="386" x2="894" y2="386" class="group-divider"/>
+      <text class="group-label" x="220" y="406" text-anchor="end">USERS</text>
+
+      <text class="lane-label-major" x="220" y="434" text-anchor="end">Students</text>
+      <text class="lane-label-minor" x="220" y="448" text-anchor="end">primary occupants</text>
+      <line x1="226" y1="440" x2="894" y2="440" class="lane-line"/>
+      <circle class="swim-dot" cx="240" cy="440" r="5" fill="#888" data-actor="students" data-time="M0"/>
+      <circle class="swim-dot" cx="320" cy="440" r="7" fill="#185FA5" data-actor="students" data-time="M3"/>
+      <circle class="swim-dot" cx="400" cy="440" r="8" fill="#185FA5" data-actor="students" data-time="M6"/>
+      <circle class="risk-ring" cx="400" cy="440" r="11"/>
+      <text class="risk-label" x="400" y="420" text-anchor="middle">vote fatigue</text>
+      <circle class="swim-dot" cx="480" cy="440" r="7" fill="#185FA5" data-actor="students" data-time="M9"/>
+      <circle class="swim-dot" cx="560" cy="440" r="7" fill="#0F6E56" data-actor="students" data-time="M12"/>
+      <circle class="swim-dot" cx="640" cy="440" r="7" fill="#0F6E56" data-actor="students" data-time="M18"/>
+      <circle class="swim-dot" cx="720" cy="440" r="7" fill="#0F6E56" data-actor="students" data-time="M24"/>
+      <circle class="swim-dot" cx="800" cy="440" r="8" fill="#9C5DD8" data-actor="students" data-time="M36"/>
+      <circle class="swim-dot" cx="880" cy="440" r="8" fill="#9C5DD8" data-actor="students" data-time="M48"/>
+
+      <text class="lane-label-major" x="220" y="472" text-anchor="end">Faculty</text>
+      <text class="lane-label-minor" x="220" y="486" text-anchor="end">academic voice</text>
+      <line x1="226" y1="478" x2="894" y2="478" class="lane-line"/>
+      <circle class="swim-dot" cx="240" cy="478" r="4" fill="#888" data-actor="faculty" data-time="M0"/>
+      <circle class="swim-dot" cx="320" cy="478" r="3" fill="#185FA5" opacity="0.55" data-actor="faculty" data-time="M3"/>
+      <circle class="swim-dot" cx="400" cy="478" r="4" fill="#185FA5" data-actor="faculty" data-time="M6"/>
+      <circle class="swim-dot" cx="480" cy="478" r="6" fill="#185FA5" data-actor="faculty" data-time="M9"/>
+      <circle class="swim-dot" cx="560" cy="478" r="6" fill="#0F6E56" data-actor="faculty" data-time="M12"/>
+      <circle class="swim-dot" cx="640" cy="478" r="5" fill="#0F6E56" data-actor="faculty" data-time="M18"/>
+      <circle class="swim-dot" cx="720" cy="478" r="5" fill="#0F6E56" data-actor="faculty" data-time="M24"/>
+      <circle class="swim-dot" cx="800" cy="478" r="7" fill="#9C5DD8" data-actor="faculty" data-time="M36"/>
+      <circle class="swim-dot" cx="880" cy="478" r="7" fill="#9C5DD8" data-actor="faculty" data-time="M48"/>
+
+      <text class="lane-label-major" x="220" y="510" text-anchor="end">Staff · visitors</text>
+      <text class="lane-label-minor" x="220" y="524" text-anchor="end">peripheral occupants</text>
+      <line x1="226" y1="516" x2="894" y2="516" class="lane-line"/>
+      <circle class="swim-dot" cx="240" cy="516" r="2" fill="#888" opacity="0.5" data-actor="staff" data-time="M0"/>
+      <circle class="swim-dot" cx="320" cy="516" r="3" fill="#185FA5" opacity="0.55" data-actor="staff" data-time="M3"/>
+      <circle class="swim-dot" cx="400" cy="516" r="4" fill="#185FA5" data-actor="staff" data-time="M6"/>
+      <circle class="swim-dot" cx="480" cy="516" r="4" fill="#185FA5" data-actor="staff" data-time="M9"/>
+      <circle class="swim-dot" cx="560" cy="516" r="4" fill="#0F6E56" data-actor="staff" data-time="M12"/>
+      <circle class="swim-dot" cx="640" cy="516" r="4" fill="#0F6E56" data-actor="staff" data-time="M18"/>
+      <circle class="swim-dot" cx="720" cy="516" r="4" fill="#0F6E56" data-actor="staff" data-time="M24"/>
+      <circle class="swim-dot" cx="800" cy="516" r="5" fill="#9C5DD8" data-actor="staff" data-time="M36"/>
+      <circle class="swim-dot" cx="880" cy="516" r="5" fill="#9C5DD8" data-actor="staff" data-time="M48"/>
+
+      <line x1="60" y1="544" x2="894" y2="544" class="group-divider"/>
+      <text class="group-label" x="220" y="564" text-anchor="end">UPSTREAM</text>
+
+      <text class="lane-label-major" x="220" y="592" text-anchor="end">Harvard E&amp;U</text>
+      <text class="lane-label-minor" x="220" y="606" text-anchor="end">2009 policy holder</text>
+      <line x1="226" y1="598" x2="894" y2="598" class="lane-line"/>
+      <circle class="swim-dot" cx="240" cy="598" r="5" fill="#888" data-actor="eandu" data-time="M0"/>
+      <circle class="swim-dot" cx="320" cy="598" r="2" fill="#888" opacity="0.45" data-actor="eandu" data-time="M3"/>
+      <circle class="swim-dot" cx="400" cy="598" r="3" fill="#185FA5" opacity="0.55" data-actor="eandu" data-time="M6"/>
+      <circle class="swim-dot" cx="480" cy="598" r="4" fill="#185FA5" data-actor="eandu" data-time="M9"/>
+      <circle class="swim-dot" cx="560" cy="598" r="6" fill="#185FA5" data-actor="eandu" data-time="M12"/>
+      <circle class="risk-ring" cx="560" cy="598" r="9.5"/>
+      <circle class="swim-dot" cx="640" cy="598" r="7" fill="#0F6E56" data-actor="eandu" data-time="M18"/>
+      <circle class="swim-dot" cx="720" cy="598" r="8" fill="#0F6E56" data-actor="eandu" data-time="M24"/>
+      <circle class="swim-dot" cx="800" cy="598" r="9" fill="#9C5DD8" data-actor="eandu" data-time="M36"/>
+      <circle class="swim-dot" cx="880" cy="598" r="9" fill="#9C5DD8" data-actor="eandu" data-time="M48"/>
+
+      <text class="lane-label-major" x="220" y="630" text-anchor="end">Office for Sustainability</text>
+      <text class="lane-label-minor" x="220" y="644" text-anchor="end">cross-school broker</text>
+      <line x1="226" y1="636" x2="894" y2="636" class="lane-line"/>
+      <circle class="swim-dot" cx="240" cy="636" r="3" fill="#888" opacity="0.5" data-actor="sustain" data-time="M0"/>
+      <circle class="swim-dot" cx="320" cy="636" r="3" fill="#185FA5" opacity="0.55" data-actor="sustain" data-time="M3"/>
+      <circle class="swim-dot" cx="400" cy="636" r="4" fill="#185FA5" data-actor="sustain" data-time="M6"/>
+      <circle class="swim-dot" cx="480" cy="636" r="6" fill="#185FA5" data-actor="sustain" data-time="M9"/>
+      <circle class="swim-dot" cx="560" cy="636" r="6" fill="#0F6E56" data-actor="sustain" data-time="M12"/>
+      <circle class="swim-dot" cx="640" cy="636" r="7" fill="#0F6E56" data-actor="sustain" data-time="M18"/>
+      <circle class="swim-dot" cx="720" cy="636" r="7" fill="#0F6E56" data-actor="sustain" data-time="M24"/>
+      <circle class="swim-dot" cx="800" cy="636" r="8" fill="#9C5DD8" data-actor="sustain" data-time="M36"/>
+      <circle class="swim-dot" cx="880" cy="636" r="8" fill="#9C5DD8" data-actor="sustain" data-time="M48"/>
+
+      <text class="lane-label-major" x="220" y="668" text-anchor="end">Thermal Council</text>
+      <text class="lane-label-minor" x="220" y="682" text-anchor="end">new governance body</text>
+      <line x1="226" y1="674" x2="894" y2="674" class="lane-line"/>
+      <rect x="228" y="670" width="248" height="8" class="does-not-exist"/>
+      <text class="does-not-exist-label" x="352" y="678" text-anchor="middle">does not exist yet</text>
+      <circle class="swim-dot" cx="480" cy="674" r="5" fill="#0F6E56" opacity="0.7" data-actor="council" data-time="M9"/>
+      <circle class="swim-dot" cx="560" cy="674" r="7" fill="#0F6E56" data-actor="council" data-time="M12"/>
+      <circle class="swim-dot" cx="640" cy="674" r="8" fill="#0F6E56" data-actor="council" data-time="M18"/>
+      <circle class="swim-dot" cx="720" cy="674" r="8" fill="#0F6E56" data-actor="council" data-time="M24"/>
+      <circle class="swim-dot" cx="800" cy="674" r="10" fill="#9C5DD8" data-actor="council" data-time="M36"/>
+      <circle class="swim-dot" cx="880" cy="674" r="10" fill="#9C5DD8" data-actor="council" data-time="M48"/>
+
+    </svg>
+
+    <div class="swim-detail is-empty" id="swim-detail">
+      <div class="sd-empty">Click any dot above to read what that actor is doing at that moment, what they perceive, and what risks apply.</div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       M48 end-state — what all three phases together produce
+       ============================================================ -->
+  <div class="m48-summary">
+    <h3 style="font-family: Rajdhani, sans-serif; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #DC8116; font-size: 14px; margin: 32px 0 8px;">M48 · End-state after all three phases</h3>
+    <p style="font-size: 14px; color: var(--text-mid); margin: 0 0 16px; font-style: italic;">
+      What the building looks like once Sensing, Voicing, and Governing have all been running long enough to become institutional muscle memory. Read top → bottom: each role has changed shape, not just task list.
+    </p>
+    <div class="m48-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px; font-size: 13px; line-height: 1.5;">
+      <div><strong style="color: #F5F5F0;">Ben (Facilities chief)</strong><br><span style="color: var(--text-mid);">Title shifts from "Chief of Facilities" to "Director of Comfort Operations." Identity has moved from gatekeeper to coordinator.</span></div>
+      <div><strong style="color: #F5F5F0;">Trevor (Sustainability)</strong><br><span style="color: var(--text-mid);">Council-driven decisions are now embedded in the annual budget cycle. Governance and budgeting share a calendar.</span></div>
+      <div><strong style="color: #F5F5F0;">Mike (BAS / Automation)</strong><br><span style="color: var(--text-mid);">Holds named role "Thermal Coordinator" with formal scope across the cross-school council. Tacit knowledge is now institutional.</span></div>
+      <div><strong style="color: #F5F5F0;">Operating Engineers</strong><br><span style="color: var(--text-mid);">Embedded in annual review of the model. Their voice carries institutional weight; recognition is no longer dependent on individual chiefs.</span></div>
+      <div><strong style="color: #F5F5F0;">Securitas / Custodial</strong><br><span style="color: var(--text-mid);">Cross-school custodial network shares observations through the model. Hidden experts are no longer hidden.</span></div>
+      <div><strong style="color: #F5F5F0;">Students</strong><br><span style="color: var(--text-mid);">Permanent voice in cross-school review. Climate is something we deliberate, not inherit.</span></div>
+      <div><strong style="color: #F5F5F0;">Faculty</strong><br><span style="color: var(--text-mid);">Faculty involvement formalized in cross-school council. Permanent academic-administrative bridge.</span></div>
+      <div><strong style="color: #F5F5F0;">GSD Dean / Leadership</strong><br><span style="color: var(--text-mid);">Has a portfolio item, not a problem. The Gund model is being exported to peer schools — a status asset, not a maintenance burden.</span></div>
+    </div>
+    <p style="font-size: 13px; color: var(--text-mid); margin: 20px 0 0; padding-top: 16px; border-top: 1px solid #2a2a26;">
+      In dollar terms, this end-state lands at approximately <strong style="color: #F5F5F0;">130,000 comfort hours/yr (~$6.6M tuition value)</strong> against a ~$140k cumulative implementation cost — see DECISION mode §05 for the side-by-side. The dollar ROI is lower than Phase 2 alone; the institutional durability is the difference.
+    </p>
+  </div>
+
+  <!-- ============================================================
+       § 4 The model architecture (renumbered from §3)
+       ============================================================ -->
+  <h2 id="sec-04"><span class="num">04</span>The model architecture</h2>
+  <p>
+    Before getting into the mechanism-by-mechanism design, here is the whole project on one page. Seven layers, from diagnosis to interface — every mode, metric, and mechanism on the dashboard belongs to one of these layers.
+  </p>
+
+  <div class="arch-diagram">
+    <div class="arch-layer">
+      <div class="arch-title">Diagnosis (what is broken)</div>
+      <div class="arch-content">Broken feedback loop · Information asymmetry · Invisible commons</div>
+      <div class="arch-source">Goetz 2011 (Wired) · Tett 2015 (Silo Effect) · Ostrom 1990 (commons governance)</div>
+    </div>
+
+    <div class="arch-layer">
+      <div class="arch-title">Behavioral mechanisms (what we use to repair)</div>
+      <div class="arch-content">Visible plurality · Friction reduction · Social norms (desc + presc) · Loss aversion + Anchoring</div>
+      <div class="arch-source">Prentice &amp; Miller 1993 · Thaler &amp; Sunstein 2008 · Cialdini, Reno &amp; Kallgren 1990 · Kahneman &amp; Tversky 1979 · Tversky &amp; Kahneman 1974 · Thaler 1985</div>
+    </div>
+
+    <div class="arch-layer">
+      <div class="arch-title">Phases (cumulative — each phase keeps everything from the prior one)</div>
+      <div class="arch-list">
+        <div class="arch-list-row">
+          <span class="arch-tag">P1</span><span class="arch-name">Sensing only</span>
+          <span class="arch-detail">Intervention 01 (public temperature stations). Data exists where people can see it. Months 0–9.</span>
+        </div>
+        <div class="arch-list-row">
+          <span class="arch-tag">P2</span><span class="arch-name">Sensing + Voicing</span>
+          <span class="arch-detail">Adds Intervention 02 (QR vote + dashboard). Sensing keeps running. Friction drops, plurality becomes visible. Months 9–24. <strong>This is S 02 (recommended).</strong></span>
+        </div>
+        <div class="arch-list-row">
+          <span class="arch-tag">P3</span><span class="arch-name">Sensing + Voicing + Governing</span>
+          <span class="arch-detail">Adds Intervention 03 (Thermal Council + RCT). The two prior layers keep running. Months 24–48. <strong>This is S 03 (full deployment).</strong></span>
+        </div>
+      </div>
+      <div class="arch-source">data visible → feelings get voiced → governance picks up the signal · each phase is a deeper layer of feedback, not a replacement</div>
+    </div>
+
+    <div class="arch-layer">
+      <div class="arch-title">Scenarios</div>
+      <div class="arch-content">S01 Setpoint Policy · ★ S02 Feedback Visualization · S03 Participatory Governance</div>
+      <div class="arch-source">contrast (low impact) · recommended (high coalition score) · contrast (high risk)</div>
+    </div>
+
+    <div class="arch-layer">
+      <div class="arch-title">Metrics (how we evaluate)</div>
+      <div class="arch-list">
+        <div class="arch-list-row">
+          <span class="arch-tag">M01</span><span class="arch-name">Perception–Ambient Gap</span>
+          <span class="arch-detail">Mean (felt temperature) − (sensor temperature) in °F · downstream outcome</span>
+        </div>
+        <div class="arch-list-row">
+          <span class="arch-tag">M02</span><span class="arch-name">Isolation Index</span>
+          <span class="arch-detail">% of voters who, before voting, believed they were the only one feeling discomfort · Visible plurality</span>
+        </div>
+        <div class="arch-list-row">
+          <span class="arch-tag">M03</span><span class="arch-name">Friction-to-Voice</span>
+          <span class="arch-detail">Time + actions required for one comfort feedback submission · Friction reduction</span>
+        </div>
+        <div class="arch-list-row">
+          <span class="arch-tag">M04</span><span class="arch-name">Loop Closure Time</span>
+          <span class="arch-detail">Days from aggregated vote signal crossing threshold → facilities action visible · Social norms</span>
+        </div>
+        <div class="arch-list-row">
+          <span class="arch-tag">M05</span><span class="arch-name">Steam Index</span>
+          <span class="arch-detail">Annual steam consumption ratio · co-benefit, not the goal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-row-pair">
+      <div class="arch-layer arch-half">
+        <div class="arch-title">Stakeholders (8)</div>
+        <div class="arch-content">Students · Staff · Faculty · Facilities · Sustainability · Securitas · Dean · Broader Society</div>
+      </div>
+      <div class="arch-layer arch-half">
+        <div class="arch-title">Dimensions (what stakeholders care about)</div>
+        <div class="arch-content">Fixed Cost · Variable Cost · Comfort · Productivity · Coordination · Efficiency</div>
+        <div class="arch-source">decision-maker's strategic frame · stakeholder care-weights × dimension impact = coalition score · Fixed Cost baseline = GSD's existing $454k/yr steam spend (Harvard Capital Planning Office), not zero</div>
+      </div>
+    </div>
+
+    <div class="arch-layer arch-final">
+      <div class="arch-title">Interface (the v6 product)</div>
+      <div class="arch-content">USER mode (occupant) · OPERATOR mode (Facilities) · DECISION mode (Dean)</div>
+      <div class="arch-source">role-specific affordances · shared data layer · cross-mode $-anchor pressure transfer</div>
+    </div>
+  </div>
+
+  <p style="font-size: 12px; color: var(--text-mid); font-style: italic;">
+    Read top → down: each layer is built on the one above. The Interface (v6) is where all six prior layers become things you can click. The next sections drill into how each layer works.
+  </p>
+
+  <!-- ============================================================
+       § 5 The mechanisms  (renumbered from §4)
+       ============================================================ -->
+  <h2 id="sec-05"><span class="num">05</span>The mechanisms</h2>
+  <p>
+    Every interface element in this system is designed around a small set of behavioral mechanisms. The diagram below shows how four mechanisms drive specific design components, which in turn move five metrics. The metrics form a causal chain: M02 → M03 → M04 → M01.
+  </p>
+
+  <div class="mech-diagram">
+    <svg viewBox="0 0 880 480" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0 0 L10 5 L0 10 Z" fill="#DC8116"/>
+        </marker>
+        <marker id="arr-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+          <path d="M0 0 L10 5 L0 10 Z" fill="#5F5E5A"/>
+        </marker>
+      </defs>
+
+      <!-- column headers -->
+      <text x="120" y="28" text-anchor="middle" font-family="Rajdhani" font-weight="600" font-size="13" fill="#A8A8A0" letter-spacing="2">MECHANISM</text>
+      <text x="440" y="28" text-anchor="middle" font-family="Rajdhani" font-weight="600" font-size="13" fill="#A8A8A0" letter-spacing="2">DESIGN COMPONENT</text>
+      <text x="760" y="28" text-anchor="middle" font-family="Rajdhani" font-weight="600" font-size="13" fill="#A8A8A0" letter-spacing="2">METRIC AFFECTED</text>
+
+      <!-- mechanism 1: Visible plurality -->
+      <rect x="20" y="55" width="200" height="80" rx="8" fill="#1B1B1B" stroke="#2E47CC" stroke-width="1.5"/>
+      <text x="120" y="80" text-anchor="middle" font-family="Rajdhani" font-weight="600" font-size="14" fill="#F5F5F0">Visible plurality</text>
+      <text x="120" y="100" text-anchor="middle" font-family="Inter" font-size="11" fill="#A8A8A0">"you're not alone"</text>
+      <text x="120" y="120" text-anchor="middle" font-family="Inter" font-size="10" fill="#5CB0FF" font-style="italic">Prentice &amp; Miller 1993</text>
+
+      <!-- mechanism 2: Friction reduction -->
+      <rect x="20" y="155" width="200" height="80" rx="8" fill="#1B1B1B" stroke="#2E47CC" stroke-width="1.5"/>
+      <text x="120" y="180" text-anchor="middle" font-family="Rajdhani" font-weight="600" font-size="14" fill="#F5F5F0">Friction reduction</text>
+      <text x="120" y="200" text-anchor="middle" font-family="Inter" font-size="11" fill="#A8A8A0">5 min → ~10 sec</text>
+      <text x="120" y="220" text-anchor="middle" font-family="Inter" font-size="10" fill="#5CB0FF" font-style="italic">Thaler &amp; Sunstein 2008</text>
+
+      <!-- mechanism 3: Social norms -->
+      <rect x="20" y="255" width="200" height="80" rx="8" fill="#1B1B1B" stroke="#2E47CC" stroke-width="1.5"/>
+      <text x="120" y="280" text-anchor="middle" font-family="Rajdhani" font-weight="600" font-size="14" fill="#F5F5F0">Social norms</text>
+      <text x="120" y="300" text-anchor="middle" font-family="Inter" font-size="11" fill="#A8A8A0">descriptive + prescriptive</text>
+      <text x="120" y="320" text-anchor="middle" font-family="Inter" font-size="10" fill="#5CB0FF" font-style="italic">Cialdini et al. 1990</text>
+
+      <!-- mechanism 4: Loss aversion + Anchoring -->
+      <rect x="20" y="370" width="200" height="80" rx="8" fill="#1B1B1B" stroke="#DC8116" stroke-width="1.5"/>
+      <text x="120" y="395" text-anchor="middle" font-family="Rajdhani" font-weight="600" font-size="14" fill="#F5F5F0">Loss aversion +</text>
+      <text x="120" y="411" text-anchor="middle" font-family="Rajdhani" font-weight="600" font-size="14" fill="#F5F5F0">Anchoring</text>
+      <text x="120" y="430" text-anchor="middle" font-family="Inter" font-size="11" fill="#A8A8A0">tuition $ as anchor</text>
+      <text x="120" y="445" text-anchor="middle" font-family="Inter" font-size="10" fill="#5CB0FF" font-style="italic">Kahneman &amp; Tversky 1979</text>
+
+      <!-- design components (middle column) -->
+      <rect x="340" y="60" width="200" height="50" rx="6" fill="#0A0A0A" stroke="#2A2A2A"/>
+      <text x="440" y="82" text-anchor="middle" font-family="Inter" font-size="12" fill="#F5F5F0">Aggregate readout</text>
+      <text x="440" y="98" text-anchor="middle" font-family="Inter" font-size="10" fill="#A8A8A0">"8 of 12 felt the same"</text>
+
+      <rect x="340" y="125" width="200" height="50" rx="6" fill="#0A0A0A" stroke="#2A2A2A"/>
+      <text x="440" y="147" text-anchor="middle" font-family="Inter" font-size="12" fill="#F5F5F0">5-tier vote button</text>
+      <text x="440" y="163" text-anchor="middle" font-family="Inter" font-size="10" fill="#A8A8A0">one tap, no form</text>
+
+      <rect x="340" y="190" width="200" height="50" rx="6" fill="#0A0A0A" stroke="#2A2A2A"/>
+      <text x="440" y="212" text-anchor="middle" font-family="Inter" font-size="12" fill="#F5F5F0">Public response log</text>
+      <text x="440" y="228" text-anchor="middle" font-family="Inter" font-size="10" fill="#A8A8A0">"facilities replied in 4d"</text>
+
+      <rect x="340" y="255" width="200" height="50" rx="6" fill="#0A0A0A" stroke="#2A2A2A"/>
+      <text x="440" y="277" text-anchor="middle" font-family="Inter" font-size="12" fill="#F5F5F0">Operator action queue</text>
+      <text x="440" y="293" text-anchor="middle" font-family="Inter" font-size="10" fill="#A8A8A0">"adjust setpoint" 1-click</text>
+
+      <rect x="340" y="380" width="200" height="60" rx="6" fill="#0A0A0A" stroke="#DC8116"/>
+      <text x="440" y="403" text-anchor="middle" font-family="Inter" font-size="12" fill="#F5F5F0">R5 Consequence card</text>
+      <text x="440" y="419" text-anchor="middle" font-family="Inter" font-size="10" fill="#A8A8A0">"$2,400 of tuition"</text>
+      <text x="440" y="433" text-anchor="middle" font-family="Inter" font-size="10" fill="#A8A8A0">scaled across 3 modes</text>
+
+      <!-- metrics (right column) -->
+      <rect x="660" y="55" width="200" height="48" rx="6" fill="#1B1B1B" stroke="#3C3489"/>
+      <text x="760" y="76" text-anchor="middle" font-family="Inter" font-weight="600" font-size="12" fill="#F5F5F0">M02 Isolation Index</text>
+      <text x="760" y="92" text-anchor="middle" font-family="Inter" font-size="10" fill="#A8A8A0">% feeling alone — drops</text>
+
+      <rect x="660" y="118" width="200" height="48" rx="6" fill="#1B1B1B" stroke="#3C3489"/>
+      <text x="760" y="139" text-anchor="middle" font-family="Inter" font-weight="600" font-size="12" fill="#F5F5F0">M03 Friction-to-Voice</text>
+      <text x="760" y="155" text-anchor="middle" font-family="Inter" font-size="10" fill="#A8A8A0">sec per submission</text>
+
+      <rect x="660" y="181" width="200" height="48" rx="6" fill="#1B1B1B" stroke="#3C3489"/>
+      <text x="760" y="202" text-anchor="middle" font-family="Inter" font-weight="600" font-size="12" fill="#F5F5F0">M04 Loop Closure</text>
+      <text x="760" y="218" text-anchor="middle" font-family="Inter" font-size="10" fill="#A8A8A0">days vote → action</text>
+
+      <rect x="660" y="244" width="200" height="48" rx="6" fill="#1B1B1B" stroke="#3C3489"/>
+      <text x="760" y="265" text-anchor="middle" font-family="Inter" font-weight="600" font-size="12" fill="#F5F5F0">M01 Perception Gap</text>
+      <text x="760" y="281" text-anchor="middle" font-family="Inter" font-size="10" fill="#A8A8A0">downstream outcome</text>
+
+      <rect x="660" y="380" width="200" height="60" rx="6" fill="#1B1B1B" stroke="#DC8116"/>
+      <text x="760" y="403" text-anchor="middle" font-family="Inter" font-weight="600" font-size="12" fill="#F5F5F0">Behavior change</text>
+      <text x="760" y="419" text-anchor="middle" font-family="Inter" font-size="10" fill="#A8A8A0">votes per week ↑</text>
+      <text x="760" y="433" text-anchor="middle" font-family="Inter" font-size="10" fill="#A8A8A0">response time ↓</text>
+
+      <!-- arrows: mechanism → component -->
+      <line x1="220" y1="95"  x2="340" y2="85"  stroke="#DC8116" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="220" y1="195" x2="340" y2="150" stroke="#DC8116" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="220" y1="295" x2="340" y2="215" stroke="#DC8116" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="220" y1="295" x2="340" y2="280" stroke="#DC8116" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="220" y1="410" x2="340" y2="410" stroke="#DC8116" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- arrows: component → metric -->
+      <line x1="540" y1="85"  x2="660" y2="79"  stroke="#DC8116" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="540" y1="150" x2="660" y2="142" stroke="#DC8116" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="540" y1="215" x2="660" y2="205" stroke="#DC8116" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="540" y1="280" x2="660" y2="205" stroke="#DC8116" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="540" y1="410" x2="660" y2="410" stroke="#DC8116" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- causal chain among metrics (right side, dashed gray) -->
+      <line x1="760" y1="103" x2="760" y2="118" stroke="#5F5E5A" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arr-dim)"/>
+      <line x1="760" y1="166" x2="760" y2="181" stroke="#5F5E5A" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arr-dim)"/>
+      <line x1="760" y1="229" x2="760" y2="244" stroke="#5F5E5A" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arr-dim)"/>
+
+      <text x="775" y="115" font-family="Inter" font-size="9" fill="#5F5E5A" font-style="italic">drives</text>
+      <text x="775" y="178" font-family="Inter" font-size="9" fill="#5F5E5A" font-style="italic">drives</text>
+      <text x="775" y="241" font-family="Inter" font-size="9" fill="#5F5E5A" font-style="italic">drives</text>
+
+      <!-- causal chain footer -->
+      <text x="760" y="312" text-anchor="middle" font-family="Inter" font-size="10" fill="#A8A8A0" font-style="italic">M02 → M03 → M04 → M01</text>
+      <text x="760" y="326" text-anchor="middle" font-family="Inter" font-size="9" fill="#5F5E5A">causal chain · M01 closes last</text>
+
+      <!-- horizontal divider before R5 row -->
+      <line x1="20" y1="358" x2="860" y2="358" stroke="#2A2A2A" stroke-width="0.5" stroke-dasharray="4 4"/>
+    </svg>
+  </div>
+
+  <p style="font-size: 12px; color: var(--text-mid); font-style: italic;">
+    Three of the four mechanisms drive direct-effect metrics (M02, M03, M04). M01 — the perception gap — closes only as a downstream result of those three. R5 Consequence sits below the line because it operates across all three modes, scaling the same dollar logic from weekly $2,400 (USER) to annual $5.1M (DECISION).
+  </p>
+
+  <!-- ============================================================
+       § 6 Behind the numbers: algorithms and formulas
+       ============================================================ -->
+  <h2 id="sec-06"><span class="num">06</span>Behind the numbers</h2>
+  <p>
+    Every projected number in this system is computed, not asserted. But the model has <strong>two kinds of computation</strong>, and they are not the same.
+  </p>
+
+  <div style="background: var(--surface-1); border: 1px solid var(--line); border-radius: var(--r-md); padding: 20px; margin: 18px 0 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+    <div>
+      <div style="font-family: var(--font-h); font-weight: 600; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-hi); margin-bottom: 10px;">Quantitative formulas</div>
+      <div style="font-size: 13px; line-height: 1.6; color: var(--text-mid); margin-bottom: 12px;">Mechanical: take fixed inputs and produce numbers via algebra.</div>
+      <div style="background: var(--surface-2); padding: 12px; border-radius: var(--r-sm); font-family: var(--font-display); font-size: 11px; line-height: 1.5; color: var(--text-hi);">
+        <strong>Example:</strong> M04 baseline = 18 days. Phase 2 effect = −9 to −13 days. If slider = 100%, result = 18 − 11.5 = 6.5 days. <strong>Reproducible.</strong>
+      </div>
+    </div>
+    <div>
+      <div style="font-family: var(--font-h); font-weight: 600; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brand-orange); margin-bottom: 10px;">Judgment rules</div>
+      <div style="font-size: 13px; line-height: 1.6; color: var(--text-mid); margin-bottom: 12px;">Design choices: encode a weighting or threshold that requires <strong>defending as a position</strong>.</div>
+      <div style="background: var(--surface-2); padding: 12px; border-radius: var(--r-sm); font-family: var(--font-display); font-size: 11px; line-height: 1.5; color: var(--text-hi);">
+        <strong>Example:</strong> We chose tuition value as ROI numerator, not steam savings. This reframes comfort from "operations expense" to "tuition fulfillment." <strong>Contestable.</strong>
+      </div>
+    </div>
+  </div>
+
+  <p>
+    In defense, formulas get verified; judgment rules get contested. Below are the four core formulas and the three judgment rules they embody.
+  </p>
+
+  <div class="subhead">6.1 · Tuition-hour anchor (R5 across all modes)</div>
+  <p>
+    The cross-mode dollar value is built on a single ratio: how much tuition is "spent" per hour of studio time at GSD. This anchor lets us translate hours of thermal discomfort into dollars users already understand.
+  </p>
+  <div class="formula">
+    <span class="label">Tuition per hour</span>
+    <span class="var">$/hour</span><span class="op">=</span><span class="const">$90,000</span><span class="op">÷</span><span class="const">10 months</span><span class="op">÷</span><span class="const">22 days</span><span class="op">÷</span><span class="const">8 hours</span><span class="op">=</span><span class="var">$51.14</span>
+    <span class="comment">$90k = approximate GSD annual tuition. 10 / 22 / 8 = standard academic year, working days, studio hours. Each hour of thermal discomfort is therefore one hour of paid-for-but-unusable time.</span>
+  </div>
+  <div class="formula">
+    <span class="label">Recovered tuition value</span>
+    <span class="var">value</span><span class="op">=</span><span class="var">hours_recovered</span><span class="op">×</span><span class="const">$51.14</span>
+    <span class="comment">Example: 47 h × $51.14 ≈ $2,400. Same formula applies in OPERATOR (monthly hours) and DECISION (annual hours), producing weekly / monthly / annual figures from the same ratio.</span>
+  </div>
+
+  <div class="subhead">6.2 · What If metric prediction (DECISION mode)</div>
+  <p>
+    When you drag the P1 / P2 / P3 sliders in DECISION mode, each metric prediction is computed by combining the per-phase effect of each intervention level. Each metric has a baseline and a 3-phase effect matrix giving low and high deltas.
+  </p>
+  <div class="formula">
+    <span class="label">Metric projection</span>
+    <span class="var">Δ_low</span> <span class="op">=</span> Σᵢ ( <span class="var">e[m].pᵢ.low</span> <span class="op">×</span> <span class="var">sliderᵢ</span><span class="op">/</span>100 )<br>
+    <span class="var">Δ_high</span> <span class="op">=</span> Σᵢ ( <span class="var">e[m].pᵢ.high</span> <span class="op">×</span> <span class="var">sliderᵢ</span><span class="op">/</span>100 )<br>
+    <span class="var">predicted_range</span> <span class="op">=</span> [ <span class="var">baseline + Δ_low</span> , <span class="var">baseline + Δ_high</span> ]
+    <span class="comment">For each metric m and each phase i ∈ {P1, P2, P3}, multiply the phase's low/high effect by the slider position (as a fraction). Sum across phases to get the total delta range.</span>
+  </div>
+  <p style="font-size: 12px; color: var(--text-mid);">
+    The effect matrix (defined in <code style="color: var(--text-hi); background: var(--surface-2); padding: 2px 6px; border-radius: 3px;">shared.js</code>) holds 5 metrics × 3 phases × 2 bounds = 30 numbers. Each is grounded in the literature cited in §06 below or in our own GSD survey (n = 24 to date).
+  </p>
+
+  <div class="subhead">6.3 · Coalition score (DECISION mode heatmap)</div>
+  <p>
+    The 8-stakeholder × 3-scenario heatmap quantifies political viability. Each cell is a weighted sum of how a scenario affects six concern dimensions, weighted by how much that stakeholder cares about each dimension.
+  </p>
+  <div class="formula">
+    <span class="label">Stakeholder payoff under scenario</span>
+    <span class="var">payoff[s, scenario]</span> <span class="op">=</span> Σ_d ( <span class="var">impact[scenario, d]</span> <span class="op">×</span> <span class="var">care[s, d]</span> )
+    <span class="comment">For each of the 6 dimensions d ∈ {Fixed Cost, Variable Cost, Comfort, Productivity, Coordination, Efficiency}, multiply the scenario's impact (−2 to +2) by the stakeholder's care weight (0 = low, 0.5 = mid, 1 = high). Sum across all 6 dimensions.</span>
+  </div>
+  <div class="formula">
+    <span class="label">Coalition total</span>
+    <span class="var">coalition[scenario]</span> <span class="op">=</span> Σ_s ( <span class="var">payoff[s, scenario]</span> )
+    <span class="comment">Sum across all 8 stakeholders. Higher = stronger political coalition. Current totals: S02 = +12, S03 = +7, S01 = −4. The S02 win comes not from highest ceiling but from absence of veto-strength opposition (no cell darker than 0).</span>
+  </div>
+
+  <div class="subhead">6.4 · ROI ratio (S02 vs S03 comparison)</div>
+  <p>
+    The ROI shown in DECISION mode R5 is where the two recommended scenarios are directly compared. The choice of numerator is the design ethic: comfort hours, not steam savings, is what we elect to put in the numerator.
+  </p>
+
+  <div class="formula">
+    <span class="label">Scenario 2 (Sensing + Voicing, RECOMMENDED)</span>
+    <span class="var">ROI(S02)</span> <span class="op">=</span> <span class="const">100,000 h</span> <span class="op">×</span> <span class="const">$51.14</span> <span class="op">÷</span> <span class="const">$80,000</span> <span class="op">≈</span> <span class="var">64 : 1</span>
+    <span class="comment">Sensing (public temperature stations) + Voicing (QR vote + dashboard). 48-month deployment, months 0–24.</span>
+  </div>
+
+  <div class="formula">
+    <span class="label">Scenario 3 (Sensing + Voicing + Governing, FULL SYSTEM)</span>
+    <span class="var">ROI(S03)</span> <span class="op">=</span> <span class="const">130,000 h</span> <span class="op">×</span> <span class="const">$51.14</span> <span class="op">÷</span> <span class="const">$140,000</span> <span class="op">≈</span> <span class="var">47 : 1</span>
+    <span class="comment">Adds Governing (Thermal Council + RCT protocol). Full 48-month deployment, months 0–48. Higher absolute comfort hours, but higher cost and lower coalition strength.</span>
+  </div>
+
+  <p style="margin-bottom: 20px; font-size: 13px; line-height: 1.6;">
+    <strong>The strategic insight:</strong> S03 produces 30,000 more annual comfort hours than S02, but costs $60k more to implement, reducing ROI from 64:1 to 47:1. More importantly, S03's political coalition score drops from +12 to +7 — Facilities moves from neutral (0) to opposition (−2) because Thermal Council governance redistributes decision-making power away from their domain. <strong>S02 is recommended because it maximizes both financial efficiency AND political durability.</strong>
+  </p>
+
+  <p style="margin-bottom: 20px; font-size: 13px; line-height: 1.6; color: var(--text-mid);">
+    If we used steam savings (~$3k/year) as the numerator instead of tuition value, S02's ROI would be ~0.04 : 1 — and the project would not pencil out. The argument is <strong>comfort, with energy as a side benefit.</strong>
+  </p>
+
+  <!-- ============================================================
+       § 6a Data sources and epistemic limits
+       ============================================================ -->
+  <div class="subhead" style="margin-top: 36px;">6.5 · Data sources: where every input comes from</div>
+
+  <table style="width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 12px; line-height: 1.5;">
+    <tr style="border-bottom: 1px solid var(--line);">
+      <th style="text-align: left; padding: 10px; background: var(--surface-1); font-family: var(--font-h); font-weight: 600;">Input</th>
+      <th style="text-align: left; padding: 10px; background: var(--surface-1); font-family: var(--font-h); font-weight: 600;">Source</th>
+      <th style="text-align: left; padding: 10px; background: var(--surface-1); font-family: var(--font-h); font-weight: 600;">Status</th>
+    </tr>
+    <tr style="border-bottom: 1px solid var(--line);">
+      <td style="padding: 10px;">Baseline M01 (−4.12 °F gap)</td>
+      <td style="padding: 10px;">P2 survey, n=49, dumbbell chart</td>
+      <td style="padding: 10px; color: #4ade80;"><strong>Empirical, ours</strong></td>
+    </tr>
+    <tr style="border-bottom: 1px solid var(--line);">
+      <td style="padding: 10px;">Baseline M02 (70% isolation)</td>
+      <td style="padding: 10px;">P2 survey: "do you think others feel this too?"</td>
+      <td style="padding: 10px; color: #fbbf24;"><strong>Empirical, ours</strong></td>
+    </tr>
+    <tr style="border-bottom: 1px solid var(--line);">
+      <td style="padding: 10px;">GSD tuition ($90k/yr)</td>
+      <td style="padding: 10px;">GSD published 2025–26 rate</td>
+      <td style="padding: 10px; color: #4ade80;"><strong>Public, empirical</strong></td>
+    </tr>
+    <tr style="border-bottom: 1px solid var(--line);">
+      <td style="padding: 10px;">Effect matrix deltas (±2 to ±45)</td>
+      <td style="padding: 10px;">Literature blend + P2 survey + stakeholder interviews</td>
+      <td style="padding: 10px; color: #fbbf24;"><strong>Modeled, literature-anchored</strong></td>
+    </tr>
+    <tr style="border-bottom: 1px solid var(--line);">
+      <td style="padding: 10px;">Coalition scores (8 × 3 matrix)</td>
+      <td style="padding: 10px;">Team judgment from Ben, Mike, Trevor interviews</td>
+      <td style="padding: 10px; color: #f87171;"><strong>Designed, contestable</strong></td>
+    </tr>
+    <tr>
+      <td style="padding: 10px;">Implementation costs ($80k / $140k)</td>
+      <td style="padding: 10px;">Bottom-up cost estimate (hardware, hosting, council time)</td>
+      <td style="padding: 10px; color: #f87171;"><strong>Estimated, unvalidated</strong></td>
+    </tr>
+  </table>
+
+  <p style="font-size: 12px; color: var(--text-mid); margin: 16px 0;">
+    <strong>Summary:</strong> High-confidence inputs (green) come from P2 survey and institutional data. Medium-confidence inputs (yellow) come from literature and stakeholder interviews. Low-confidence inputs (red) are estimates whose value is in showing the <strong>structure of the argument</strong>, not in their precision.
+  </p>
+
+  <div class="subhead" style="margin-top: 28px;">6.6 · What the model claims (and does not claim)</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 16px 0;">
+    <div style="background: var(--surface-2); border-left: 3px solid #4ade80; padding: 14px; border-radius: var(--r-sm);">
+      <div style="font-family: var(--font-h); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #4ade80; margin-bottom: 8px;">What we claim</div>
+      <ul style="margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.6; color: var(--text-hi);">
+        <li>The intervention will move five metrics in a specified <strong>direction and order</strong> (M02 / M03 first, M04 second, M01 third)</li>
+        <li>S02's coalition is <strong>broader than S01 or S03</strong> (no veto-strength opposition)</li>
+        <li>Recovered tuition value at S02: ~<strong>$5M/year at 64:1 ROI</strong></li>
+        <li>Phases are <strong>cumulative and necessary</strong></li>
+      </ul>
+    </div>
+    <div style="background: var(--surface-2); border-left: 3px solid #f87171; padding: 14px; border-radius: var(--r-sm);">
+      <div style="font-family: var(--font-h); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #f87171; margin-bottom: 8px;">What we do NOT claim</div>
+      <ul style="margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.6; color: var(--text-mid);">
+        <li>Exact effect sizes (all deltas are <strong>ranges</strong>, not points)</li>
+        <li>That comfort is <strong>directly measured</strong> (M01–M05 are feedback metrics)</li>
+        <li>That coalition scores are <strong>surveyed</strong> (they are inferred)</li>
+        <li>That the model is <strong>predictive in a frequentist sense</strong> (it is structured projection)</li>
+      </ul>
+    </div>
+  </div>
+  <h2 id="sec-07"><span class="num">07</span>References</h2>
+  <p>
+    The model draws from two literature traditions. <strong>Behavioral mechanism research</strong> grounds how users interact with the dashboard. <strong>Thermal comfort, building performance, and energy literature</strong> grounds the metric definitions and baseline values. Each reference is paired with a one-line note showing how it became part of the v6 model.
+  </p>
+
+  <div class="refs-cluster">
+
+    <h3>A · Behavioral mechanisms</h3>
+
+    <div class="ref-item">
+      <div class="citation"><span class="author">Prentice, D. A. &amp; Miller, D. T.</span> <span class="year">(1993).</span> <span class="title">"Pluralistic ignorance and alcohol use on campus: Some consequences of misperceiving the social norm." Journal of Personality and Social Psychology, 64(2), 243–256.</span></div>
+      <div class="applied">→ Used in M02 Isolation Index. Justifies the ~70% baseline (people overestimate how alone they are in feeling discomfort) and the projected drop to ~25% after the aggregate readout intervention.</div>
+    </div>
+
+    <div class="ref-item">
+      <div class="citation"><span class="author">Thaler, R. H. &amp; Sunstein, C. R.</span> <span class="year">(2008).</span> <span class="title">Nudge: Improving Decisions About Health, Wealth, and Happiness. Yale University Press.</span></div>
+      <div class="applied">→ Used in M03 Friction-to-Voice. Justifies the design choice of 5-tier one-tap voting (vs. an email-form ticket): friction below 30 seconds substantially shifts participation rates.</div>
+    </div>
+
+    <div class="ref-item">
+      <div class="citation"><span class="author">Cialdini, R. B., Reno, R. R. &amp; Kallgren, C. A.</span> <span class="year">(1990).</span> <span class="title">"A focus theory of normative conduct: Recycling the concept of norms to reduce littering in public places." Journal of Personality and Social Psychology, 58(6), 1015–1026.</span></div>
+      <div class="applied">→ Used in M04 Loop Closure Time. The descriptive/prescriptive distinction motivates public response logs: facilities don't just respond, they respond visibly, which sets a norm.</div>
+    </div>
+
+    <div class="ref-item">
+      <div class="citation"><span class="author">Kahneman, D. &amp; Tversky, A.</span> <span class="year">(1979).</span> <span class="title">"Prospect Theory: An Analysis of Decision under Risk." Econometrica, 47(2), 263–291.</span></div>
+      <div class="applied">→ Used in R5 Consequence card across all 3 modes. Loss aversion (loss feels ~2× a gain) explains why "you lost $2,400 of comfort hours" works better than "you gained $3 of energy savings".</div>
+    </div>
+
+    <div class="ref-item">
+      <div class="citation"><span class="author">Tversky, A. &amp; Kahneman, D.</span> <span class="year">(1974).</span> <span class="title">"Judgment under Uncertainty: Heuristics and Biases." Science, 185(4157), 1124–1131.</span></div>
+      <div class="applied">→ Used in tuition anchor ($51 / hour). Anchoring effect: numbers are evaluated relative to a reference. We chose tuition because every GSD user has it as a salient sunk cost.</div>
+    </div>
+
+    <div class="ref-item">
+      <div class="citation"><span class="author">Thaler, R. H.</span> <span class="year">(1985).</span> <span class="title">"Mental Accounting and Consumer Choice." Marketing Science, 4(3), 199–214.</span></div>
+      <div class="applied">→ Used in tuition anchor design. Mental accounting explains why tuition feels distinct from other money — placing thermal hours in the tuition account makes them feel relevant in a way generic dollar values would not.</div>
+    </div>
+
+    <div class="ref-item">
+      <div class="citation"><span class="author">Goetz, T.</span> <span class="year">(2011).</span> <span class="title">"Harnessing the Power of Feedback Loops." Wired Magazine, June 2011.</span></div>
+      <div class="applied">→ Frames the entire diagnosis. The four-step feedback loop (Evidence → Relevance → Consequence → Action) is exactly what's broken at Gund — and what each region of the v6 dashboard restores, one step per region.</div>
+    </div>
+
+    <h3>B · Thermal comfort, building performance, and energy</h3>
+
+    <div class="ref-item">
+      <div class="citation"><span class="author">de Dear, R. &amp; Brager, G. S.</span> <span class="year">(2002).</span> <span class="title">"Thermal comfort in naturally ventilated buildings: revisions to ASHRAE Standard 55." Energy and Buildings, 34(6), 549–561.</span></div>
+      <div class="applied">→ Used in M01 Perception Gap interpretation. Adaptive comfort theory: when occupants gain perceived control, the felt-vs-ambient gap narrows by 60–85%. This bounds our M01 projection range.</div>
+    </div>
+
+    <div class="ref-item">
+      <div class="citation"><span class="author">ANSI/ASHRAE Standard 55</span> <span class="year">(2020).</span> <span class="title">Thermal Environmental Conditions for Human Occupancy. ASHRAE.</span></div>
+      <div class="applied">→ Defines the thermal comfort envelope used by Harvard FAS HVAC. Our M01 baseline (−4.1°F gap) is measured against this standard's PMV-PPD model.</div>
+    </div>
+
+    <div class="ref-item">
+      <div class="citation"><span class="author">Shove, E.</span> <span class="year">(2003).</span> <span class="title">Comfort, Cleanliness and Convenience: The Social Organization of Normality. Berg.</span></div>
+      <div class="applied">→ Justifies why private clothing/adaptation behavior is a useful diagnostic of broken feedback. Practices theory: when system response fails, people compensate privately — and that compensation is invisible to facilities.</div>
+    </div>
+
+    <div class="ref-item">
+      <div class="citation"><span class="author">Tett, G.</span> <span class="year">(2015).</span> <span class="title">The Silo Effect: The Peril of Expertise and the Promise of Breaking Down Barriers. Simon &amp; Schuster.</span></div>
+      <div class="applied">→ Diagnostic framing for the broken feedback loop. The information silos between Mike (BAS), Ben (Facilities), Trevor (Sustainability), and students are exactly the silos this dashboard tries to bridge.</div>
+    </div>
+
+    <div class="ref-item">
+      <div class="citation"><span class="author">Ostrom, E.</span> <span class="year">(1990).</span> <span class="title">Governing the Commons: The Evolution of Institutions for Collective Action. Cambridge University Press.</span></div>
+      <div class="applied">→ Names the project: Gund Thermal <em>Commons</em>. Thermal comfort is treated here as a shared resource requiring collective governance, not a private optimization problem.</div>
+    </div>
+
+    <div class="ref-item">
+      <div class="citation"><span class="author">Hussey, M. A. &amp; Hughes, J. P.</span> <span class="year">(2007).</span> <span class="title">"Design and analysis of stepped wedge cluster randomized trials." Contemporary Clinical Trials, 28(2), 182–191.</span></div>
+      <div class="applied">→ Methodology for piloting S02. Stepped-wedge design lets us roll out the dashboard tray-by-tray rather than all-at-once, generating evidence while still serving every zone within the trial period.</div>
+    </div>
+
+  </div>
+
+  <p style="margin-top: 36px; font-size: 12px; color: var(--text-mid); font-style: italic;">
+    Each metric prediction is a weighted blend of these literature sources, our own GSD survey data, and stakeholder reaction interviews (Ben Szalewicz, Mike Smith, Trevor O'Brien). The full assumptions document — with discount factors, boundary conditions, and what would still need confirming — is available on request.
+  </p>
+
+</div>
+
+<footer class="foot">
+  <div>VIS 2478 · Spring 2026</div>
+  <div>About</div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+document.getElementById('mode-switch-mount').innerHTML = renderModeSwitch(null);
+
+// =========================================================================
+// PLAY-FLOW INTERACTIVE
+// =========================================================================
+const FLOW_STEPS = [
+  {
+    title: "USER votes",
+    desc: "An occupant scans the QR code on their tray and casts a 1-tap comfort vote. Within seconds they see the aggregate readout — 'you're not alone.'",
+    meta: "Mechanism: Friction reduction + Visible plurality · Region: USER R2 / R3"
+  },
+  {
+    title: "Vote enters the OPERATOR queue",
+    desc: "The vote is added to the live thermal field. When sustained signal in a zone crosses threshold (e.g. 'cold' votes for 4+ hours), it appears as a prioritized ticket in the OPERATOR view.",
+    meta: "Mechanism: Aggregated visibility · Region: OPERATOR R2 / R3"
+  },
+  {
+    title: "OPERATOR acts",
+    desc: "Facilities clicks 'Adjust setpoint at L03 W' or 'Reply publicly to votes'. Action takes one click. The action is logged with a timestamp.",
+    meta: "Mechanism: Friction reduction · Region: OPERATOR R4"
+  },
+  {
+    title: "Loop closes — visible to USER",
+    desc: "Within 5 minutes, the action appears back in USER mode as a public response. The user sees their vote was not just heard but acted on. This visibility is the loop closing.",
+    meta: "Mechanism: Social norms (descriptive + prescriptive) · Region: USER history bar / OPERATOR public log"
+  },
+  {
+    title: "DECISION sees the annual roll-up",
+    desc: "At month / year scale, all loops are aggregated into the 6-dimension gauge and the R5 Annual Outlook. The Dean sees: 100,000 h × $51 ≈ $5.1M of recovered tuition value at 63 : 1 ROI.",
+    meta: "Mechanism: Loss aversion + Anchoring · Region: DECISION R2 / R5"
+  }
+];
+
+let flowTimer = null;
+
+function showStep(i) {
+  document.querySelectorAll('.flow-step').forEach((el, idx) => {
+    el.classList.toggle('active', idx === i);
+  });
+  if (i >= 0 && i < FLOW_STEPS.length) {
+    const s = FLOW_STEPS[i];
+    document.getElementById('flow-detail').innerHTML = `
+      <div class="what">${i+1}. ${s.title}</div>
+      <div class="desc">${s.desc}</div>
+      <div class="meta">${s.meta}</div>
+    `;
+    document.getElementById('flow-progress').textContent = `Step ${i+1} of 5`;
+  }
+}
+
+function playFlow() {
+  if (flowTimer) clearTimeout(flowTimer);
+  document.querySelectorAll('.flow-step').forEach(el => el.classList.remove('active'));
+
+  let i = 0;
+  function nextStep() {
+    if (i >= FLOW_STEPS.length) {
+      document.getElementById('flow-progress').textContent = `Complete · click any step to revisit`;
+      return;
+    }
+    showStep(i);
+    i++;
+    flowTimer = setTimeout(nextStep, 2400);
+  }
+  nextStep();
+}
+
+document.getElementById('flow-play').addEventListener('click', playFlow);
+document.querySelectorAll('.flow-step').forEach((el, idx) => {
+  el.addEventListener('click', () => {
+    if (flowTimer) clearTimeout(flowTimer);
+    showStep(idx);
+    document.getElementById('flow-progress').textContent = `Step ${idx+1} of 5 · click play to restart`;
+  });
+});
+
+// ===== Theory of change: swimlane interaction =====
+const swimData = {
+  ben: {
+    name: 'Ben Szalewicz',
+    role: 'GSD facilities chief · decision gate',
+    M0:  { phase: 'baseline',           do: 'Holds an "envelope first" position. Receives complaints individually.', perceive: 'Comfort is a private grievance. Each complaint a one-off.', risk: null },
+    M3:  { phase: 'phase 1 · sensing',  do: 'Briefed on the proposal. Asked to authorize an L03 sensor + QR pilot.', perceive: 'A research project, low commitment. But: "what if students think we have been ignoring them?"', risk: 'Worry about being framed as having been negligent. Mitigation: position the pilot as adding visibility on top of existing work, not correcting failure.' },
+    M6:  { phase: 'phase 1 · sensing',  do: 'Reviews first month of aggregated comfort data alongside Mike.', perceive: 'The data is reading what he already sensed — but now there is a record.', risk: null },
+    M9:  { phase: 'phase 1 · sensing',  do: 'Approves expansion of pilot to L02 and L04. Endorses pre-council working group.', perceive: 'Pilot is contained, no political fallout. Worth letting it grow.', risk: null },
+    M12: { phase: 'phase 2 · voicing',  do: 'Publicly endorses Thermal Council. Co-chairs first meeting.', perceive: 'This is now a story he can tell upward. Council reduces 1:1 complaint load.', risk: null },
+    M18: { phase: 'phase 2 · voicing',  do: 'Routine attendance at council. Handles disputes through the body.', perceive: 'Workload reduced. Has a venue for hard tradeoffs.', risk: null },
+    M24: { phase: 'phase 2 · voicing',  do: 'Recommends model to peer facilities chiefs at other Harvard schools.', perceive: 'This is now a portfolio item, not a problem.', risk: null },
+    M36: { phase: 'phase 3 · governing', do: 'Formal liaison between GSD council and Harvard E&U policy review.', perceive: 'GSD has earned a voice in upstream policy. Sees himself as enabler.', risk: null },
+    M48: { phase: 'phase 3 · governing', do: 'Institutional role change: "Director of Comfort Operations" instead of "Chief of Facilities".', perceive: 'Identity has shifted from gatekeeper to coordinator.', risk: null }
+  },
+  admin: {
+    name: 'Admin team',
+    role: 'GSD operations · approvals and budgeting',
+    M0:  { phase: 'baseline',           do: 'Processes work orders, manages outsourced contracts (Securitas, Entensiv).', perceive: 'Thermal complaints are noise. No data infrastructure to act on.', risk: null },
+    M3:  { phase: 'phase 1 · sensing',  do: 'Reviews pilot scope and budget request. Approves QR + sensor hardware.', perceive: 'Cheap enough to allow. Wants to see procurement clarity.', risk: null },
+    M6:  { phase: 'phase 1 · sensing',  do: 'Tracks pilot expenditures. Reports cost-per-vote to Ben.', perceive: 'Data is becoming a budget line. That is new.', risk: null },
+    M9:  { phase: 'phase 1 · sensing',  do: 'Begins drafting expansion budget for full Gund deployment.', perceive: 'Project is scaling. Coordination overhead increasing.', risk: null },
+    M12: { phase: 'phase 2 · voicing',  do: 'Allocates standing budget for council operations and dashboard maintenance.', perceive: 'This is now a recurring program, not a project.', risk: null },
+    M18: { phase: 'phase 2 · voicing',  do: 'Coordinates contractor briefings (Entensiv, Securitas) on dashboard outputs.', perceive: 'Outsourced parties now part of the feedback loop.', risk: null },
+    M24: { phase: 'phase 2 · voicing',  do: 'Builds reporting templates for Dean and broader Harvard ops review.', perceive: 'Their work is now externally legible.', risk: null },
+    M36: { phase: 'phase 3 · governing', do: 'Manages cross-school replication contracts.', perceive: 'GSD is exporting a model.', risk: null },
+    M48: { phase: 'phase 3 · governing', do: 'Embeds council-driven decisions into annual budget cycle.', perceive: 'Governance and budgeting now share a calendar.', risk: null }
+  },
+  mike: {
+    name: 'Mike Smith',
+    role: 'Automation coordinator · sole BAS access',
+    M0:  { phase: 'baseline',           do: 'Sole BAS dashboard access. Billed hourly to GSD. Reactive, ticket-driven.', perceive: '"I am the person they call when something is broken."', risk: null },
+    M3:  { phase: 'phase 1 · sensing',  do: 'Invited to co-design the dashboard. Asked what data he is comfortable making visible.', perceive: 'Worried about being replaced. Worried about loss of expertise monopoly.', risk: 'This is the largest political risk in the entire transition. Mitigation: explicitly position him as the system architect, not the user. Hours billed do not decrease, role expands.' },
+    M6:  { phase: 'phase 1 · sensing',  do: 'Trains the dashboard on his own decision logic. Becomes the data interpreter.', perceive: '"I am being asked to teach the system what I know."', risk: null },
+    M9:  { phase: 'phase 1 · sensing',  do: 'Retains BAS, adds public-facing read-only viewer. Hours stable.', perceive: 'Role is intact, with new visibility. Income unaffected.', risk: null },
+    M12: { phase: 'phase 2 · voicing',  do: 'Sits on Thermal Council as technical voice. Translates between data and people.', perceive: '"I have a venue for the things I have always known."', risk: null },
+    M18: { phase: 'phase 2 · voicing',  do: 'Coordinates dashboard expansion across Gund. Manages access tiers.', perceive: 'Now a system orchestrator, not a single operator.', risk: null },
+    M24: { phase: 'phase 2 · voicing',  do: 'Documents practices into a transferable playbook.', perceive: 'His tacit knowledge has become institutional memory.', risk: null },
+    M36: { phase: 'phase 3 · governing', do: 'Supports replication: trains automation coordinators at other Harvard schools.', perceive: 'Authority expands. He is now sought-after.', risk: null },
+    M48: { phase: 'phase 3 · governing', do: 'Holds title "Thermal Coordinator" with formal scope across cross-school council.', perceive: 'The role he always implicitly held is now named.', risk: null }
+  },
+  engineers: {
+    name: 'Operating engineers',
+    role: 'Field execution · the people who actually turn the valves',
+    M0:  { phase: 'baseline',           do: 'Execute Mike\'s instructions. No view of why.', perceive: '"We are told what to set, not why."', risk: null },
+    M3:  { phase: 'phase 1 · sensing',  do: 'Trained on the dashboard logic. Begin reading aggregated comfort data.', perceive: 'New tool. Cautious about extra responsibility without extra pay.', risk: null },
+    M6:  { phase: 'phase 1 · sensing',  do: 'Use the dashboard to inform field decisions. Begin contributing observations back.', perceive: '"I can see what the building feels."', risk: 'Responsibility creeps without compensation adjustment. Mitigation: scope clarifications and a small recognition mechanism (council-cited contributions).' },
+    M9:  { phase: 'phase 1 · sensing',  do: 'Provide structured field notes that feed dashboard annotations.', perceive: 'Tacit knowledge legible to the system.', risk: null },
+    M12: { phase: 'phase 2 · voicing',  do: 'Have a rotating seat or invited voice in council technical reviews.', perceive: 'Recognized as experts, not laborers.', risk: null },
+    M18: { phase: 'phase 2 · voicing',  do: 'Coordinate with Securitas/custodial on shift-overlap observations.', perceive: 'Cross-team flow improves.', risk: null },
+    M24: { phase: 'phase 2 · voicing',  do: 'Stable role. Standard part of the workflow.', perceive: 'New normal.', risk: null },
+    M36: { phase: 'phase 3 · governing', do: 'Train cross-school engineers on the protocol.', perceive: 'Practitioner authority now exportable.', risk: null },
+    M48: { phase: 'phase 3 · governing', do: 'Embedded in annual review of the model.', perceive: 'Their voice has institutional weight.', risk: null }
+  },
+  custodial: {
+    name: 'Custodial · security',
+    role: 'Hidden experts · 24/7 in the building, rarely consulted',
+    M0:  { phase: 'baseline',           do: 'In the building 24/7. Receive complaints first. Not part of any data flow.', perceive: 'Invisible to the system.', risk: null },
+    M3:  { phase: 'phase 1 · sensing',  do: 'One-week structured interview round. Their tacit knowledge feeds the baseline assumptions.', perceive: '"For the first time, someone is asking us what we see."', risk: null },
+    M6:  { phase: 'phase 1 · sensing',  do: 'Occasionally provide situational notes (e.g., night-shift cold spots).', perceive: 'Slightly more recognized but still on the edge.', risk: null },
+    M9:  { phase: 'phase 1 · sensing',  do: 'Invited into the pre-council working group.', perceive: 'Welcomed in, not just consulted.', risk: null },
+    M12: { phase: 'phase 2 · voicing',  do: 'Hold a rotating seat on the council representing 24/7 occupant perspective.', perceive: '"We have a chair."', risk: null },
+    M18: { phase: 'phase 2 · voicing',  do: 'Provide off-hours data unavailable from any other source.', perceive: 'Their knowledge is now institutional input.', risk: null },
+    M24: { phase: 'phase 2 · voicing',  do: 'Their seat is permanent in the council charter.', perceive: 'Institutionalized.', risk: null },
+    M36: { phase: 'phase 3 · governing', do: 'Cross-school custodial network shares observations through the model.', perceive: 'Recognition crosses building boundaries.', risk: null },
+    M48: { phase: 'phase 3 · governing', do: 'Embedded role in cross-school operations.', perceive: 'Hidden experts are no longer hidden.', risk: null }
+  },
+  students: {
+    name: 'Students',
+    role: 'Primary occupants · main user group, source of legitimacy',
+    M0:  { phase: 'baseline',           do: 'Private complaints. Add layers, leave the building, endure. Believe they are alone.', perceive: 'Isolated. "Maybe it is just me."', risk: null },
+    M3:  { phase: 'phase 1 · sensing',  do: 'Scan QR codes on each tray. First votes registered.', perceive: '"My discomfort is not an illusion. There are others."', risk: null },
+    M6:  { phase: 'phase 1 · sensing',  do: 'See aggregated comfort patterns. Begin to recognize spatial hot/cold zones.', perceive: '"I can read the building."', risk: 'Vote fatigue: novelty wears off, participation could fall. Mitigation: visible council formation in M9 turns voting into a path to actual change.' },
+    M9:  { phase: 'phase 1 · sensing',  do: 'Some students invited into the pre-council working group.', perceive: 'Voice is now formalized.', risk: null },
+    M12: { phase: 'phase 2 · voicing',  do: 'Permanent student representation on Thermal Council.', perceive: '"We have a real seat at the table."', risk: null },
+    M18: { phase: 'phase 2 · voicing',  do: 'Generational handoff: graduating students train next cohort\'s reps.', perceive: 'Continuity, not one-off representation.', risk: null },
+    M24: { phase: 'phase 2 · voicing',  do: 'Routine engagement. Voting and council participation becomes part of the GSD experience.', perceive: 'Climate is now a thing students help make, not endure.', risk: null },
+    M36: { phase: 'phase 3 · governing', do: 'GSD students mentor peers at other schools through the cross-school network.', perceive: 'Their experience is exportable.', risk: null },
+    M48: { phase: 'phase 3 · governing', do: 'Permanent voice in cross-school review.', perceive: 'Climate is something we deliberate, not inherit.', risk: null }
+  },
+  faculty: {
+    name: 'Faculty',
+    role: 'Academic voice · use space-claim power to self-regulate',
+    M0:  { phase: 'baseline',           do: 'Use studio doors, room reservations, and personal heaters to manage their own comfort.', perceive: 'Comfort is a private problem solved with positional power.', risk: null },
+    M3:  { phase: 'phase 1 · sensing',  do: 'Receive notification. Mostly skeptical but curious.', perceive: '"Worth watching, not yet worth participating."', risk: null },
+    M6:  { phase: 'phase 1 · sensing',  do: 'Some begin voting. Use data in their own teaching about systems.', perceive: 'Pedagogically interesting. Civically slow to engage.', risk: null },
+    M9:  { phase: 'phase 1 · sensing',  do: 'Invited into council planning. Some accept.', perceive: 'Status appeal: "I should be at the table."', risk: null },
+    M12: { phase: 'phase 2 · voicing',  do: 'Faculty representation on council. Bring academic framing to the work.', perceive: 'Council is becoming an intellectual venue too.', risk: null },
+    M18: { phase: 'phase 2 · voicing',  do: 'Some faculty begin teaching the model in studios as case study.', perceive: 'The work is also pedagogy.', risk: null },
+    M24: { phase: 'phase 2 · voicing',  do: 'Council outputs cited in faculty research and curriculum.', perceive: 'The project crosses into the academic mission.', risk: null },
+    M36: { phase: 'phase 3 · governing', do: 'Help frame the cross-school replication intellectually.', perceive: 'Their voice carries beyond Gund.', risk: null },
+    M48: { phase: 'phase 3 · governing', do: 'Faculty involvement formalized in cross-school council.', perceive: 'Permanent academic-administrative bridge.', risk: null }
+  },
+  staff: {
+    name: 'Staff · visitors',
+    role: 'Peripheral occupants · long-time presence but rarely surveyed',
+    M0:  { phase: 'baseline',           do: 'Limited voice in the system. Adapt or complain to no one in particular.', perceive: 'Invisible.', risk: null },
+    M3:  { phase: 'phase 1 · sensing',  do: 'See dashboards in lobbies. Mostly observers.', perceive: 'Aware of the system but not yet active.', risk: null },
+    M6:  { phase: 'phase 1 · sensing',  do: 'Some staff begin voting alongside students.', perceive: 'They are part of the count.', risk: null },
+    M9:  { phase: 'phase 1 · sensing',  do: 'Outreach effort to admin staff specifically.', perceive: 'Recognized as long-haul occupants.', risk: null },
+    M12: { phase: 'phase 2 · voicing',  do: 'A staff seat on the council. Visitors get a feedback channel through the dashboard.', perceive: 'Inclusion.', risk: null },
+    M18: { phase: 'phase 2 · voicing',  do: 'Steady participation. Visitors\' transient feedback used as comparison data.', perceive: 'Their experience matters too.', risk: null },
+    M24: { phase: 'phase 2 · voicing',  do: 'Stable role.', perceive: 'New normal.', risk: null },
+    M36: { phase: 'phase 3 · governing', do: 'Cross-school staff networks share observations.', perceive: 'Cross-cutting voice.', risk: null },
+    M48: { phase: 'phase 3 · governing', do: 'Embedded in long-term review.', perceive: 'Visible.', risk: null }
+  },
+  eandu: {
+    name: 'Harvard E&U',
+    role: 'University-level policy holder · 2009 Temperature Policy',
+    M0:  { phase: 'baseline',           do: 'Maintains the 2009 Temperature Policy. No active feedback channel from buildings.', perceive: 'Policy is settled. No reason to revisit.', risk: null },
+    M3:  { phase: 'phase 1 · sensing',  do: 'Aware of the GSD pilot but not involved.', perceive: '"School-level experiment, not our concern yet."', risk: null },
+    M6:  { phase: 'phase 1 · sensing',  do: 'Receives first informal data report from Trevor / Office for Sustainability.', perceive: 'Mild interest. Useful as reference.', risk: null },
+    M9:  { phase: 'phase 1 · sensing',  do: 'Invited to observe pilot. No commitments.', perceive: 'Politely curious.', risk: null },
+    M12: { phase: 'phase 2 · voicing',  do: 'Receives a complete data package showing measured outcomes.', perceive: '"This may inform the next policy review."', risk: 'Risk of being framed as having held an obsolete policy. Mitigation: do not request policy change at this stage. Provide data for their use, on their timeline.' },
+    M18: { phase: 'phase 2 · voicing',  do: 'Internal review of 2009 policy reopens. Uses GSD data as one of several inputs.', perceive: 'Updated thinking is possible.', risk: null },
+    M24: { phase: 'phase 2 · voicing',  do: 'Drafts a revision incorporating tighter deadbands and feedback hooks.', perceive: 'New policy is a defensible institutional move.', risk: null },
+    M36: { phase: 'phase 3 · governing', do: 'New university-level policy adopted, drawing on the cross-school council protocol.', perceive: 'They are leading the modernization, not being dragged.', risk: null },
+    M48: { phase: 'phase 3 · governing', do: 'Annual policy review now built around the cross-school feedback model.', perceive: 'Policy is alive again.', risk: null }
+  },
+  sustain: {
+    name: 'Office for Sustainability',
+    role: 'Cross-school broker · sustainability narrative owner',
+    M0:  { phase: 'baseline',           do: 'Tracks energy and emissions. Comfort not in their direct portfolio.', perceive: 'Sustainability is energy, not feelings.', risk: null },
+    M3:  { phase: 'phase 1 · sensing',  do: 'Briefed on the pilot. Sees a connection to occupant engagement metrics.', perceive: 'A new angle on sustainability storytelling.', risk: null },
+    M6:  { phase: 'phase 1 · sensing',  do: 'Begins citing the GSD pilot in cross-school sustainability conversations.', perceive: 'Demonstration project.', risk: null },
+    M9:  { phase: 'phase 1 · sensing',  do: 'Helps connect the GSD model with parallel Harvard sustainability programs.', perceive: 'Convening role.', risk: null },
+    M12: { phase: 'phase 2 · voicing',  do: 'Co-sponsors expansion of the model to a second school.', perceive: 'Replication is possible.', risk: null },
+    M18: { phase: 'phase 2 · voicing',  do: 'Builds replication toolkit. Hosts inter-school working group.', perceive: 'Owns the cross-school narrative.', risk: null },
+    M24: { phase: 'phase 2 · voicing',  do: 'Funds replication at two more schools.', perceive: 'A program, not an experiment.', risk: null },
+    M36: { phase: 'phase 3 · governing', do: 'Manages the cross-school council secretariat.', perceive: 'They are the connective tissue.', risk: null },
+    M48: { phase: 'phase 3 · governing', do: 'Embedded as the operational home of the cross-school model.', perceive: 'A permanent piece of Harvard sustainability infrastructure.', risk: null }
+  },
+  council: {
+    name: 'Thermal Council',
+    role: 'New governance body · does not exist at M0',
+    M0:  { phase: 'baseline',           do: 'Does not exist.', perceive: '—', risk: null },
+    M3:  { phase: 'baseline',           do: 'Does not exist.', perceive: '—', risk: null },
+    M6:  { phase: 'baseline',           do: 'Does not exist.', perceive: '—', risk: null },
+    M9:  { phase: 'phase 1 · sensing',  do: 'Pre-council working group convenes. Mike, Ben, Trevor (sustainability), 2 student reps, 1 custodial rep.', perceive: 'Trust-building, no formal authority yet.', risk: null },
+    M12: { phase: 'phase 2 · voicing',  do: 'Officially chartered. Monthly meetings. Public minutes.', perceive: 'A new venue for thermal decisions.', risk: null },
+    M18: { phase: 'phase 2 · voicing',  do: 'Routine cadence. RCT-style setpoint experiments running.', perceive: 'Productive disagreement.', risk: null },
+    M24: { phase: 'phase 2 · voicing',  do: 'Membership rotates on schedule. Decision log published.', perceive: 'Institutional and trustworthy.', risk: null },
+    M36: { phase: 'phase 3 · governing', do: 'Becomes one node of a cross-school council network.', perceive: 'Replicable governance model.', risk: null },
+    M48: { phase: 'phase 3 · governing', do: 'Anchors the cross-school model. Feeds into Harvard E&U policy review.', perceive: 'Permanent.', risk: null }
+  }
+};
+
+const swimDots = document.querySelectorAll('.swim-dot');
+const swimDetail = document.getElementById('swim-detail');
+let activeDot = null;
+
+swimDots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const actor = dot.getAttribute('data-actor');
+    const time  = dot.getAttribute('data-time');
+    const data  = swimData[actor];
+    if (!data) return;
+    const slot  = data[time];
+    if (!slot) return;
+
+    if (activeDot) activeDot.classList.remove('is-active');
+    dot.classList.add('is-active');
+    activeDot = dot;
+
+    swimDetail.classList.remove('is-empty');
+
+    let html = `
+      <div class="sd-head">
+        <span class="sd-actor">${data.name}</span>
+        <span class="sd-time">${time}</span>
+        <span class="sd-phase">${slot.phase}</span>
+      </div>
+      <div class="sd-row"><span class="sd-key">Role</span><span class="sd-val" style="color:var(--text-mid); font-style:italic;">${data.role}</span></div>
+      <div class="sd-row"><span class="sd-key">Doing</span><span class="sd-val">${slot.do}</span></div>
+      <div class="sd-row"><span class="sd-key">Perceives</span><span class="sd-val" style="color:var(--text-mid);">${slot.perceive}</span></div>
+    `;
+    if (slot.risk) {
+      html += `<div class="sd-row is-risk"><span class="sd-key">Risk</span><span class="sd-val">${slot.risk}</span></div>`;
+    }
+    swimDetail.innerHTML = html;
+  });
+});
+
+// ===== TOC scrollspy =====
+const tocLinks = document.querySelectorAll('.toc-item');
+const sections = Array.from(document.querySelectorAll('h2[id^="sec-"]'));
+
+function updateActiveTOC() {
+  const scrollPos = window.scrollY + 140;
+  let current = sections[0];
+  for (const sec of sections) {
+    if (sec.offsetTop <= scrollPos) current = sec;
+    else break;
+  }
+  tocLinks.forEach(link => {
+    link.classList.toggle('is-active', link.getAttribute('href') === '#' + current.id);
+  });
+}
+
+window.addEventListener('scroll', updateActiveTOC, { passive: true });
+updateActiveTOC();
+
+// Smooth scroll for TOC links
+tocLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      const top = target.offsetTop - 110;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>

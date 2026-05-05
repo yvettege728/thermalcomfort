@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USER · Gund Thermal Commons</title>
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="dot"></span> Gund Thermal Commons</div>
+  <div class="center" id="mode-switch-mount"></div>
+  <div class="right">
+    <a href="about.html" class="about-link">About</a>
+  </div>
+</header>
+
+<div class="mode-banner user">
+  <div>Viewing as · USER · L03 W</div>
+  <div class="right-meta">L03 west tray · 68.2°F · live</div>
+</div>
+
+<main>
+
+  <!-- ============================================================
+       R2 HERO — vote prompt + ambient
+       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">02</div>
+      <div class="title">How do you feel right now?</div>
+      <div class="desc">L03 west tray · cold drop from glass roof concentrates here</div>
+    </div>
+
+    <div class="row-3" style="margin-bottom: 16px;">
+      <div class="card">
+        <div class="lbl">Ambient now</div>
+        <div class="v t-mono-num">68.2<span class="unit">°F</span></div>
+        <div class="sub">Sensor reading at this tray</div>
+      </div>
+      <div class="card">
+        <div class="lbl">Past 30 min</div>
+        <div class="v t-mono-num">12<span class="unit">votes</span></div>
+        <div class="sub">From people on this tray</div>
+      </div>
+      <div class="card bordered-orange">
+        <div class="lbl">Most common feeling</div>
+        <div class="v t-mono-num" style="color: var(--user-cool-1)">cold</div>
+        <div class="sub">8 of 12 voted cold or too cold</div>
+      </div>
+    </div>
+
+    <div class="vote-grid" id="vote-grid">
+      <button class="vote-btn" data-vote="very-cold"><span class="swatch"></span><span class="label">too<br>cold</span></button>
+      <button class="vote-btn" data-vote="cold"><span class="swatch"></span><span class="label">slightly<br>cold</span></button>
+      <button class="vote-btn" data-vote="fine"><span class="swatch"></span><span class="label">just<br>right</span></button>
+      <button class="vote-btn" data-vote="warm"><span class="swatch"></span><span class="label">slightly<br>warm</span></button>
+      <button class="vote-btn" data-vote="very-warm"><span class="swatch"></span><span class="label">too<br>warm</span></button>
+    </div>
+
+    <div class="post-vote" id="post-vote">
+      <div class="you-said">You said it feels <span class="vote-word" id="your-vote-word">—</span>.</div>
+      <div class="alone-line" id="alone-line">—</div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       R3 DIAGNOSIS — stack + history
+       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">03</div>
+      <div class="title">How others on this tray feel right now</div>
+      <div class="desc">Live aggregation · L03 west · last 30 min</div>
+    </div>
+
+    <div class="stack-section">
+      <div class="stack-head">
+        <div class="title">Right now · L03 west</div>
+        <div class="meta">past 30 min · n = <span id="now-n">12</span></div>
+      </div>
+
+      <div class="stack" id="stack">
+        <div class="stack-col" data-vote="very-cold"><div class="col-count" data-key="very-cold">0</div><div class="col-bricks" data-bricks="very-cold"></div><div class="col-label">too cold</div></div>
+        <div class="stack-col" data-vote="cold"><div class="col-count" data-key="cold">0</div><div class="col-bricks" data-bricks="cold"></div><div class="col-label">slightly cold</div></div>
+        <div class="stack-col" data-vote="fine"><div class="col-count" data-key="fine">0</div><div class="col-bricks" data-bricks="fine"></div><div class="col-label">just right</div></div>
+        <div class="stack-col" data-vote="warm"><div class="col-count" data-key="warm">0</div><div class="col-bricks" data-bricks="warm"></div><div class="col-label">slightly warm</div></div>
+        <div class="stack-col" data-vote="very-warm"><div class="col-count" data-key="very-warm">0</div><div class="col-bricks" data-bricks="very-warm"></div><div class="col-label">too warm</div></div>
+      </div>
+    </div>
+
+    <div class="history-section">
+      <div class="stack-head">
+        <div class="title">Past 2 hours</div>
+        <div class="meta">L03 west · 8 fifteen-minute slices</div>
+      </div>
+      <p style="font-size: 13px; color: var(--text-mid); margin: 8px 0 0;">
+        Cold votes have stayed dominant — this is not a one-off complaint, it's a sustained signal.
+      </p>
+      <div class="history-bar" id="history-bar"></div>
+      <div class="history-axis">
+        <span>2h ago</span>
+        <span>1h ago</span>
+        <span>now</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       R3.5 LOOP CLOSURE — what operator did in the past 2 hours
+       This is the missing fourth step of Goetz's model:
+       Evidence → Relevance → Consequence → ACTION (visible).
+       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">03.5</div>
+      <div class="title">In the past 2 hours, facilities did this</div>
+      <div class="desc">Voting only matters if action follows. This is the loop closing in public.</div>
+    </div>
+
+    <div class="action-feed" id="action-feed">
+      <!-- rendered by JS from SAMPLE.operator.recent_actions -->
+    </div>
+  </section>
+
+  <!-- ============================================================
+       R5 CONSEQUENCE — your tuition value (CRITICAL)
+       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">05</div>
+      <div class="title">What your votes did this week</div>
+      <div class="desc">Comfort translated into the language GSD already understands: tuition</div>
+    </div>
+
+    <div class="consequence">
+      <div class="eyebrow">This week, your votes helped</div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          Studio time you got back
+          <span class="small">Hours per week you no longer spend layering up, leaving the building, or working through discomfort. Modeled from P2 survey median (~4–10 h/wk).</span>
+        </div>
+        <div class="value" id="cons-hours-major">7 h</div>
+      </div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          Worth in tuition value
+          <span class="small">Recovered hours × $51.14/hr (= $90k tuition ÷ 10mo ÷ 22d ÷ 8h). One unusable hour = one paid-but-wasted hour.</span>
+        </div>
+        <div class="value">
+          <span id="cons-dollars-major">$358</span>
+          <span class="pct" id="cons-pct-major">≈ 0.4% of one student's tuition</span>
+        </div>
+      </div>
+      <div class="row minor">
+        <div class="arrow">↳</div>
+        <div class="label">
+          Energy steam saved
+          <span class="small">Side benefit. Included only to show how small it is — comfort is the argument, not BTUs.</span>
+        </div>
+        <div class="value">
+          <span id="cons-dollars-minor">$3.20</span>
+          <span class="pct" id="cons-pct-minor">≈ 0.004% of tuition</span>
+        </div>
+      </div>
+      <div class="footer-line">
+        First number is why you should vote. Second is the side benefit. Comfort is ~110× more valuable per voter than energy savings here — that ratio is the whole point.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       R4 ACTION — see more, subscribe
+       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">04</div>
+      <div class="title">See more</div>
+      <div class="desc">Voluntary follow-on</div>
+    </div>
+
+    <div class="row-3">
+      <div class="card">
+        <div class="lbl">See full Gund map</div>
+        <div class="sub" style="margin-top: 12px;">All 5 trays, live thermal field. Switch to Operator view.</div>
+        <a href="operator.html" class="about-link" style="margin-top: 14px; display: inline-block;">Open Operator →</a>
+      </div>
+      <div class="card">
+        <div class="lbl">Weekly digest</div>
+        <div class="sub" style="margin-top: 12px;">One email Friday with the week's summary and what facilities did.</div>
+        <a href="#" class="about-link" style="margin-top: 14px; display: inline-block;">Subscribe</a>
+      </div>
+      <div class="card">
+        <div class="lbl">How is this calculated?</div>
+        <div class="sub" style="margin-top: 12px;">Methodology, mechanisms, and source literature.</div>
+        <a href="about.html" class="about-link" style="margin-top: 14px; display: inline-block;">About this system →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div>VIS 2478 · Wightman · Ge · Lock</div>
+  <div>Reset · <a href="user.html">user.html</a></div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+// =========================================================================
+// USER MODE LOGIC
+// =========================================================================
+
+document.getElementById('mode-switch-mount').innerHTML = renderModeSwitch('user');
+
+// ---- vote state ----------------------------------------------------------
+const seedVotes = ['very-cold','cold','cold','very-cold','cold','cold','fine','cold','very-cold','cold','fine','cold'];
+const VOTE_KEYS = ['very-cold','cold','fine','warm','very-warm'];
+const VOTE_LABELS = {
+  'very-cold':'too cold','cold':'slightly cold','fine':'just right','warm':'slightly warm','very-warm':'too warm'
+};
+let allVotes = [...seedVotes];
+let myVote = null;
+
+function counts() {
+  const c = { 'very-cold':0,'cold':0,'fine':0,'warm':0,'very-warm':0 };
+  for (const v of allVotes) c[v]++;
+  return c;
+}
+
+function renderStack() {
+  const c = counts();
+  for (const k of VOTE_KEYS) {
+    const col = document.querySelector(`.stack-col[data-vote="${k}"]`);
+    const countEl = col.querySelector('.col-count');
+    const bricksEl = col.querySelector('.col-bricks');
+    const n = c[k];
+    countEl.textContent = n;
+    if (n > 0) col.classList.add('has-votes');
+    // render bricks (existing — no animation re-trigger)
+    bricksEl.innerHTML = '';
+    for (let i = 0; i < n; i++) {
+      const b = document.createElement('div');
+      b.className = 'brick';
+      bricksEl.appendChild(b);
+    }
+  }
+  document.getElementById('now-n').textContent = allVotes.length;
+}
+
+function renderHistory() {
+  // 8 slices of 15 min, fake distribution
+  const slices = [
+    { 'very-cold':1,'cold':2,'fine':1,'warm':0,'very-warm':0 },
+    { 'very-cold':2,'cold':1,'fine':1,'warm':0,'very-warm':0 },
+    { 'very-cold':1,'cold':3,'fine':0,'warm':0,'very-warm':0 },
+    { 'very-cold':3,'cold':2,'fine':0,'warm':1,'very-warm':0 },
+    { 'very-cold':2,'cold':3,'fine':1,'warm':0,'very-warm':0 },
+    { 'very-cold':3,'cold':2,'fine':0,'warm':0,'very-warm':0 },
+    { 'very-cold':2,'cold':4,'fine':1,'warm':0,'very-warm':0 },
+    { 'very-cold':3,'cold':5,'fine':2,'warm':0,'very-warm':0 },
+  ];
+  const colors = {
+    'very-cold': 'var(--user-cool-2)',
+    'cold':      'var(--user-cool-1)',
+    'fine':      'var(--user-neutral)',
+    'warm':      'var(--user-warm-2)',
+    'very-warm': 'var(--user-warm-1)',
+  };
+  const bar = document.getElementById('history-bar');
+  bar.innerHTML = '';
+  for (const slice of slices) {
+    const total = Object.values(slice).reduce((a,b)=>a+b, 0);
+    const seg = document.createElement('div');
+    seg.className = 'seg';
+    if (total === 0) {
+      seg.style.background = 'var(--surface-2)';
+    } else {
+      for (const k of VOTE_KEYS) {
+        if (!slice[k]) continue;
+        const part = document.createElement('div');
+        part.className = 'part';
+        part.style.background = colors[k];
+        part.style.height = ((slice[k]/total)*100) + '%';
+        seg.appendChild(part);
+      }
+    }
+    bar.appendChild(seg);
+  }
+}
+
+function handleVote(key) {
+  if (myVote) return;  // one vote per session in this prototype
+  myVote = key;
+  allVotes.push(key);
+
+  // mark button
+  document.querySelectorAll('.vote-btn').forEach(b => {
+    if (b.dataset.vote === key) b.classList.add('is-mine');
+  });
+
+  // post-vote panel
+  const pv = document.getElementById('post-vote');
+  pv.classList.add('is-shown');
+  document.getElementById('your-vote-word').textContent = VOTE_LABELS[key];
+
+  const c = counts();
+  const sameCount = c[key] - 1;  // others who voted same way
+  const total = allVotes.length - 1;
+  const pct = Math.round((sameCount / Math.max(1, total)) * 100);
+
+  let msg;
+  if (sameCount === 0) {
+    msg = `You're the first to feel <strong>${VOTE_LABELS[key]}</strong> here in the past 30 minutes — your vote opens the signal.`;
+  } else if (sameCount < 3) {
+    msg = `<strong>${sameCount}</strong> ${sameCount === 1 ? 'other person' : 'other people'} on this tray felt the same way today.`;
+  } else {
+    msg = `<strong>${sameCount} of ${total}</strong> on this tray felt the same way today (~${pct}%) — you are not the only one.`;
+  }
+  document.getElementById('alone-line').innerHTML = msg;
+
+  // animate the new brick into the stack
+  const col = document.querySelector(`.stack-col[data-vote="${key}"]`);
+  if (col) {
+    col.classList.add('has-votes');
+    const bricksEl = col.querySelector('.col-bricks');
+    const newBrick = document.createElement('div');
+    newBrick.className = 'brick is-mine';
+    bricksEl.appendChild(newBrick);
+    col.querySelector('.col-count').textContent = c[key];
+  }
+  document.getElementById('now-n').textContent = allVotes.length;
+}
+
+document.querySelectorAll('.vote-btn').forEach(btn => {
+  btn.addEventListener('click', () => handleVote(btn.dataset.vote));
+});
+
+// initial render (without my vote)
+renderStack();
+renderHistory();
+
+// ---- R3.5 loop closure: render recent operator actions -----------------
+function fmtMinutesAgo(m) {
+  if (m < 60) return m + ' min ago';
+  const h = Math.floor(m / 60);
+  const rem = m % 60;
+  if (rem === 0) return h + 'h ago';
+  return h + 'h ' + rem + 'min ago';
+}
+function renderActionFeed() {
+  const acts = SAMPLE.operator.recent_actions;
+  if (!acts || acts.length === 0) {
+    document.getElementById('action-feed').innerHTML =
+      '<div class="action-empty">No facilities action in the last 2 hours.</div>';
+    return;
+  }
+  const html = acts.map(a => `
+    <div class="action-row">
+      <div class="action-arrow">↳</div>
+      <div class="action-body">
+        <span class="action-actor">${a.actor}</span>
+        <span class="action-verb">${a.verb}</span>
+      </div>
+      <div class="action-time">${fmtMinutesAgo(a.minutes_ago)}</div>
+    </div>
+  `).join('');
+  document.getElementById('action-feed').innerHTML = html;
+}
+renderActionFeed();
+
+// ---- R5 anchoring fill --------------------------------------------------
+function renderConsequence() {
+  const h = SAMPLE.user.weekly_hours_recovered;
+  const dollarsMajor = dollarsFromHours(h);
+  document.getElementById('cons-hours-major').textContent = h + ' h';
+  document.getElementById('cons-dollars-major').textContent = fmtDollarsExact(dollarsMajor);
+  document.getElementById('cons-pct-major').textContent = '≈ ' + fmtPct(pctOfTuition(dollarsMajor)) + ' of one student\'s tuition';
+
+  const sm = SAMPLE.user.weekly_steam_saved;
+  document.getElementById('cons-dollars-minor').textContent = '$' + sm.toFixed(2);
+  document.getElementById('cons-pct-minor').textContent = '≈ ' + fmtPct(pctOfTuition(sm)) + ' of tuition';
+}
+renderConsequence();
+</script>
+
+</body>
+</html>

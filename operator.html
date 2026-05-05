@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPERATOR · Gund Thermal Commons</title>
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="dot"></span> Gund Thermal Commons</div>
+  <div class="center" id="mode-switch-mount"></div>
+  <div class="right">
+    <a href="about.html" class="about-link">About</a>
+  </div>
+</header>
+
+<div class="mode-banner operator">
+  <div>Viewing as · OPERATOR · Facilities Console</div>
+  <div class="right-meta" id="op-banner-meta">last action 45 min ago</div>
+</div>
+
+<main>
+
+  <!-- ============================================================
+       R2 HERO — live heatmap + alerts
+       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">02</div>
+      <div class="title">Live discomfort across Gund</div>
+      <div class="desc">5 trays × 6 zones · last 30 minutes</div>
+    </div>
+
+    <div class="row-3" style="margin-bottom: 16px;">
+      <div class="card bordered-teal">
+        <div class="lbl">Active alerts</div>
+        <div class="v t-mono-num" style="color: var(--op-alert)">3</div>
+        <div class="sub">Sustained signal in 3 zones</div>
+      </div>
+      <div class="card">
+        <div class="lbl">Votes today</div>
+        <div class="v t-mono-num">142</div>
+        <div class="sub">vs 89 yesterday</div>
+      </div>
+      <div class="card">
+        <div class="lbl">Avg response time</div>
+        <div class="v t-mono-num">6 d</div>
+        <div class="sub">target: 5 days · trend ↓</div>
+      </div>
+    </div>
+
+    <div class="card surface-0">
+      <div class="lbl">Tray-level thermal field · click a level to inspect</div>
+
+      <div class="plan-stage">
+        <div class="plan-tabs">
+          <button class="plan-tab" data-tray="1">L01</button>
+          <button class="plan-tab" data-tray="2">L02</button>
+          <button class="plan-tab is-active" data-tray="3">L03</button>
+          <button class="plan-tab" data-tray="4">L04</button>
+          <button class="plan-tab" data-tray="5">L05</button>
+        </div>
+
+        <div class="plan-meta">
+          <div class="head" id="plan-head"><em>Level 03</em> · live blended field.</div>
+          <div class="nbox"><span class="lbl">votes</span><span id="plan-n">24</span></div>
+        </div>
+
+        <div class="plan-svg-wrap">
+          <svg id="plan-svg" viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="color:#6a6863;">
+            <defs>
+              <filter id="thermal-blur" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="18"/>
+              </filter>
+              <filter id="thermal-glow" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="34"/>
+              </filter>
+            </defs>
+
+            <!-- floor walls (architectural plan from v5) -->
+            <g stroke="currentColor" fill="none">
+<path stroke-width="0.6" opacity="0.7" d="M92.6 298.1L105.1 298.1 M92.6 346.9L105.1 346.9 M92.6 153.5L105.1 153.5 M92.6 95.2L105.1 95.2 M160.9 210.0L191.4 210.0 M92.6 114.5L105.1 114.5 M92.6 95.5L105.1 95.5 M92.6 162.7L105.1 162.7 M160.9 278.6L191.7 278.6 M92.6 173.0L105.1 173.0 M92.6 240.2L105.1 240.2 M92.6 115.1L105.1 115.1 M92.6 317.9L105.1 317.9 M191.7 317.9L201.2 317.9 M288.7 317.9L317.1 317.9 M92.6 336.6L105.1 336.6 M712.8 336.6L729.6 336.6 M738.7 336.6L756.1 336.6 M835.7 336.6L857.1 336.6 M92.6 289.0L105.1 289.0 M93.8 191.3L125.5 191.3 M134.7 191.3L143.8 191.3 M92.6 259.4L105.1 259.4 M92.6 356.1L105.1 356.1 M200.9 372.9L234.4 372.9 M236.3 372.9L261.9 372.9 M92.6 269.1L105.1 269.1 M92.6 231.0L105.1 231.0 M712.8 337.8L727.4 337.8 M738.7 337.8L747.9 337.8 M93.8 220.9L104.5 220.9 M92.6 288.4L105.1 288.4 M92.6 153.2L105.1 153.2 M160.9 208.7L191.4 208.7 M92.6 230.4L105.1 230.4 M92.6 211.5L105.1 211.5 M92.6 279.2L105.1 279.2 M92.6 395.1L105.1 395.1 M375.7 336.9L391.9 336.9 M438.2 336.9L469.3 336.9 M527.6 336.9L538.6 336.9 M674.7 336.9L712.8 336.9 M92.6 124.2L105.1 124.2 M438.2 363.1L457.4 363.1 M529.7 363.1L551.1 363.1 M642.9 363.1L665.2 363.1 M746.3 363.1L756.1 363.1 M825.4 363.1L857.1 363.1 M92.6 202.0L105.1 202.0 M92.6 346.3L105.1 346.3 M92.6 327.1L105.1 327.1 M92.6 221.2L105.1 221.2 M263.1 249.3L272.6 249.3 M438.2 362.2L457.4 362.2 M529.7 362.2L551.4 362.2 M642.9 362.2L663.1 362.2 M728.7 362.2L738.1 362.2 M746.3 362.2L756.1 362.2 M825.4 362.2L857.1 362.2 M93.8 114.8L105.1 114.8 M92.6 260.0L105.1 260.0 M92.6 143.4L105.1 143.4 M93.8 143.8L105.1 143.8 M92.6 133.7L105.1 133.7 M93.8 230.7L104.5 230.7 M92.6 298.4L105.1 298.4 M92.6 182.2L105.1 182.2 M92.6 182.5L105.1 182.5 M92.6 124.5L105.1 124.5 M92.6 385.1L105.1 385.1 M136.5 338.7L147.2 338.7 M642.9 338.7L665.5 338.7 M674.7 338.7L712.8 338.7 M860.7 338.7L871.1 338.7 M93.8 105.0L105.1 105.0 M93.8 317.6L104.5 317.6 M160.9 240.8L191.4 240.8 M290.9 240.8L317.1 240.8 M93.8 259.7L104.5 259.7 M92.6 104.7L105.1 104.7 M92.6 356.4L105.1 356.4 M92.6 144.1L105.1 144.1 M159.4 144.1L170.7 144.1 M191.7 247.5L201.2 247.5 M92.6 337.2L105.1 337.2 M198.4 337.2L225.6 337.2 M234.4 337.2L252.7 337.2 M92.6 84.9L105.1 84.9 M92.6 240.5L105.1 240.5 M237.8 240.5L263.7 240.5 M878.1 240.5L890.0 240.5 M375.7 338.4L391.9 338.4 M438.2 338.4L469.3 338.4 M527.6 338.4L538.6 338.4 M148.1 84.6L159.4 84.6 M92.6 375.9L105.1 375.9 M92.6 385.4L105.1 385.4 M92.6 163.3L105.1 163.3 M92.6 191.6L105.1 191.6 M93.8 134.0L105.1 134.0 M92.6 192.3L105.1 192.3 M92.6 269.4L105.1 269.4 M835.7 338.1L857.1 338.1 M860.1 338.1L871.7 338.1 M92.6 105.3L105.1 105.3 M201.2 246.3L235.7 246.3 M160.9 279.5L191.7 279.5 M92.6 220.6L105.1 220.6 M92.6 307.6L105.1 307.6 M92.6 375.3L105.1 375.3 M92.6 327.4L105.1 327.4 M92.6 134.3L105.1 134.3 M92.6 201.4L105.1 201.4 M93.8 201.7L104.5 201.7 M93.8 163.0L105.1 163.0 M159.4 177.0L170.7 177.0 M173.1 177.0L198.7 177.0 M554.2 447.6L581.9 447.6 M612.4 447.6L640.5 447.6 M288.7 238.9L317.1 238.9 M525.8 238.9L554.2 238.9 M93.8 249.9L104.5 249.9 M92.6 308.2L105.1 308.2 M148.1 85.2L159.4 85.2 M92.6 366.1L105.1 366.1 M92.6 211.2L105.1 211.2 M857.1 238.6L878.1 238.6 M892.5 238.6L903.8 238.6 M92.6 249.6L105.1 249.6 M92.6 394.5L105.1 394.5 M92.6 172.4L105.1 172.4 M93.8 172.7L104.5 172.7 M93.8 346.6L104.5 346.6 M93.8 192.6L125.5 192.6 M134.7 192.6L143.8 192.6 M290.9 316.1L317.1 316.1 M878.1 239.2L890.0 239.2 M93.8 278.9L104.5 278.9 M554.2 278.9L563.3 278.9 M93.8 307.9L104.5 307.9 M160.9 241.7L191.7 241.7 M200.9 341.1L225.6 341.1 M234.4 341.1L249.1 341.1 M556.0 279.8L564.5 279.8 M93.8 192.0L104.5 192.0 M554.2 416.8L564.2 416.8 M612.4 416.8L640.5 416.8 M200.9 354.2L224.1 354.2 M235.7 354.2L249.1 354.2 M518.5 314.0L552.0 314.0 M200.9 355.5L225.6 355.5 M236.3 355.5L252.7 355.5 M525.8 241.1L552.0 241.1 M857.1 241.1L878.1 241.1 M391.5 348.5L427.2 348.5 M159.7 160.2L170.7 160.2 M104.5 87.0L143.8 87.0 M554.2 256.9L563.3 256.9 M391.5 347.5L427.2 347.5 M581.0 393.9L596.9 393.9 M554.2 256.0L564.5 256.0 M860.1 336.2L871.7 336.2 M887.9 289.9L904.1 289.9 M162.1 16.8L198.7 16.8 M181.4 94.6L198.7 94.6 M261.3 251.1L272.6 251.1 M893.7 213.0L905.0 213.0 M581.0 392.1L598.7 392.1 M160.6 159.3L170.7 159.3 M556.0 313.4L564.8 313.4 M263.1 240.5L263.1 249.3 M263.1 380.2L263.1 406.4 M217.4 394.8L217.4 406.4 M610.0 414.0L610.0 450.3 M163.0 375.9L163.0 405.2 M903.5 238.6L903.5 248.7 M693.3 338.7L693.3 362.2 M640.5 414.3L640.5 447.6 M136.5 318.3L136.5 337.2 M136.5 348.1L136.5 365.5 M118.5 153.8L118.5 170.6 M159.4 141.3L159.4 179.4 M901.9 271.6L901.9 285.0 M198.7 144.1L198.7 177.0 M191.4 179.4L191.4 208.7 M191.4 210.0L191.4 240.8 M261.9 336.9L261.9 372.9 M235.7 238.6L235.7 247.5 M144.7 86.4L144.7 113.5 M144.7 190.4L144.7 223.1 M144.7 231.3L144.7 252.1 M144.7 315.2L144.7 323.4 M181.4 44.9L181.4 66.3 M181.4 84.0L181.4 94.6 M554.2 238.9L554.2 278.9 M554.2 416.8L554.2 447.6 M428.2 338.4L428.2 351.5 M170.7 144.1L170.7 177.0 M427.2 338.4L427.2 351.5 M159.7 144.1L159.7 165.4 M902.5 257.2L902.5 270.7 M891.3 201.1L891.3 213.3 M891.3 260.6L891.3 272.8 M641.1 338.7L641.1 364.9 M641.1 366.8L641.1 396.3 M641.1 402.5L641.1 414.3 M905.0 260.9L905.0 273.1 M162.1 375.9L162.1 405.2 M907.1 212.7L907.1 223.1 M236.3 355.5L236.3 372.9 M143.8 87.0L143.8 113.5 M143.8 192.6L143.8 220.3 M143.8 231.3L143.8 252.1 M663.1 338.7L663.1 352.7 M252.7 337.2L252.7 355.5 M824.4 336.6L824.4 368.6 M825.4 337.8L825.4 362.2 M234.4 351.8L234.4 372.9 M135.6 318.3L135.6 339.0 M135.6 348.1L135.6 365.5 M551.1 363.1L551.1 402.1 M200.9 341.1L200.9 354.2 M200.9 355.5L200.9 372.9 M747.9 337.8L747.9 362.2 M584.7 414.0L584.7 452.5 M581.9 416.8L581.9 447.6 M812.9 369.8L812.9 405.2 M160.6 144.1L160.6 165.4 M117.6 153.8L117.6 171.5 M536.8 338.4L536.8 362.2 M890.3 281.3L890.3 289.9 M642.0 406.4L642.0 414.7 M556.0 279.8L556.0 313.4 M811.9 369.8L811.9 405.2 M904.1 222.5L904.1 233.4 M904.1 281.6L904.1 289.9 M748.8 336.6L748.8 362.2 M173.1 144.1L173.1 177.0 M598.7 392.1L598.7 414.0 M664.3 338.7L664.3 352.7 M467.5 338.4L467.5 352.4 M728.7 337.8L728.7 352.7 M582.8 347.8L582.8 364.9 M582.8 366.8L582.8 382.9 M179.2 44.9L179.2 66.3 M179.2 84.0L179.2 97.1 M218.3 394.8L218.3 405.2 M612.4 414.0L612.4 447.6 M598.4 428.4L598.4 450.3 M891.9 245.9L891.9 255.7 M466.6 338.4L466.6 352.4 M535.8 338.4L535.8 362.2 M889.7 238.3L889.7 247.2 M249.1 341.1L249.1 354.2 M581.0 347.8L581.0 382.9 M498.3 338.4L498.3 362.2 M499.2 338.4L499.2 362.2 M905.6 248.7L905.6 259.1 M727.4 337.8L727.4 352.7 M596.2 428.4L596.2 450.3 M694.2 338.7L694.2 362.2 M596.9 393.9L596.9 414.0 M888.2 272.8L888.2 281.3"/>
+<path stroke-width="0.9" opacity="1" d="M212.8 161.1L261.6 161.1 M263.7 161.1L408.6 161.1 M419.9 161.1L555.1 161.1 M566.4 161.1L701.5 161.1 M712.8 161.1L895.8 161.1 M201.2 163.9L893.4 163.9 M92.6 278.6L143.8 278.6 M217.0 317.9L268.0 317.9 M93.8 318.3L143.8 318.3 M516.0 318.3L564.8 318.3 M92.6 406.4L551.4 406.4 M641.1 406.4L860.1 406.4 M582.8 364.9L641.1 364.9 M93.8 220.3L143.8 220.3 M92.6 84.0L159.4 84.0 M551.4 450.3L642.9 450.3 M274.7 336.9L352.2 336.9 M477.6 336.9L519.7 336.9 M581.0 336.9L665.5 336.9 M857.1 336.9L899.5 336.9 M92.6 250.2L143.8 250.2 M465.7 363.1L509.0 363.1 M685.3 363.1L738.1 363.1 M201.2 194.1L263.7 194.1 M93.8 249.3L143.8 249.3 M465.7 362.2L509.0 362.2 M685.3 362.2L727.4 362.2 M92.6 317.3L143.8 317.3 M581.0 338.7L641.1 338.7 M217.0 316.7L268.0 316.7 M581.3 317.6L859.5 317.6 M93.8 123.9L143.8 123.9 M92.6 403.7L551.4 403.7 M642.9 403.7L860.1 403.7 M274.7 338.4L352.2 338.4 M477.6 338.4L519.7 338.4 M159.4 97.1L201.2 97.1 M92.6 405.8L551.1 405.8 M643.5 405.8L856.8 405.8 M92.6 365.5L144.7 365.5 M93.8 279.5L143.8 279.5 M201.2 218.8L263.7 218.8 M93.8 152.9L143.8 152.9 M860.1 339.3L901.9 339.3 M93.8 124.8L143.8 124.8 M201.2 238.6L263.7 238.6 M92.6 86.4L148.1 86.4 M159.4 141.3L201.2 141.3 M159.4 179.4L201.2 179.4 M93.8 153.8L143.8 153.8 M93.8 221.5L143.8 221.5 M198.4 380.2L263.1 380.2 M551.4 414.0L612.4 414.0 M583.1 315.8L857.7 315.8 M582.8 366.8L641.1 366.8 M159.4 14.4L201.2 14.4 M93.8 366.5L144.7 366.5 M262.2 166.9L262.2 245.3 M391.5 338.4L391.5 406.4 M642.9 338.7L642.9 450.3 M859.2 166.9L859.2 245.3 M857.7 166.9L857.7 244.4 M857.7 262.4L857.7 315.8 M263.7 161.1L263.7 244.4 M201.2 14.4L201.2 317.9 M104.8 327.1L104.8 406.4 M857.1 336.6L857.1 396.7 M95.3 84.0L95.3 403.7 M193.6 179.4L193.6 242.9 M193.6 247.5L193.6 316.1 M92.6 84.0L92.6 406.4 M159.4 14.4L159.4 97.1 M198.7 16.8L198.7 94.6 M198.7 179.4L198.7 242.9 M364.1 338.4L364.1 406.4 M144.7 134.9L144.7 176.7 M144.7 260.3L144.7 307.3 M554.2 336.6L554.2 414.0 M93.2 327.1L93.2 406.4 M455.0 363.1L455.0 405.2 M860.1 336.2L860.1 406.4 M427.2 360.7L427.2 405.2 M191.7 241.7L191.7 318.3 M162.1 16.8L162.1 97.1 M198.4 337.2L198.4 380.2 M200.6 97.7L200.6 141.0 M336.3 338.4L336.3 406.4 M143.8 134.9L143.8 176.7 M143.8 260.3L143.8 307.3 M784.5 363.1L784.5 405.2 M785.4 362.2L785.4 405.2 M200.0 97.1L200.0 141.3 M428.5 363.1L428.5 405.2 M390.6 338.4L390.6 405.2 M711.3 363.1L711.3 405.2 M337.2 338.4L337.2 405.2 M712.2 363.1L712.2 405.2 M160.9 251.4L160.9 317.3 M160.0 251.4L160.0 318.3 M264.0 338.4L264.0 405.2 M551.4 336.6L551.4 450.3 M288.7 238.9L288.7 317.9 M747.9 363.1L747.9 405.2 M520.0 363.1L520.0 405.2 M99.0 327.4L99.0 405.2 M675.6 363.1L675.6 405.2 M290.9 240.8L290.9 316.1 M199.4 247.5L199.4 316.1 M674.7 363.1L674.7 405.2 M483.4 363.1L483.4 405.2 M748.8 363.1L748.8 405.2 M583.1 238.9L583.1 315.8 M859.5 262.4L859.5 317.6 M552.0 241.1L552.0 314.0 M581.3 238.9L581.3 317.6 M519.1 363.1L519.1 405.2 M362.9 338.4L362.9 405.2 M455.9 363.1L455.9 405.2 M482.5 363.1L482.5 405.2"/>
+            </g>
+
+            <g id="plan-thermal-layer"></g>
+            <g id="plan-anchor-layer"></g>
+            <g id="plan-annotation-layer"></g>
+          </svg>
+        </div>
+
+        <div class="plan-body" id="plan-body"></div>
+
+        <div class="plan-legend">
+          <span class="legend-item"><span class="swatch-dot" style="background:#5cb0ff"></span>cold field</span>
+          <span class="legend-item"><span class="swatch-dot" style="background:#ff5a3c"></span>warm field</span>
+          <span class="legend-item"><span class="swatch-dot" style="background:#8a857d"></span>neutral field</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       R3 DIAGNOSIS — open ticket queue
+       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">03</div>
+      <div class="title">Open tickets · prioritized</div>
+      <div class="desc">Sorted by sustained-signal strength</div>
+    </div>
+
+    <div class="tickets-queue" id="tickets-queue"></div>
+  </section>
+
+  <!-- ============================================================
+       R4 ACTION — admin buttons
+       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">04</div>
+      <div class="title">Act on the strongest signal (L03 W)</div>
+      <div class="desc">Each action is logged with your name and visible to USER mode within 5 min — the loop is public.</div>
+    </div>
+
+    <div class="actions">
+      <button class="action-btn" data-action="adjust" data-actor="Bill"><span class="icon">▲</span>Adjust setpoint at L03 W</button>
+      <button class="action-btn" data-action="walkthrough" data-actor="Nicolas"><span class="icon">→</span>Schedule walk-through</button>
+      <button class="action-btn" data-action="known" data-actor="Bill"><span class="icon">!</span>Mark as known issue</button>
+      <button class="action-btn" data-action="reply" data-actor="Mike"><span class="icon">…</span>Reply publicly to votes</button>
+      <button class="action-btn" data-action="ask-engineer" data-actor="Mike"><span class="icon">⚙</span>Ask operating engineer to check</button>
+      <button class="action-btn" data-action="walk-zone" data-actor="Nicolas"><span class="icon">⌖</span>Walk to zone &amp; ask students</button>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       R5 CONSEQUENCE — building-wide tuition pressure
+       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">05</div>
+      <div class="title">Building-wide impact this month</div>
+      <div class="desc">What your queue is responsible for · same data the Dean sees in DECISION mode</div>
+    </div>
+
+    <div class="consequence">
+      <div class="eyebrow">This month, building-wide</div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          Comfort hours recovered
+          <span class="small">~500 occupants × ~7 h/wk recoverable × 4.3 wk × ~56% loop-closure rate ≈ 8,400 h. Lost when tickets sit; recovered when they close fast.</span>
+        </div>
+        <div class="value" id="op-hours">8,400 h</div>
+      </div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          Worth in tuition value
+          <span class="small">Recovered hours × $51.14/hr (= $90k tuition ÷ 10mo ÷ 22d ÷ 8h). Aggregated across all GSD users.</span>
+        </div>
+        <div class="value">
+          <span id="op-dollars">$430k</span>
+          <span class="pct" id="op-pct">≈ tuition for 4.8 students</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          Average response time
+          <span class="small">Median time from threshold-crossed signal → first logged operator action.</span>
+        </div>
+        <div class="value">6 d <span class="pct">target 5d · −2 d this month</span></div>
+      </div>
+      <div class="row">
+        <div class="arrow">↳</div>
+        <div class="label">
+          % of tickets closed
+          <span class="small">Closed = action logged + visible in USER mode. Open tickets stay loud.</span>
+        </div>
+        <div class="value">78% <span class="pct">+12 pp this month</span></div>
+      </div>
+      <div class="footer-line">
+        These four numbers are visible to all USER and DECISION views. They aren't your performance review — they are the loop closing in public. Slow numbers here become Dean-level pressure in DECISION mode.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div>VIS 2478 · Wightman · Ge · Lock</div>
+  <div>Operator console · <a href="operator.html">operator.html</a></div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+// =========================================================================
+// OPERATOR MODE LOGIC
+// =========================================================================
+
+document.getElementById('mode-switch-mount').innerHTML = renderModeSwitch('operator');
+
+// ---- plan view (migrated from v5, all 5 trays now have data) ------------
+const planBaseFrame = { x: 72, y: 56, width: 856, height: 326 };
+
+const planData = {
+  '1': {
+    n: 8,
+    note: `n = 8 votes on the L01 tray. Closest to ground level. Mostly neutral with a mild cold pocket near the north entry — likely door-draft effect.`,
+    fieldLabel: 'mostly neutral / mild cold at entry',
+    clouds: [
+      {cx: 280, cy: 260, rx: 130, ry: 90, type: 'cold', opacity: 0.16},
+      {cx: 540, cy: 245, rx: 180, ry: 100, type: 'fine', opacity: 0.14},
+      {cx: 780, cy: 250, rx: 150, ry: 95, type: 'fine', opacity: 0.12}
+    ],
+    points: [
+      {x:240, y:260, type:'cold', w:1},
+      {x:320, y:280, type:'cold', w:2},
+      {x:480, y:265, type:'fine', w:1},
+      {x:560, y:285, type:'fine', w:1},
+      {x:640, y:265, type:'fine', w:1},
+      {x:720, y:285, type:'fine', w:1},
+      {x:800, y:265, type:'fine', w:1}
+    ]
+  },
+  '2': {
+    n: 11,
+    note: `n = 11 votes on the L02 tray. Transitional zone. Cold lingers at west; east shows early warming as glass heat begins to influence.`,
+    fieldLabel: 'cold west / warming east',
+    clouds: [
+      {cx: 280, cy: 260, rx: 160, ry: 105, type: 'cold', opacity: 0.24},
+      {cx: 480, cy: 280, rx: 130, ry: 90, type: 'fine', opacity: 0.14},
+      {cx: 700, cy: 250, rx: 170, ry: 100, type: 'hot', opacity: 0.18}
+    ],
+    points: [
+      {x:240, y:265, type:'cold', w:2},
+      {x:320, y:285, type:'cold', w:3},
+      {x:400, y:280, type:'cold', w:1},
+      {x:480, y:280, type:'fine', w:1},
+      {x:560, y:265, type:'fine', w:1},
+      {x:640, y:265, type:'hot', w:1},
+      {x:720, y:280, type:'hot', w:1},
+      {x:800, y:265, type:'hot', w:1}
+    ]
+  },
+  '3': {
+    n: 24,
+    note: `n = 24 votes on the L03 tray. Deepest sample. <strong>West cold cluster sustained 4 hours</strong> — recommend setpoint check on this zone first.`,
+    fieldLabel: 'west cold / east warm · sustained signal',
+    clouds: [
+      {cx: 250, cy: 235, rx: 160, ry: 120, type: 'cold', opacity: 0.34},
+      {cx: 400, cy: 300, rx: 170, ry: 110, type: 'cold', opacity: 0.22},
+      {cx: 530, cy: 240, rx: 150, ry: 105, type: 'fine', opacity: 0.18},
+      {cx: 705, cy: 230, rx: 190, ry: 110, type: 'hot', opacity: 0.28},
+      {cx: 792, cy: 300, rx: 150, ry: 96, type: 'hot', opacity: 0.24}
+    ],
+    points: [
+      {x:280, y:285, type:'cold', w:3},
+      {x:340, y:300, type:'cold', w:2},
+      {x:380, y:285, type:'cold', w:4},
+      {x:420, y:265, type:'cold', w:2},
+      {x:460, y:285, type:'fine', w:1},
+      {x:520, y:300, type:'fine', w:1},
+      {x:580, y:280, type:'fine', w:1},
+      {x:640, y:265, type:'fine', w:1},
+      {x:700, y:280, type:'hot', w:2},
+      {x:760, y:265, type:'hot', w:1},
+      {x:820, y:285, type:'hot', w:2},
+      {x:870, y:265, type:'hot', w:1},
+      {x:340, y:380, type:'cold', w:2},
+      {x:480, y:380, type:'fine', w:1},
+      {x:620, y:380, type:'fine', w:1},
+      {x:760, y:380, type:'hot', w:1}
+    ]
+  },
+  '4': {
+    n: 14,
+    note: `n = 14 votes on the L04 tray. Closer to glass roof. Broad warm condition, only narrow neutral pocket at the west side.`,
+    fieldLabel: 'warm tray / compressed neutral pocket',
+    clouds: [
+      {cx: 390, cy: 245, rx: 120, ry: 86, type: 'fine', opacity: 0.14},
+      {cx: 520, cy: 238, rx: 180, ry: 110, type: 'hot', opacity: 0.22},
+      {cx: 670, cy: 238, rx: 200, ry: 118, type: 'hot', opacity: 0.30},
+      {cx: 745, cy: 320, rx: 145, ry: 94, type: 'hot', opacity: 0.20}
+    ],
+    points: [
+      {x:380, y:280, type:'fine', w:1},
+      {x:440, y:285, type:'hot', w:2},
+      {x:500, y:265, type:'hot', w:3},
+      {x:560, y:285, type:'hot', w:2},
+      {x:620, y:285, type:'hot', w:3},
+      {x:680, y:265, type:'hot', w:1},
+      {x:740, y:285, type:'hot', w:1},
+      {x:520, y:380, type:'hot', w:1}
+    ]
+  },
+  '5': {
+    n: 6,
+    note: `n = 6 votes on the L05 tray. Hottest upper tray near roof apex. Smaller sample but uniformly warm.`,
+    fieldLabel: 'uniformly warm at apex',
+    clouds: [
+      {cx: 480, cy: 240, rx: 220, ry: 115, type: 'hot', opacity: 0.32},
+      {cx: 700, cy: 250, rx: 180, ry: 100, type: 'hot', opacity: 0.26}
+    ],
+    points: [
+      {x:420, y:260, type:'hot', w:2},
+      {x:500, y:280, type:'hot', w:1},
+      {x:580, y:265, type:'hot', w:2},
+      {x:660, y:280, type:'hot', w:1},
+      {x:740, y:265, type:'hot', w:1},
+      {x:820, y:280, type:'hot', w:1}
+    ]
+  }
+};
+
+function thermalColor(type, alpha) {
+  if (type === 'cold') return `rgba(92,176,255,${alpha})`;
+  if (type === 'hot') return `rgba(255,90,60,${alpha})`;
+  return `rgba(138,133,125,${alpha})`;
+}
+
+function renderThermalField(data) {
+  const cloudEllipses = data.clouds.map((c) => `
+    <ellipse cx="${c.cx}" cy="${c.cy}" rx="${c.rx}" ry="${c.ry}" fill="${thermalColor(c.type, c.opacity)}" filter="url(#thermal-glow)"/>
+    <ellipse cx="${c.cx}" cy="${c.cy}" rx="${Math.round(c.rx * 0.68)}" ry="${Math.round(c.ry * 0.68)}" fill="${thermalColor(c.type, Math.min(c.opacity + 0.08, 0.4))}" filter="url(#thermal-blur)"/>
+  `).join('');
+
+  const localFields = data.points.map((p) => {
+    const baseRadius = 20 + p.w * 12;
+    const haloRadius = 44 + p.w * 18;
+    return `
+      <circle cx="${p.x}" cy="${p.y}" r="${haloRadius}" fill="${thermalColor(p.type, p.type === 'fine' ? 0.08 : 0.12)}" filter="url(#thermal-glow)"/>
+      <circle cx="${p.x}" cy="${p.y}" r="${baseRadius}" fill="${thermalColor(p.type, p.type === 'fine' ? 0.12 : 0.18)}" filter="url(#thermal-blur)"/>
+    `;
+  }).join('');
+
+  return `
+    <rect x="${planBaseFrame.x}" y="${planBaseFrame.y}" width="${planBaseFrame.width}" height="${planBaseFrame.height}" fill="rgba(0,0,0,0.34)"/>
+    ${cloudEllipses}
+    ${localFields}
+  `;
+}
+
+function renderAnchors(data) {
+  return data.points.map((p) => {
+    const color = p.type === 'cold' ? '#5cb0ff' : p.type === 'hot' ? '#ff5a3c' : '#8a857d';
+    const r = 3 + p.w * 0.9;
+    const ring = 10 + p.w * 3.5;
+    return `
+      <circle cx="${p.x}" cy="${p.y}" r="${ring}" fill="none" stroke="${color}" stroke-width="0.8" opacity="0.35"/>
+      <circle cx="${p.x}" cy="${p.y}" r="${ring + 8}" fill="none" stroke="${color}" stroke-width="0.45" opacity="0.14"/>
+      <circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${color}"/>
+    `;
+  }).join('');
+}
+
+function renderPlan(tray) {
+  const thermalLayer    = document.getElementById('plan-thermal-layer');
+  const anchorLayer     = document.getElementById('plan-anchor-layer');
+  const annotationLayer = document.getElementById('plan-annotation-layer');
+  const head            = document.getElementById('plan-head');
+  const body            = document.getElementById('plan-body');
+  const nEl             = document.getElementById('plan-n');
+
+  thermalLayer.innerHTML    = '';
+  anchorLayer.innerHTML     = '';
+  annotationLayer.innerHTML = '';
+
+  const data = planData[String(tray)];
+  head.innerHTML = `<em>Level 0${tray}</em> · live blended field.`;
+  body.innerHTML = data.note;
+  nEl.textContent = data.n;
+
+  thermalLayer.innerHTML = renderThermalField(data);
+  anchorLayer.innerHTML  = renderAnchors(data);
+  annotationLayer.innerHTML = `
+    <rect x="${planBaseFrame.x}" y="${planBaseFrame.y}" width="${planBaseFrame.width}" height="${planBaseFrame.height}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    <text x="${planBaseFrame.x + 18}" y="${planBaseFrame.y + 22}" font-family="Inter, sans-serif" font-size="9" letter-spacing="3" fill="#8a857d">THERMAL FIELD / ${data.fieldLabel.toUpperCase()}</text>
+  `;
+}
+
+renderPlan(3);
+
+// plan-tab click handler
+document.querySelectorAll('.plan-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.plan-tab').forEach(x => x.classList.remove('is-active'));
+    t.classList.add('is-active');
+    renderPlan(t.dataset.tray);
+  });
+});
+
+// ---- tickets queue -------------------------------------------------------
+function renderTickets() {
+  const html = SAMPLE.operator.open_tickets.map(t => `
+    <div class="ticket-row">
+      <div class="ticket-zone">${t.zone}</div>
+      <div class="ticket-desc">${t.desc}</div>
+      <div class="ticket-meta">${t.meta}</div>
+    </div>
+  `).join('');
+  document.getElementById('tickets-queue').innerHTML = html;
+}
+renderTickets();
+
+// ---- action button confirm flash ----------------------------------------
+// Mocks the cross-mode loop: when an operator acts, the action shows the
+// engineer's name and is "logged · visible to users" — same surface that
+// USER mode reads from in its R3.5 loop-closure feed.
+const ACTION_VERBS = {
+  'adjust':       'just adjusted setpoint',
+  'walkthrough':  'just scheduled walk-through',
+  'known':        'just marked known issue',
+  'reply':        'just replied to votes',
+  'ask-engineer': 'just pinged operating engineer',
+  'walk-zone':    'just walked the zone',
+};
+document.querySelectorAll('.action-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.classList.add('confirm-flash');
+    const original = btn.innerHTML;
+    const actor = btn.dataset.actor || 'Operator';
+    const verb  = ACTION_VERBS[btn.dataset.action] || 'just acted';
+    btn.innerHTML = `<span class="icon">✓</span><strong>${actor}</strong> ${verb} · visible to users`;
+    setTimeout(() => {
+      btn.classList.remove('confirm-flash');
+      btn.innerHTML = original;
+    }, 2800);
+  });
+});
+
+// ---- R5 building consequence --------------------------------------------
+function renderOpConsequence() {
+  const h = SAMPLE.operator.monthly_hours_recovered;
+  const d = dollarsFromHours(h);
+  const studentEquiv = (d / TUITION_PER_YEAR).toFixed(1);
+  document.getElementById('op-hours').textContent = h.toLocaleString() + ' h';
+  document.getElementById('op-dollars').textContent = fmtDollars(d);
+  document.getElementById('op-pct').textContent = '≈ tuition for ' + studentEquiv + ' students';
+}
+renderOpConsequence();
+</script>
+
+</body>
+</html>
