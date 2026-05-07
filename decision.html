@@ -5,6 +5,1624 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DECISION · Gund Thermal Commons</title>
 <link rel="stylesheet" href="shared.css">
+<style>
+/* =========================================================================
+   DECISION mode — S02-centered rewrite
+   ========================================================================= */
+
+/* orbit replaced by scenario-tabs above */
+
+/* =========================================================================
+   §03 — Thermal Commons: Making Discomfort Actionable
+   New two-column intervention model
+   ========================================================================= */
+
+/* Scenario tab selector */
+.scenario-tabs {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  margin-bottom: 24px;
+  width: fit-content;
+}
+.scenario-tab {
+  position: relative;
+  padding: 10px 22px;
+  font-family: var(--font-h);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  border-right: 1px solid var(--line-strong);
+  background: var(--surface-1);
+  cursor: pointer;
+  transition: color 0.18s, background 0.18s;
+}
+.scenario-tab:last-child { border-right: none; }
+.scenario-tab:hover { color: var(--text-hi); background: var(--surface-2); }
+.scenario-tab.is-active {
+  color: #fff;
+  background: var(--dec-accent-2);
+  border-right-color: var(--dec-accent-2);
+}
+.scenario-tab .tab-num {
+  display: inline-block;
+  margin-right: 6px;
+  opacity: 0.55;
+  font-size: 9px;
+}
+.scenario-tab.is-active .tab-num { opacity: 0.75; }
+
+/* two-column split */
+.intervention-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--line);
+}
+
+/* Left narrative column */
+.intervention-narrative {
+  background: var(--surface-1);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.narrative-header {
+  padding: 22px 24px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.narrative-eyebrow {
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-low);
+  margin-bottom: 6px;
+}
+.narrative-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-hi);
+  line-height: 1.15;
+}
+.phase-steps {
+  flex: 1;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.phase-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 14px;
+  padding: 16px 0;
+  cursor: pointer;
+  transition: opacity 0.18s;
+}
+.phase-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 17px;
+  top: 52px;
+  bottom: -16px;
+  width: 2px;
+  background: var(--line-strong);
+}
+.phase-step.is-active::after { background: rgba(110,95,184,0.35); }
+.phase-step.is-done::after { background: rgba(110,95,184,0.6); }
+
+.step-node {
+  position: relative;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-low);
+  transition: all 0.22s ease;
+}
+.phase-step.is-active .step-node {
+  border-color: var(--dec-accent-2);
+  background: rgba(110,95,184,0.15);
+  color: var(--dec-accent-2);
+  box-shadow: 0 0 0 5px rgba(110,95,184,0.08);
+}
+.phase-step.is-done .step-node {
+  border-color: rgba(110,95,184,0.55);
+  background: rgba(110,95,184,0.2);
+  color: #9d91d8;
+}
+.step-content { padding-top: 4px; }
+.step-label {
+  font-family: var(--font-h);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-low);
+  margin-bottom: 3px;
+}
+.phase-step.is-active .step-label { color: var(--dec-accent-2); }
+.phase-step.is-done .step-label   { color: #9d91d8; }
+.step-name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-hi);
+  margin-bottom: 5px;
+  line-height: 1.15;
+}
+.step-desc {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-mid);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.38s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s;
+  opacity: 0;
+}
+.phase-step.is-active .step-desc,
+.phase-step.is-done .step-desc {
+  max-height: 120px;
+  opacity: 1;
+}
+.step-progress {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.step-progress-bar {
+  flex: 1;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  overflow: hidden;
+}
+.step-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--dec-accent-2);
+  width: 0%;
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.step-progress-pct {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--dec-accent-2);
+  min-width: 28px;
+  text-align: right;
+}
+
+/* Timeline scrubber */
+.narrative-scrubber {
+  padding: 18px 24px 20px;
+  border-top: 1px solid var(--line);
+}
+.scrubber-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.scrubber-phase-name {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-hi);
+}
+.scrubber-pct {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dec-accent-2);
+}
+.scrubber-input {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--dec-accent-2);
+  cursor: pointer;
+}
+
+/* Right sticky metrics panel */
+.intervention-metrics {
+  background: var(--surface-0);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.metrics-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 18px 22px 14px;
+  background: var(--surface-0);
+  border-bottom: 1px solid var(--line);
+}
+.metrics-eyebrow {
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-low);
+  margin-bottom: 4px;
+}
+.metrics-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-hi);
+  letter-spacing: -0.005em;
+}
+.metrics-body {
+  padding: 16px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.metric-item-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.metric-item-name {
+  font-family: var(--font-h);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+.metric-item-code {
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-low);
+}
+.metric-item-values {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.metric-val-now {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-mid);
+  min-width: 52px;
+  text-decoration: line-through;
+  text-decoration-color: rgba(255,255,255,0.15);
+}
+.metric-arrow {
+  color: var(--dec-accent-2);
+  font-size: 14px;
+  opacity: 0.6;
+}
+.metric-val-proj {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--dec-accent-2);
+  transition: color 0.3s;
+}
+.metric-val-proj.is-empty { color: var(--text-low); font-size: 15px; }
+.metric-bar-wrap {
+  position: relative;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  overflow: visible;
+}
+.metric-bar-range {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(110,95,184,0.35);
+  transition: left 0.4s cubic-bezier(0.22,1,0.36,1), width 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.metric-bar-cursor {
+  position: absolute;
+  top: -4px;
+  width: 3px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--dec-accent-2);
+  transition: left 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.metric-bar-baseline {
+  position: absolute;
+  top: -3px;
+  width: 1px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.28);
+}
+.metric-range-text {
+  font-family: var(--font-display);
+  font-size: 10px;
+  color: var(--text-low);
+  margin-top: 2px;
+}
+
+/* Impact strip at bottom of right panel */
+.impact-strip {
+  margin: 0 22px 20px;
+  padding: 16px;
+  border: 1px solid rgba(110,95,184,0.22);
+  border-radius: var(--r-md);
+  background: rgba(110,95,184,0.06);
+}
+.impact-strip-head {
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dec-accent-2);
+  margin-bottom: 12px;
+  opacity: 0.75;
+}
+.impact-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.impact-stat { display: flex; flex-direction: column; gap: 3px; }
+.impact-stat .lbl {
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-low);
+}
+.impact-stat .val {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-hi);
+}
+.impact-stat .src {
+  font-size: 10px;
+  color: var(--text-low);
+  line-height: 1.4;
+}
+
+/* =========================================================================
+   §04 — What changes when you know?
+   Pre/post behavioral re-choice
+   ========================================================================= */
+
+.reframe-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--line);
+}
+
+/* Left: digest panel */
+.reframe-digest {
+  background: var(--surface-1);
+  padding: 28px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.digest-eyebrow {
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-low);
+  margin-bottom: 0;
+}
+.digest-title {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-hi);
+  line-height: 1.2;
+}
+.digest-prior-choice {
+  padding: 12px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+.digest-prior-label {
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-low);
+  margin-bottom: 6px;
+}
+.digest-prior-name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-hi);
+  margin-bottom: 4px;
+}
+.digest-prior-credo {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+.digest-no-choice {
+  padding: 12px 14px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-md);
+  font-size: 12px;
+  color: var(--text-low);
+  font-style: italic;
+}
+
+/* Evidence bullets */
+.digest-evidence {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.digest-evidence-head {
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-low);
+}
+.evidence-item {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+.evidence-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(110,95,184,0.14);
+  font-size: 10px;
+  color: var(--dec-accent-2);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.evidence-text {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-hi);
+}
+.evidence-text strong { color: var(--dec-accent-2); }
+.evidence-text .src {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  font-family: var(--font-h);
+  color: var(--text-low);
+  letter-spacing: 0.04em;
+}
+
+/* Right: re-choice panel */
+.reframe-choice {
+  background: var(--surface-0);
+  padding: 28px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.rechoice-eyebrow {
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-low);
+}
+.rechoice-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-hi);
+  line-height: 1.25;
+}
+.rechoice-sub {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-mid);
+  margin-top: -8px;
+}
+.rechoice-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.rechoice-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface-1);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.18s, background 0.18s, transform 0.18s;
+}
+.rechoice-option:hover {
+  border-color: var(--dec-accent-2);
+  background: rgba(110,95,184,0.06);
+  transform: translateX(2px);
+}
+.rechoice-option.is-chosen {
+  border-color: var(--dec-accent-2);
+  background: rgba(110,95,184,0.12);
+}
+.rechoice-letter {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-mid);
+  background: var(--surface-2);
+  transition: all 0.18s;
+}
+.rechoice-option.is-chosen .rechoice-letter {
+  background: var(--dec-accent-2);
+  border-color: var(--dec-accent-2);
+  color: #fff;
+}
+.rechoice-body { flex: 1; }
+.rechoice-verb {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-hi);
+  margin-bottom: 3px;
+  line-height: 1.2;
+}
+.rechoice-gloss {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-mid);
+}
+
+/* Post-choice reveal */
+.rechoice-result {
+  padding: 16px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.38s, transform 0.38s;
+  pointer-events: none;
+}
+.rechoice-result.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.result-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.result-head-label {
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-low);
+}
+.result-verdict {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.result-verdict.changed { color: #99E0B6; }
+.result-verdict.same    { color: var(--text-hi); }
+.result-stat {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-mid);
+}
+.result-stat strong { color: var(--text-hi); }
+.result-mechanism {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  background: rgba(110,95,184,0.08);
+  border-left: 2px solid var(--dec-accent-2);
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--text-mid);
+  font-style: italic;
+}
+.result-mechanism strong { color: var(--dec-accent-2); font-style: normal; }
+/* old metric-row replaced by new .metric-item system above */
+
+/* ----- Speculative game ----- */
+.speculative-stage {
+  position: relative;
+  margin-top: 6px;
+  isolation: isolate;
+}
+.speculative-curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  overflow: hidden;
+}
+.curtain-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 52%;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.98) 0%, rgba(8,8,8,0.94) 100%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 14px);
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease;
+}
+.curtain-left {
+  left: 0;
+  border-right: 1px solid rgba(110,95,184,0.16);
+}
+.curtain-right {
+  right: 0;
+  border-left: 1px solid rgba(110,95,184,0.16);
+}
+.curtain-seam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, transparent 0%, rgba(110,95,184,0.7) 18%, rgba(110,95,184,0.7) 82%, transparent 100%);
+  box-shadow: 0 0 22px rgba(110,95,184,0.28);
+  transition: opacity 0.7s ease;
+}
+.speculative-stage.is-revealed .curtain-left {
+  transform: translateX(-104%);
+  opacity: 0;
+}
+.speculative-stage.is-revealed .curtain-right {
+  transform: translateX(104%);
+  opacity: 0;
+}
+.speculative-stage.is-revealed .curtain-seam {
+  opacity: 0;
+}
+.matrix-frame {
+  background: radial-gradient(ellipse at top left, rgba(110,95,184,0.06) 0%, transparent 60%), var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 32px 32px 24px;
+  margin-top: 8px;
+}
+.matrix-axis-x {
+  display: grid;
+  grid-template-columns: 160px 1fr 1fr;
+  font-family: var(--font-h);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-low);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.matrix-axis-x > div:first-child {
+  color: transparent;
+}
+.matrix-axis-x > div:not(:first-child) {
+  text-align: center;
+  color: var(--dec-accent-2);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.axis-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.7;
+}
+.matrix-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+  align-items: stretch;
+}
+.matrix-row:last-child {
+  margin-bottom: 0;
+}
+.matrix-row-label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: var(--font-h);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--dec-accent-2);
+  padding-right: 14px;
+  border-right: 1px solid var(--line);
+}
+.matrix-row-label .telos-sub {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  color: var(--text-mid);
+  font-weight: 400;
+}
+.persona-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-1);
+  cursor: pointer;
+  transition: border-color 0.18s, transform 0.18s, background 0.18s, box-shadow 0.18s;
+}
+.persona-card::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110,95,184,0.08) 0%, transparent 70%);
+  transition: transform 0.4s ease;
+}
+.persona-card:hover {
+  border-color: var(--dec-accent-2);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(110,95,184,0.12);
+}
+.persona-card:hover::before {
+  transform: scale(1.4);
+}
+.persona-card.is-selected {
+  border-color: var(--dec-accent-2);
+  background: linear-gradient(135deg, rgba(110,95,184,0.14) 0%, var(--surface-1) 60%);
+  box-shadow: inset 0 0 0 1px var(--dec-accent-2), 0 8px 32px rgba(110,95,184,0.18);
+}
+.selected-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: none;
+  z-index: 2;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--dec-accent-2);
+}
+.persona-card.is-selected .selected-badge {
+  display: inline-block;
+}
+.head-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.persona-icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--dec-accent-2);
+  transition: background 0.18s, transform 0.18s;
+}
+.persona-icon svg {
+  width: 24px;
+  height: 24px;
+}
+.persona-card:hover .persona-icon {
+  transform: rotate(-6deg) scale(1.05);
+}
+.persona-card.is-selected .persona-icon {
+  background: var(--dec-accent-2);
+  border-color: var(--dec-accent-2);
+  color: #fff;
+}
+.persona-card .name {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+  color: var(--text-hi);
+  margin-bottom: 3px;
+}
+.persona-card .id-tag {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--text-low);
+}
+.persona-card .credo {
+  padding-left: 12px;
+  border-left: 2px solid var(--line-strong);
+  font-family: var(--font-h);
+  font-size: 12.5px;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--text-mid);
+}
+.persona-card.is-selected .credo {
+  border-left-color: var(--dec-accent-2);
+  color: var(--text-hi);
+}
+.game-stage {
+  display: none;
+  margin-top: 32px;
+  padding: 28px;
+  border: 1px solid var(--dec-accent-2);
+  border-radius: var(--r-md);
+  background: linear-gradient(180deg, var(--surface-1) 0%, var(--surface-0) 100%);
+}
+.game-stage.is-active {
+  display: block;
+}
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 6px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.game-header .left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.you-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-sm);
+  background: var(--dec-accent-2);
+  color: #fff;
+}
+.you-icon svg {
+  width: 20px;
+  height: 20px;
+}
+.you-are {
+  font-family: var(--font-h);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-low);
+}
+.you-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--dec-accent-2);
+}
+.reset-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  font-family: var(--font-h);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+.reset-btn:hover {
+  color: var(--text-hi);
+  border-color: var(--text-mid);
+}
+.round-progress {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 18px 0 24px;
+}
+.round-dot {
+  position: relative;
+  overflow: hidden;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--surface-3);
+}
+.round-dot.is-done {
+  background: var(--dec-accent-2);
+}
+.round-dot.is-current::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--dec-accent-2);
+  animation: progressPulse 2s ease-in-out infinite;
+}
+@keyframes progressPulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+.game-body {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  align-items: start;
+}
+.trilemma-col {
+  position: sticky;
+  top: 20px;
+}
+.trilemma {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+.trilemma-head {
+  margin-bottom: 4px;
+  font-family: var(--font-h);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dec-accent-2);
+}
+.trilemma-sub {
+  margin-bottom: 12px;
+  font-size: 11px;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--text-mid);
+}
+.tri-svg {
+  width: 100%;
+  height: 220px;
+  display: block;
+}
+.tri-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+.tri-stat {
+  text-align: center;
+}
+.tri-stat .lbl {
+  margin-bottom: 3px;
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-low);
+}
+.tri-stat .val {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-hi);
+}
+.tri-stat.comfort .val { color: #E89999; }
+.tri-stat.energy .val { color: #99E0B6; }
+.tri-stat.voice .val { color: #B0A6E8; }
+.tri-legend {
+  display: none;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-low);
+  line-height: 1.7;
+}
+.tri-legend.visible {
+  display: block;
+}
+.tri-legend .swatch {
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: var(--dec-accent-2);
+}
+.tri-legend .swatch.dash {
+  height: 0;
+  background: transparent;
+  border-bottom: 2px dashed var(--dec-accent-2);
+}
+.round-block {
+  margin-bottom: 18px;
+}
+.round-label {
+  margin-bottom: 6px;
+  font-family: var(--font-h);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dec-accent-2);
+}
+.round-title {
+  margin-bottom: 12px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  color: var(--text-hi);
+}
+.scenario-text {
+  margin-bottom: 18px;
+  padding: 16px 18px;
+  border-left: 3px solid var(--dec-accent-2);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  background: var(--surface-2);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-hi);
+}
+.scenario-text .speaker {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--font-h);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+.choices {
+  display: grid;
+  gap: 10px;
+}
+.choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  text-align: left;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface-1);
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+}
+.choice:hover {
+  border-color: var(--dec-accent-2);
+  background: var(--surface-2);
+}
+.choice:active {
+  transform: scale(0.997);
+}
+.choice.is-chosen {
+  border-color: var(--dec-accent-2);
+  background: linear-gradient(135deg, rgba(110,95,184,0.18) 0%, var(--surface-2) 60%);
+}
+.choice.is-disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.choice-letter {
+  width: 24px;
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--dec-accent-2);
+}
+.choice-body .verb {
+  margin-bottom: 4px;
+  font-family: var(--font-h);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-hi);
+}
+.choice-body .gloss {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-mid);
+}
+.choice-body .alignment {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.choice-body .alignment.aligned {
+  color: #99E0B6;
+  background: rgba(79,187,142,0.12);
+}
+.choice-body .alignment.misaligned {
+  color: #E89999;
+  background: rgba(226,75,74,0.12);
+}
+.ending-block {
+  display: none;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--dec-accent-2);
+}
+.ending-block.is-active {
+  display: block;
+}
+.ending-eyebrow {
+  margin-bottom: 8px;
+  font-family: var(--font-h);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dec-accent-2);
+}
+.ending-title {
+  margin-bottom: 14px;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--text-hi);
+}
+.ending-narrative {
+  margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-hi);
+}
+.ending-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 16px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+}
+.ending-stat .lbl {
+  margin-bottom: 4px;
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-low);
+}
+.ending-stat .val {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-hi);
+}
+.ending-stat .val.good { color: #99E0B6; }
+.ending-stat .val.warn { color: #E89999; }
+.ending-winners-losers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.wl-block {
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.wl-block.win {
+  border-left: 3px solid #4FBB8E;
+  background: rgba(79,187,142,0.08);
+}
+.wl-block.loss {
+  border-left: 3px solid #E24B4A;
+  background: rgba(226,75,74,0.08);
+}
+.wl-head {
+  margin-bottom: 4px;
+  font-family: var(--font-h);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.wl-block.win .wl-head { color: #99E0B6; }
+.wl-block.loss .wl-head { color: #E89999; }
+.ending-coda {
+  padding: 14px 18px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface-1);
+  font-family: var(--font-h);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--text-mid);
+}
+.ending-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.ending-actions button {
+  padding: 9px 16px;
+  border-radius: var(--r-sm);
+  font-family: var(--font-h);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.btn-primary {
+  border: 1px solid var(--dec-accent-2);
+  background: var(--dec-accent-2);
+  color: #fff;
+}
+.btn-secondary {
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--text-mid);
+}
+.btn-secondary:hover {
+  color: var(--text-hi);
+  border-color: var(--text-mid);
+}
+
+/* compare-stage replaced by reframe-wrap above */
+.gallery-frame {
+  margin-top: 8px;
+}
+.gallery-track-wrap {
+  overflow: hidden;
+  position: relative;
+  padding: 8px 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+.gallery-track {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 8px 50% 24px;
+}
+.gallery-track::-webkit-scrollbar {
+  display: none;
+}
+.gallery-card {
+  position: relative;
+  flex: 0 0 360px;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 22px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-1);
+  opacity: 0.55;
+  transform: scale(0.92);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s, opacity 0.3s, box-shadow 0.3s;
+  scroll-snap-align: center;
+}
+.gallery-card.is-center {
+  opacity: 1;
+  transform: scale(1.02);
+  border-color: var(--dec-accent-2);
+  box-shadow: 0 8px 32px rgba(110,95,184,0.18);
+}
+.gc-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.gc-id-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.gc-icon-mini {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--dec-accent-2);
+}
+.gallery-card.is-center .gc-icon-mini {
+  background: var(--dec-accent-2);
+  border-color: var(--dec-accent-2);
+  color: #fff;
+}
+.gc-icon-mini svg {
+  width: 16px;
+  height: 16px;
+}
+.gc-id {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--dec-accent-2);
+}
+.gc-time {
+  font-family: var(--font-h);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-low);
+}
+.gc-name {
+  margin-bottom: 4px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  color: var(--text-hi);
+}
+.gc-credo {
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-h);
+  font-size: 11px;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--text-mid);
+}
+.gc-mini-tri {
+  width: 100%;
+  height: 80px;
+  margin-bottom: 12px;
+}
+.gc-narrative {
+  flex: 1;
+  margin-bottom: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-hi);
+}
+.gc-headline {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  color: var(--text-hi);
+}
+.gc-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+}
+.gc-stat .lbl {
+  font-family: var(--font-h);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-low);
+}
+.gc-stat .val {
+  margin-top: 2px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-hi);
+}
+.gc-stat .val.warn { color: #E89999; }
+.gc-stat .val.good { color: #99E0B6; }
+.gc-coda {
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  font-family: var(--font-h);
+  font-size: 11px;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--text-mid);
+}
+.gallery-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 6px;
+}
+.gallery-arrow {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--surface-1);
+  color: var(--text-mid);
+  font-family: var(--font-display);
+  font-size: 16px;
+}
+.gallery-arrow:hover {
+  border-color: var(--dec-accent-2);
+  color: var(--dec-accent-2);
+}
+.gallery-dots {
+  display: flex;
+  gap: 6px;
+}
+.gallery-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--surface-3);
+  transition: background 0.15s, transform 0.15s;
+}
+.gallery-dot.is-active {
+  background: var(--dec-accent-2);
+  transform: scale(1.25);
+}
+
+@media (max-width: 1100px) {
+  .intervention-split,
+  .reframe-wrap,
+  .game-body {
+    grid-template-columns: 1fr;
+  }
+  .trilemma-col {
+    position: static;
+  }
+  .intervention-metrics {
+    border-top: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .matrix-row,
+  .matrix-axis-x {
+    grid-template-columns: 110px 1fr 1fr;
+  }
+  .curtain-panel {
+    width: 54%;
+  }
+}
+
+@media (max-width: 720px) {
+  .scenario-orbit,
+  .model-card,
+  .matrix-frame,
+  .game-stage,
+  .intervention-split,
+  .reframe-wrap {
+    padding: 18px;
+  }
+  .intervention-split,
+  .reframe-wrap {
+    grid-template-columns: 1fr;
+  }
+  .orbit-name,
+  .round-title,
+  .gc-name {
+    font-size: 18px;
+  }
+  .orbit-node {
+    width: min(32vw, 150px);
+    min-width: 92px;
+    padding: 14px;
+  }
+  .timeline-marks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 16px;
+  }
+  .ending-grid,
+  .ending-winners-losers {
+    grid-template-columns: 1fr 1fr;
+  }
+  .gallery-card {
+    flex-basis: 280px;
+    padding: 18px 18px 16px;
+  }
+  .impact-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-node,
+  .curtain-panel,
+  .curtain-seam,
+  .gallery-card {
+    transition: none;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -21,438 +1639,1119 @@
   <div class="right-meta">Period · Annual · 2025–26</div>
 </div>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="icon-crusader" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="6" y1="3" x2="6" y2="21"/><path d="M6 4 L18 4 L15 8 L18 12 L6 12"/>
+    </symbol>
+    <symbol id="icon-organizer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="6" cy="8" r="2.2"/><circle cx="12" cy="6" r="2.2"/><circle cx="18" cy="8" r="2.2"/>
+      <path d="M3 19 c0 -3 2 -5 5 -5 c1 0 2 0.3 3 1 c1 -0.7 2 -1 3 -1 c1 0 2 0.3 3 1 c1 -0.7 2 -1 3 -1"/>
+    </symbol>
+    <symbol id="icon-patron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 8 L7 14 L12 6 L17 14 L21 8 L19 18 L5 18 Z"/>
+      <circle cx="3" cy="8" r="1" fill="currentColor"/><circle cx="12" cy="6" r="1" fill="currentColor"/><circle cx="21" cy="8" r="1" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-mediator" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="3" x2="12" y2="20"/><line x1="6" y1="20" x2="18" y2="20"/><line x1="3" y1="7" x2="21" y2="7"/>
+      <path d="M3 7 L1 13 L5 13 Z"/><path d="M21 7 L19 13 L23 13 Z"/>
+    </symbol>
+    <symbol id="icon-architect" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 4 L20 4 L4 20 Z"/>
+      <line x1="9" y1="4" x2="9" y2="9"/><line x1="14" y1="4" x2="14" y2="6.5"/>
+      <line x1="4" y1="9" x2="9" y2="9"/><line x1="4" y1="14" x2="6.5" y2="14"/>
+    </symbol>
+    <symbol id="icon-commoner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M12 3 L12 21 M3 12 L21 12 M5.5 5.5 L18.5 18.5 M18.5 5.5 L5.5 18.5"/>
+    </symbol>
+    <symbol id="icon-authority" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 19 L13 11 M9 7 L17 15 M7 5 L15 13 M3 21 L11 13"/>
+      <line x1="14" y1="20" x2="22" y2="20"/>
+    </symbol>
+    <symbol id="icon-assembly" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <circle cx="12" cy="6" r="1.2" fill="currentColor"/><circle cx="17" cy="9" r="1.2" fill="currentColor"/><circle cx="17" cy="15" r="1.2" fill="currentColor"/>
+      <circle cx="12" cy="18" r="1.2" fill="currentColor"/><circle cx="7" cy="15" r="1.2" fill="currentColor"/><circle cx="7" cy="9" r="1.2" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
+
 <main>
 
-  <!-- ============================================================
-       R2 HERO — 6-dimension strategic gauge
-       ============================================================ -->
+  <section>
+    <div class="region-head">
+      <div class="num">01</div>
+      <div class="title">Speculative situation</div>
+      <div class="desc">Pick a role and play three rounds.</div>
+    </div>
+
+    <div class="speculative-stage" id="speculative-stage">
+      <div class="speculative-curtain" aria-hidden="true">
+        <div class="curtain-panel curtain-left"></div>
+        <div class="curtain-panel curtain-right"></div>
+        <div class="curtain-seam"></div>
+      </div>
+
+      <p style="font-size: 13px; color: var(--text-mid); max-width: 760px; margin: 0 0 22px; line-height: 1.6;">
+        Same evidentiary system, different decision-maker.
+      </p>
+
+      <div class="matrix-frame">
+        <div class="matrix-axis-x">
+          <div></div>
+          <div><svg class="axis-icon"><use href="#icon-authority"/></svg> By Authority</div>
+          <div><svg class="axis-icon"><use href="#icon-assembly"/></svg> By Assembly</div>
+        </div>
+
+        <div class="matrix-row">
+          <div class="matrix-row-label">The Planet<span class="telos-sub">we care about the climate</span></div>
+          <div class="persona-card" data-persona="crusader">
+            <span class="selected-badge">Selected</span>
+            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-crusader"/></svg></div><div class="head-text"><div class="name">The Crusader</div><div class="id-tag">P1 · 01</div></div></div>
+            <div class="credo">"I'll push the policy through, even if no one likes it."</div>
+          </div>
+          <div class="persona-card" data-persona="organizer">
+            <span class="selected-badge">Selected</span>
+            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-organizer"/></svg></div><div class="head-text"><div class="name">The Organizer</div><div class="id-tag">P1 · 02</div></div></div>
+            <div class="credo">"We build a coalition the climate can't ignore."</div>
+          </div>
+        </div>
+
+        <div class="matrix-row">
+          <div class="matrix-row-label">Comfort<span class="telos-sub">we care about bodies in the building</span></div>
+          <div class="persona-card" data-persona="patron">
+            <span class="selected-badge">Selected</span>
+            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-patron"/></svg></div><div class="head-text"><div class="name">The Patron</div><div class="id-tag">P2 · 01</div></div></div>
+            <div class="credo">"I decide who deserves to be comfortable here."</div>
+          </div>
+          <div class="persona-card" data-persona="mediator">
+            <span class="selected-badge">Selected</span>
+            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-mediator"/></svg></div><div class="head-text"><div class="name">The Mediator</div><div class="id-tag">P2 · 02</div></div></div>
+            <div class="credo">"We negotiate whose body sets the temperature."</div>
+          </div>
+        </div>
+
+        <div class="matrix-row">
+          <div class="matrix-row-label">Community<span class="telos-sub">we care about the school as a place</span></div>
+          <div class="persona-card" data-persona="architect">
+            <span class="selected-badge">Selected</span>
+            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-architect"/></svg></div><div class="head-text"><div class="name">The Architect</div><div class="id-tag">P3 · 01</div></div></div>
+            <div class="credo">"I shape what the building teaches its occupants."</div>
+          </div>
+          <div class="persona-card" data-persona="commoner">
+            <span class="selected-badge">Selected</span>
+            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-commoner"/></svg></div><div class="head-text"><div class="name">The Commoner</div><div class="id-tag">P3 · 02</div></div></div>
+            <div class="credo">"We hold this building in common — heat included."</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="game-stage" id="game-stage">
+        <div class="game-header">
+          <div class="left">
+            <div class="you-icon"><svg id="you-icon-svg"><use href="#icon-crusader" id="you-icon-use"/></svg></div>
+            <div class="you-text"><div class="you-are">You are</div><div class="you-name" id="you-name">—</div></div>
+          </div>
+          <button class="reset-btn" id="reset-btn">↺ Choose another</button>
+        </div>
+
+        <div class="round-progress">
+          <div class="round-dot" data-round="1"></div>
+          <div class="round-dot" data-round="2"></div>
+          <div class="round-dot" data-round="3"></div>
+        </div>
+
+        <div class="game-body">
+          <div class="rounds-col">
+            <div id="rounds-mount"></div>
+            <div class="ending-block" id="ending-block"></div>
+          </div>
+
+          <div class="trilemma-col">
+            <div class="trilemma">
+              <div class="trilemma-head">Trilemma</div>
+              <div class="trilemma-sub">Three things you cannot fully have at once.</div>
+              <svg class="tri-svg" viewBox="0 0 240 220" id="tri-svg">
+                <g stroke="rgba(255,255,255,0.10)" stroke-width="0.8" fill="none">
+                  <line x1="120" y1="20" x2="120" y2="180"/>
+                  <line x1="25" y1="165" x2="120" y2="180"/>
+                  <line x1="215" y1="165" x2="120" y2="180"/>
+                  <line x1="25" y1="165" x2="215" y2="165"/>
+                  <polygon points="120,55 70,150 170,150" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="0.6"/>
+                  <polygon points="120,90 95,135 145,135" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="0.6"/>
+                </g>
+                <polygon id="tri-target" points="120,180 120,180 120,180" fill="none" stroke="#6E5FB8" stroke-width="1.4" stroke-dasharray="4 3" opacity="0"/>
+                <polygon id="tri-actual" points="120,180 120,180 120,180" fill="rgba(110,95,184,0.22)" stroke="#6E5FB8" stroke-width="2.2" style="transition: points 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);"/>
+                <g font-family="var(--font-h)" font-size="9" font-weight="600" letter-spacing="0.1em">
+                  <text x="120" y="14" text-anchor="middle" fill="#99E0B6">ENERGY</text>
+                  <text x="22" y="180" text-anchor="middle" fill="#B0A6E8">VOICE</text>
+                  <text x="218" y="180" text-anchor="middle" fill="#E89999">COMFORT</text>
+                </g>
+              </svg>
+              <div class="tri-stats">
+                <div class="tri-stat comfort"><div class="lbl">Comfort</div><div class="val" id="v-comfort">0</div></div>
+                <div class="tri-stat energy"><div class="lbl">Energy</div><div class="val" id="v-energy">0</div></div>
+                <div class="tri-stat voice"><div class="lbl">Voice</div><div class="val" id="v-voice">0</div></div>
+              </div>
+              <div class="tri-legend" id="tri-legend">
+                <div><span class="swatch"></span>Your path</div>
+                <div><span class="swatch dash"></span>If fully in character</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section>
     <div class="region-head">
       <div class="num">02</div>
-      <div class="title">Six dimensions · current state</div>
-      <div class="desc">Six lenses Harvard leadership already uses to evaluate any building investment. Numbers are baseline (no intervention). Sources cited per dimension.</div>
+      <div class="title">Six possible institutions</div>
+      <div class="desc">Six ways the same evidence layer can settle into different institutional forms.</div>
     </div>
 
-    <div class="dim-gauge" id="dim-gauge">
-      <!-- rendered by JS -->
+    <div class="gallery-frame">
+      <div class="gallery-track-wrap">
+        <div class="gallery-track" id="gallery-track"></div>
+      </div>
+      <div class="gallery-controls">
+        <button class="gallery-arrow" id="gal-prev" aria-label="Previous">‹</button>
+        <div class="gallery-dots" id="gallery-dots"></div>
+        <button class="gallery-arrow" id="gal-next" aria-label="Next">›</button>
+      </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       R3 DIAGNOSIS — coalition heatmap
-       ============================================================ -->
   <section>
     <div class="region-head">
       <div class="num">03</div>
-      <div class="title">Stakeholder political payoff per scenario</div>
-      <div class="desc">Each cell = (stakeholder's care-weight on each dimension) × (scenario's impact on that dimension), summed and normalized to −3…+3. Computed, not asserted — see About §6 for the formula.</div>
+      <div class="title">Making Thermal Discomfort Actionable</div>
+      <div class="desc">S02 · Feedback Visualization — four phases, five metrics</div>
     </div>
 
-    <div class="card surface-0" style="overflow-x: auto;">
-      <table class="coalition-table" id="coalition-table">
-        <thead>
-          <tr>
-            <th class="left">Stakeholder</th>
-            <th>S01 Setpoint Policy</th>
-            <th class="featured">S02 Feedback Viz ★</th>
-            <th>S03 Participatory</th>
-          </tr>
-        </thead>
-        <tbody id="coalition-body">
-          <!-- rendered by JS -->
-        </tbody>
-      </table>
-    </div>
+    <!-- No tab selector — single S02 view -->
 
-    <p style="font-size: 13px; color: var(--text-mid); margin-top: 12px;">
-      S02 wins on coalition arithmetic: no cell darker than 0, three stakeholders at +3, leaves Facilities at neutral. S03's higher ceiling is blocked by Facilities (−2 = veto risk).
-    </p>
+    <div class="intervention-split" id="intervention-split">
+
+      <!-- Left: phase narrative -->
+      <div class="intervention-narrative">
+        <div class="narrative-header">
+          <div class="narrative-eyebrow" id="narrative-eyebrow">S02 · Recommended path · Phase mockup</div>
+          <div class="narrative-title" id="narrative-title">Four phases of the feedback loop</div>
+        </div>
+
+        <div class="phase-steps" id="phase-steps">
+          <div class="phase-step is-active" data-phase="0">
+            <div class="step-node">1</div>
+            <div class="step-content">
+              <div class="step-label">Phase 1 · M0 – M9</div>
+              <div class="step-name">Metric Collection</div>
+              <div class="step-desc">Temperature sensors and occupant survey data are made visible for the first time. The building's thermal profile becomes legible — not to users yet, but to the research layer. Evidence is the first condition of action.</div>
+              <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" data-phase="0"></div></div><div class="step-progress-pct" data-phase="0">0%</div></div>
+            </div>
+          </div>
+          <div class="phase-step" data-phase="1">
+            <div class="step-node">2</div>
+            <div class="step-content">
+              <div class="step-label">Phase 2 · M3 – M18</div>
+              <div class="step-name">Deploy Feedback</div>
+              <div class="step-desc">QR voting and the public dashboard go live. Occupants can signal discomfort in under 10 seconds. Isolation drops as social proof becomes visible: "73 others on this tray voted cold this week." Friction-to-voice falls from 5 min to ~10 sec.</div>
+              <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" data-phase="1"></div></div><div class="step-progress-pct" data-phase="1">0%</div></div>
+            </div>
+          </div>
+          <div class="phase-step" data-phase="2">
+            <div class="step-node">3</div>
+            <div class="step-content">
+              <div class="step-label">Phase 3 · M6 – M24</div>
+              <div class="step-name">Evaluate Feedback</div>
+              <div class="step-desc">Aggregated signals cross thresholds that trigger formal review. Facilities sees clustered patterns, not individual complaints. The loop is closing: perception gap narrows because the right people now see the right data at the right time.</div>
+              <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" data-phase="2"></div></div><div class="step-progress-pct" data-phase="2">0%</div></div>
+            </div>
+          </div>
+          <div class="phase-step" data-phase="3">
+            <div class="step-node">4</div>
+            <div class="step-content">
+              <div class="step-label">Phase 4 · M12 – M48</div>
+              <div class="step-name">Implement Change</div>
+              <div class="step-desc">Named interventions — setpoint adjustments, riser reroutes — are recorded publicly against the feedback that motivated them. Accountability is no longer implicit. Steam co-benefits appear late, as a side-effect of governance, not the goal.</div>
+              <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" data-phase="3"></div></div><div class="step-progress-pct" data-phase="3">0%</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="narrative-scrubber">
+          <div class="scrubber-label">
+            <div class="scrubber-phase-name" id="scrubber-phase-name">Metric collection</div>
+            <div class="scrubber-pct" id="scrubber-pct">0%</div>
+          </div>
+          <input class="scrubber-input" type="range" min="0" max="100" value="0" id="timeline">
+        </div>
+      </div>
+
+      <!-- Right: sticky metrics -->
+      <div class="intervention-metrics">
+        <div class="metrics-header">
+          <div class="metrics-eyebrow">Live projection · move slider to update</div>
+          <div class="metrics-title">Five outcome metrics</div>
+        </div>
+
+        <div class="metrics-body">
+          <div class="metric-item" data-metric="M1">
+            <div class="metric-item-head">
+              <div class="metric-item-name">Perception–Ambient Gap</div>
+              <div class="metric-item-code">M01</div>
+            </div>
+            <div class="metric-item-values">
+              <div class="metric-val-now">−4.1°F</div>
+              <div class="metric-arrow">→</div>
+              <div class="metric-val-proj is-empty" id="m1-proj">—</div>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-bar-baseline" style="left: 53%"></div>
+              <div class="metric-bar-range" id="m1-range-bar" style="left:53%;width:0"></div>
+              <div class="metric-bar-cursor" id="m1-cursor" style="left:53%"></div>
+            </div>
+            <div class="metric-range-text" id="m1-range-text">felt temperature vs. sensor reading</div>
+          </div>
+
+          <div class="metric-item" data-metric="M2">
+            <div class="metric-item-head">
+              <div class="metric-item-name">Isolation Index</div>
+              <div class="metric-item-code">M02</div>
+            </div>
+            <div class="metric-item-values">
+              <div class="metric-val-now">70%</div>
+              <div class="metric-arrow">→</div>
+              <div class="metric-val-proj is-empty" id="m2-proj">—</div>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-bar-baseline" style="left:70%"></div>
+              <div class="metric-bar-range" id="m2-range-bar" style="left:70%;width:0"></div>
+              <div class="metric-bar-cursor" id="m2-cursor" style="left:70%"></div>
+            </div>
+            <div class="metric-range-text" id="m2-range-text">% who think they are alone in feeling this</div>
+          </div>
+
+          <div class="metric-item" data-metric="M3">
+            <div class="metric-item-head">
+              <div class="metric-item-name">Friction-to-Voice</div>
+              <div class="metric-item-code">M03</div>
+            </div>
+            <div class="metric-item-values">
+              <div class="metric-val-now">5 min</div>
+              <div class="metric-arrow">→</div>
+              <div class="metric-val-proj is-empty" id="m3-proj">—</div>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-bar-baseline" style="left:100%"></div>
+              <div class="metric-bar-range" id="m3-range-bar" style="left:100%;width:0"></div>
+              <div class="metric-bar-cursor" id="m3-cursor" style="left:100%"></div>
+            </div>
+            <div class="metric-range-text" id="m3-range-text">time to submit one discomfort signal</div>
+          </div>
+
+          <div class="metric-item" data-metric="M4">
+            <div class="metric-item-head">
+              <div class="metric-item-name">Loop Closure Time</div>
+              <div class="metric-item-code">M04</div>
+            </div>
+            <div class="metric-item-values">
+              <div class="metric-val-now">18 days</div>
+              <div class="metric-arrow">→</div>
+              <div class="metric-val-proj is-empty" id="m4-proj">—</div>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-bar-baseline" style="left:90%"></div>
+              <div class="metric-bar-range" id="m4-range-bar" style="left:90%;width:0"></div>
+              <div class="metric-bar-cursor" id="m4-cursor" style="left:90%"></div>
+            </div>
+            <div class="metric-range-text" id="m4-range-text">days from visible signal to visible action</div>
+          </div>
+
+          <div class="metric-item" data-metric="M5">
+            <div class="metric-item-head">
+              <div class="metric-item-name">Steam Index</div>
+              <div class="metric-item-code">M05</div>
+            </div>
+            <div class="metric-item-values">
+              <div class="metric-val-now">100</div>
+              <div class="metric-arrow">→</div>
+              <div class="metric-val-proj is-empty" id="m5-proj">—</div>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-bar-baseline" style="left:50%"></div>
+              <div class="metric-bar-range" id="m5-range-bar" style="left:50%;width:0"></div>
+              <div class="metric-bar-cursor" id="m5-cursor" style="left:50%"></div>
+            </div>
+            <div class="metric-range-text" id="m5-range-text">co-benefit only · mechanical change arrives late</div>
+          </div>
+        </div>
+
+        <!-- Impact strip -->
+        <div class="impact-strip">
+          <div class="impact-strip-head">S02 full deployment · evidence basis</div>
+          <div class="impact-stats">
+            <div class="impact-stat">
+              <div class="lbl">Hours recovered</div>
+              <div class="val">100k/yr</div>
+              <div class="src">500 occupants × 7h/wk × 4.3wk/mo × 56% coverage</div>
+            </div>
+            <div class="impact-stat">
+              <div class="lbl">Tuition value</div>
+              <div class="val">$5.1M/yr</div>
+              <div class="src">100k h × $51.14/h tuition anchor · Harvard published rate</div>
+            </div>
+            <div class="impact-stat">
+              <div class="lbl">Implementation</div>
+              <div class="val">$80k</div>
+              <div class="src">Sensor hardware + dashboard + first-year upkeep · 63:1 ROI</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </section>
 
-  <!-- ============================================================
-       R4 ACTION / WHAT IF — scenarios + sliders
-       ============================================================ -->
   <section>
     <div class="region-head">
       <div class="num">04</div>
-      <div class="title">Test interventions</div>
-      <div class="desc">Three interventions stack into three phases. Drag the mix below to test partial deployments and watch the five outcome metrics shift.</div>
+      <div class="title">What changes when you know?</div>
+      <div class="desc">A behavioral test: same scenario, new information — do you decide differently?</div>
     </div>
 
-    <div class="scenarios">
-      <div class="scenario-card">
-        <div class="num">S 01</div>
-        <div class="name">Setpoint Policy</div>
-        <div class="arch">Incremental · Top-down</div>
-        <div class="what">
-          University Campus Services tightens annual setpoint policy. No new sensors, no new interfaces.
-          <em>The system stays the same; the rules tighten.</em>
-        </div>
-        <div class="grid-meta">
-          <div class="gm"><div class="lbl">Disruption</div><div class="v">Low</div></div>
-          <div class="gm"><div class="lbl">Investment</div><div class="v">Minimal</div></div>
-          <div class="gm"><div class="lbl">Comfort</div><div class="v" style="color: var(--op-alert)">−2</div></div>
-          <div class="gm"><div class="lbl">Coalition</div><div class="v" style="color: var(--op-alert)">−4</div></div>
-        </div>
-      </div>
+    <div class="reframe-wrap" id="reframe-section">
 
-      <div class="scenario-card featured">
-        <div class="featured-tag">↳ Recommended</div>
-        <div class="num">S 02</div>
-        <div class="name">Feedback Visualization</div>
-        <div class="arch">Mixed · Information-led</div>
-        <div class="what">
-          Public temperature stations + QR-based comfort polling + a building-wide thermal dashboard everyone can read.
-          <em>The thermostat becomes a piece of public infrastructure.</em>
-        </div>
-        <div class="grid-meta">
-          <div class="gm"><div class="lbl">Disruption</div><div class="v">Medium</div></div>
-          <div class="gm"><div class="lbl">Investment</div><div class="v">Modest</div></div>
-          <div class="gm"><div class="lbl">Comfort</div><div class="v" style="color: #4FBB8E">+2</div></div>
-          <div class="gm"><div class="lbl">Coalition</div><div class="v" style="color: var(--brand-orange)">+12</div></div>
-        </div>
-      </div>
-
-      <div class="scenario-card">
-        <div class="num">S 03</div>
-        <div class="name">Participatory Governance</div>
-        <div class="arch">Transformational · Bottom-up</div>
-        <div class="what">
-          Standing Thermal Council with student / faculty / facilities reps. Setpoints set deliberatively, tested via RCT.
-          <em>The thermostat becomes a venue for collective decision-making.</em>
-        </div>
-        <div class="grid-meta">
-          <div class="gm"><div class="lbl">Disruption</div><div class="v">High</div></div>
-          <div class="gm"><div class="lbl">Investment</div><div class="v">Coordination</div></div>
-          <div class="gm"><div class="lbl">Comfort</div><div class="v" style="color: #4FBB8E">+2</div></div>
-          <div class="gm"><div class="lbl">Coalition</div><div class="v" style="color: #C0DD97">+7</div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="whatif">
-      <div class="controls-card">
-        <h3>Intervention mix</h3>
-        <div class="sub">
-          Three interventions, deployed cumulatively into three phases.
-          <strong>Phase 1</strong> = Sensing only · <strong>Phase 2</strong> = Sensing + Voicing · <strong>Phase 3</strong> = Sensing + Voicing + Governing.
-          Drag any slider 0–100% to test partial deployments.
+      <!-- Left: evidence digest -->
+      <div class="reframe-digest">
+        <div>
+          <div class="digest-eyebrow">Before the evidence</div>
+          <div class="digest-title">Your prior decision</div>
         </div>
 
-        <div class="phase">
-          <div class="row">
-            <div class="name"><span class="n">i 01</span>Sensing</div>
-            <div class="pct"><span id="p1-val">100</span>%</div>
+        <div id="digest-prior-choice-display">
+          <div class="digest-no-choice">Complete §01 above to see your prior choice here.</div>
+        </div>
+
+        <div class="digest-evidence">
+          <div class="digest-evidence-head">What the system now shows you</div>
+
+          <div class="evidence-item">
+            <div class="evidence-icon">●</div>
+            <div class="evidence-text">
+              <strong>70% of occupants thought they were the only one feeling cold.</strong> They were wrong — the signal was always collective, just invisible.
+              <span class="src">M02 Isolation Index · P2 survey · n = 42</span>
+            </div>
           </div>
-          <div class="desc">Public temperature stations on every tray. Data exists where people can see it. <em>Drives Phase 1.</em></div>
-          <input type="range" min="0" max="100" value="100" class="slider" id="p1">
-        </div>
 
-        <div class="phase">
-          <div class="row">
-            <div class="name"><span class="n">i 02</span>Voicing</div>
-            <div class="pct"><span id="p2-val">100</span>%</div>
+          <div class="evidence-item">
+            <div class="evidence-icon">●</div>
+            <div class="evidence-text">
+              The current process to flag thermal discomfort takes <strong>over 5 minutes and 7 steps</strong> — most people never complete it. S02 reduces this to a single tap.
+              <span class="src">M03 Friction-to-Voice · Harvard Facilities service request audit</span>
+            </div>
           </div>
-          <div class="desc">QR-coded 1-tap comfort vote + live aggregate readout + public dashboard. Friction drops, plurality becomes visible. <em>Adds onto Sensing → Phase 2.</em></div>
-          <input type="range" min="0" max="100" value="100" class="slider" id="p2">
-        </div>
 
-        <div class="phase">
-          <div class="row">
-            <div class="name"><span class="n">i 03</span>Governing</div>
-            <div class="pct"><span id="p3-val">0</span>%</div>
+          <div class="evidence-item">
+            <div class="evidence-icon">●</div>
+            <div class="evidence-text">
+              Without the feedback system, the average time from a complaint to visible action is <strong>18 days</strong>. Visibility alone reduced this to 4–8 days in comparable building deployments.
+              <span class="src">M04 Loop Closure · Goetz 2011; Darby 2006 feedback review</span>
+            </div>
           </div>
-          <div class="desc">Standing Thermal Council with public deliberation; setpoints set via stepped-wedge RCT. <em>Adds onto Sensing + Voicing → Phase 3.</em></div>
-          <input type="range" min="0" max="100" value="0" class="slider" id="p3">
-        </div>
 
-        <div class="presets">
-          <button class="preset" data-p1="0" data-p2="0" data-p3="0">Status Quo</button>
-          <button class="preset" data-p1="100" data-p2="0" data-p3="0">Phase 1 only</button>
-          <button class="preset is-active" data-p1="100" data-p2="100" data-p3="0">Phase 2 (S 02 ★)</button>
-          <button class="preset" data-p1="100" data-p2="100" data-p3="100">Phase 3 (S 03)</button>
-        </div>
-      </div>
-
-      <div class="predictions-card">
-        <h3>Projected metrics</h3>
-        <div class="sub">Five outcome metrics (M01–M05) that move when you drag the interventions. Each shows a <em>range</em> (low/high estimate) — projections are arguments, not predictions. Source equations in About §6.</div>
-
-        <div class="metric-row" data-metric="M1">
-          <div class="name"><span class="code">M01</span>Perception–Ambient Gap<span class="sub">how off felt vs ambient</span></div>
-          <div class="now-val"><div class="lbl">Now</div><div class="v">−4.1°F</div></div>
-          <div class="range-bar" data-axis-min="-6" data-axis-max="0" data-baseline="-4.12">
-            <div class="range-fill"></div>
-            <div class="range-baseline" style="left:31.3%"></div>
-            <div class="range-current"></div>
+          <div class="evidence-item">
+            <div class="evidence-icon">$</div>
+            <div class="evidence-text">
+              Each hour of thermal discomfort equals <strong>$51.14 of paid-but-unusable tuition time</strong>. Across the school, the current gap represents ~$5.1M/year of institutional value leaking invisibly.
+              <span class="src">$90k/yr ÷ 10mo ÷ 22d ÷ 8h = $51.14/h · Harvard GSD tuition 2025–26</span>
+            </div>
           </div>
-          <div class="future"><div class="lbl">Projected</div><div class="v" id="m1-num">—</div><div class="range-text" id="m1-range">—</div></div>
-        </div>
 
-        <div class="metric-row" data-metric="M2">
-          <div class="name"><span class="code">M02</span>Isolation Index<span class="sub">% who think they're the only one</span></div>
-          <div class="now-val"><div class="lbl">Now</div><div class="v">70%</div></div>
-          <div class="range-bar" data-axis-min="0" data-axis-max="100" data-baseline="70">
-            <div class="range-fill"></div>
-            <div class="range-baseline" style="left:70%"></div>
-            <div class="range-current"></div>
+          <div class="evidence-item">
+            <div class="evidence-icon">▲</div>
+            <div class="evidence-text">
+              <strong>"Students have a lot of power to move the needle"</strong> — but only if facilities can see what students are experiencing. The current system makes that impossible.
+              <span class="src">Ben Szalewicz, GSD Facilities Management · P3 stakeholder interview</span>
+            </div>
           </div>
-          <div class="future"><div class="lbl">Projected</div><div class="v" id="m2-num">—</div><div class="range-text" id="m2-range">—</div></div>
+        </div>
+      </div>
+
+      <!-- Right: re-choice panel -->
+      <div class="reframe-choice">
+        <div class="rechoice-eyebrow">After seeing the evidence</div>
+        <div class="rechoice-title">The dashboard goes public. What should happen next?</div>
+        <div class="rechoice-sub">You've seen the data. The same moment — M0, the trigger — but now with full visibility into why the feedback loop has been failing. Make a single choice.</div>
+
+        <div class="rechoice-options" id="rechoice-options">
+          <button class="rechoice-option" type="button" data-choice="a">
+            <div class="rechoice-letter">A</div>
+            <div class="rechoice-body">
+              <div class="rechoice-verb">Lock the message down.</div>
+              <div class="rechoice-gloss">Frame the dashboard as confirmation that the building is already within policy. Treat new visibility as a communications issue to manage.</div>
+            </div>
+          </button>
+          <button class="rechoice-option" type="button" data-choice="b">
+            <div class="rechoice-letter">B</div>
+            <div class="rechoice-body">
+              <div class="rechoice-verb">Convene around the evidence.</div>
+              <div class="rechoice-gloss">Use the public dashboard as a shared object. Bring operators, student reps, and leadership into one room around what the pattern now makes undeniable.</div>
+            </div>
+          </button>
+          <button class="rechoice-option" type="button" data-choice="c">
+            <div class="rechoice-letter">C</div>
+            <div class="rechoice-body">
+              <div class="rechoice-verb">Quietly fix the coldest room.</div>
+              <div class="rechoice-gloss">Respond to the most visible room first, but keep the broader dashboard from becoming a school-wide conversation.</div>
+            </div>
+          </button>
         </div>
 
-        <div class="metric-row" data-metric="M3">
-          <div class="name"><span class="code">M03</span>Friction-to-Voice<span class="sub">time to submit one signal</span></div>
-          <div class="now-val"><div class="lbl">Now</div><div class="v">5 min</div></div>
-          <div class="range-bar" data-axis-min="0" data-axis-max="300" data-baseline="300">
-            <div class="range-fill"></div>
-            <div class="range-baseline" style="left:100%"></div>
-            <div class="range-current"></div>
+        <div class="rechoice-result" id="rechoice-result">
+          <div class="result-head">
+            <div class="result-head-label">Your choice</div>
           </div>
-          <div class="future"><div class="lbl">Projected</div><div class="v" id="m3-num">—</div><div class="range-text" id="m3-range">—</div></div>
+          <div class="result-verdict" id="result-verdict"></div>
+          <div class="result-stat" id="result-stat"></div>
+          <div class="result-mechanism" id="result-mechanism"></div>
         </div>
+      </div>
 
-        <div class="metric-row" data-metric="M4">
-          <div class="name"><span class="code">M04</span>Loop Closure Time<span class="sub">days from signal to action</span></div>
-          <div class="now-val"><div class="lbl">Now</div><div class="v">18 d</div></div>
-          <div class="range-bar" data-axis-min="0" data-axis-max="20" data-baseline="18">
-            <div class="range-fill"></div>
-            <div class="range-baseline" style="left:90%"></div>
-            <div class="range-current"></div>
-          </div>
-          <div class="future"><div class="lbl">Projected</div><div class="v" id="m4-num">—</div><div class="range-text" id="m4-range">—</div></div>
-        </div>
-
-        <div class="metric-row" data-metric="M5">
-          <div class="name"><span class="code">M05</span>Steam Index<span class="sub">co-benefit, not the goal</span></div>
-          <div class="now-val"><div class="lbl">Now</div><div class="v">100</div></div>
-          <div class="range-bar" data-axis-min="80" data-axis-max="105" data-baseline="100">
-            <div class="range-fill"></div>
-            <div class="range-baseline" style="left:80%"></div>
-            <div class="range-current"></div>
-          </div>
-          <div class="future"><div class="lbl">Projected</div><div class="v" id="m5-num">—</div><div class="range-text" id="m5-range">—</div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       R5 CONSEQUENCE — annual ROI for S02 vs S03 end-state
-       ============================================================ -->
-  <section>
-    <div class="region-head">
-      <div class="num">05</div>
-      <div class="title">Annual outlook · S 02 (recommended) vs S 03 (full deployment)</div>
-      <div class="desc">What recovered comfort hours look like once Phase 2 holds steady, and what extending into Phase 3 (governing) adds. Tuition opportunity cost as the anchor.</div>
-    </div>
-
-    <div class="consequence">
-      <div class="eyebrow">Annual outlook · S 02 (Phase 2 · recommended)</div>
-      <div class="row">
-        <div class="arrow">↳</div>
-        <div class="label">
-          Comfort hours recovered annually
-          <span class="small">~500 GSD users × ~7 h/wk × ~30 weeks/yr × ~95% loop-closure once Phase 2 stable.</span>
-        </div>
-        <div class="value" id="dec-hours">100,000 h</div>
-      </div>
-      <div class="row">
-        <div class="arrow">↳</div>
-        <div class="label">
-          Tuition value recovered
-          <span class="small">Recovered hours × $51.14/hr (= $90k tuition ÷ 10mo ÷ 22d ÷ 8h).</span>
-        </div>
-        <div class="value" id="dec-value">$5.1M</div>
-      </div>
-      <div class="row">
-        <div class="arrow">↳</div>
-        <div class="label">
-          Implementation cost
-          <span class="small">Sensor hardware + dashboard build + first-year support. One-time + small recurring.</span>
-        </div>
-        <div class="value" id="dec-cost">$80k</div>
-      </div>
-      <div class="row">
-        <div class="arrow">↳</div>
-        <div class="label">
-          ROI ratio
-          <span class="small">Tuition value recovered ÷ implementation cost. The number that travels in Dean-level memos.</span>
-        </div>
-        <div class="value" id="dec-roi">63 : 1</div>
-      </div>
-      <div class="footer-line">
-        This is not an energy proposal. The energy savings are real but small (~$3k/year). The argument is comfort: thousands of paid-for hours are currently unusable, and that's the asset being recovered.
-      </div>
-    </div>
-
-    <div class="consequence" style="margin-top: 24px;">
-      <div class="eyebrow">If we go all the way · S 03 (Phase 3 · governing)</div>
-      <div class="row">
-        <div class="arrow">↳</div>
-        <div class="label">
-          Comfort hours recovered annually
-          <span class="small">Council deliberation + stepped-wedge RCT closes the long-tail signals Phase 2 misses (~30% lift over S02).</span>
-        </div>
-        <div class="value" id="dec-s03-hours">130,000 h</div>
-      </div>
-      <div class="row">
-        <div class="arrow">↳</div>
-        <div class="label">
-          Tuition value recovered
-          <span class="small">Same $51.14/hr anchor.</span>
-        </div>
-        <div class="value" id="dec-s03-value">$6.6M</div>
-      </div>
-      <div class="row">
-        <div class="arrow">↳</div>
-        <div class="label">
-          Implementation cost
-          <span class="small">Phase 2 cost + standing council operating budget + RCT facilitation.</span>
-        </div>
-        <div class="value" id="dec-s03-cost">$140k</div>
-      </div>
-      <div class="row">
-        <div class="arrow">↳</div>
-        <div class="label">
-          ROI ratio
-          <span class="small">Lower than S02, but adds non-monetary returns: institutional capacity, faculty/student governance experience, exportable model.</span>
-        </div>
-        <div class="value" id="dec-s03-roi">47 : 1</div>
-      </div>
-      <div class="footer-line">
-        S 03 is not "S 02 plus more money." It is S 02 plus a permanent capacity for the institution to hear itself. The dollar ROI is lower; the political durability is higher. See About §7 for the M48 end-state across all eight stakeholders.
-      </div>
     </div>
   </section>
 
 </main>
 
 <footer class="foot">
-  <div>VIS 2478 · Wightman · Ge · Lock</div>
+  <div>VIS 2478 | Utility Interface Design | Yvette Ge</div>
   <div>Decision view · <a href="decision.html">decision.html</a></div>
 </footer>
 
 <script src="shared.js"></script>
 <script>
-// =========================================================================
-// DECISION MODE LOGIC
-// =========================================================================
-
 document.getElementById('mode-switch-mount').innerHTML = renderModeSwitch('decision');
 
-// ---- 6-dim gauge --------------------------------------------------------
-function renderDimGauge() {
-  const html = Object.entries(SAMPLE.decision.dimensions).map(([name, d]) => `
-    <div class="dim-cell">
-      <div class="dim-name">${name}</div>
-      <div class="dim-val">${d.val}</div>
-      <div class="dim-trend ${d.trend}">${d.trendLabel}</div>
-    </div>
-  `).join('');
-  document.getElementById('dim-gauge').innerHTML = html;
-}
-renderDimGauge();
+// =========================================================================
+// §03 — Phase timeline + Metrics (S02 only)
+// =========================================================================
 
-// ---- coalition heatmap --------------------------------------------------
-function renderCoalition() {
-  const sh = SAMPLE.decision.stakeholders;
+const PHASE_NAMES = ['Metric collection', 'Deploy feedback', 'Evaluate feedback', 'Implement change'];
+const timeline = document.getElementById('timeline');
+
+function activePhaseIndex(t) {
+  if (t < 25) return 0;
+  if (t < 50) return 1;
+  if (t < 75) return 2;
+  return 3;
+}
+
+function phasesFromTimeline(t) {
+  return [
+    Math.min(100, Math.max(0, t * 4)),
+    Math.min(100, Math.max(0, (t - 25) * 4)),
+    Math.min(100, Math.max(0, (t - 50) * 4)),
+    Math.min(100, Math.max(0, (t - 75) * 4)),
+  ];
+}
+
+function renderTimelineModel() {
+  const t = Number(timeline.value);
+  const values = phasesFromTimeline(t);
+  const phaseIndex = activePhaseIndex(t);
+
+  // Phase name + pct
+  document.getElementById('scrubber-phase-name').textContent = PHASE_NAMES[phaseIndex];
+  const phaseProgress = Math.round(values[phaseIndex]);
+  document.getElementById('scrubber-pct').textContent = phaseProgress + '%';
+
+  // Phase steps
+  const steps = document.querySelectorAll('.phase-step');
+  steps.forEach((step, idx) => {
+    const v = values[idx];
+    const isActive = idx === phaseIndex;
+    const isDone = v === 100;
+    step.classList.toggle('is-active', isActive && !isDone);
+    step.classList.toggle('is-done', isDone);
+    const fill = step.querySelector('.step-progress-fill[data-phase="' + idx + '"]');
+    const pct = step.querySelector('.step-progress-pct[data-phase="' + idx + '"]');
+    if (fill) fill.style.width = v + '%';
+    if (pct)  pct.textContent = Math.round(v) + '%';
+  });
+
+  // Metrics
+  renderMetricsForValues(values);
+}
+
+// Metric bar config: [axisMin, axisMax, baselinePct]
+const METRIC_BAR_CFG = {
+  M1: { min: -6, max: 2, baselinePct: 53 },  // (-4.12 - -6)/(2 - -6) = 1.88/8 = 23.5% ... wait, improving means moving right
+  M2: { min: 0, max: 100, baselinePct: 70 },
+  M3: { min: 0, max: 300, baselinePct: 100 },
+  M4: { min: 0, max: 20, baselinePct: 90 },
+  M5: { min: 80, max: 105, baselinePct: 80 },
+};
+
+function renderMetricsForValues(values) {
+  const results = whatifCompute(values[0], values[1], values[2], values[3]);
+  const IDS = { M1:'m1', M2:'m2', M3:'m3', M4:'m4', M5:'m5' };
+
+  for (const mKey of ['M1','M2','M3','M4','M5']) {
+    const [lo, hi, mid] = results[mKey];
+    const id = IDS[mKey];
+    const projEl = document.getElementById(id + '-proj');
+    const rangeBar = document.getElementById(id + '-range-bar');
+    const cursor = document.getElementById(id + '-cursor');
+    const rangeText = document.getElementById(id + '-range-text');
+
+    const cfg = METRIC_BAR_CFG[mKey];
+    const loP = pctOnAxis(lo, cfg.min, cfg.max);
+    const hiP = pctOnAxis(hi, cfg.min, cfg.max);
+    const midP = pctOnAxis(mid, cfg.min, cfg.max);
+
+    // For M1,M2,M3,M4 improvement means lower value = bar moves left
+    // Show range as actual range (lo to hi)
+    const leftPct = Math.min(loP, hiP);
+    const widthPct = Math.abs(hiP - loP);
+
+    rangeBar.style.left = leftPct + '%';
+    rangeBar.style.width = widthPct + '%';
+    cursor.style.left = midP + '%';
+
+    const formatted = metricFmt(mKey, mid);
+    projEl.textContent = formatted;
+    projEl.classList.remove('is-empty');
+    rangeText.textContent = metricFmt(mKey, lo) + ' – ' + metricFmt(mKey, hi) + ' · projected range';
+  }
+}
+
+timeline.addEventListener('input', renderTimelineModel);
+renderTimelineModel();
+
+// =========================================================================
+// §04 — Behavioral re-choice
+// =========================================================================
+
+const RECHOICE_OUTCOMES = {
+  // same_as_r1_choice -> mechanism explanation
+  a: {
+    verb: 'Lock the message down.',
+    same_narrative: 'You chose the same path — even with full visibility, authority-by-suppression felt like the most manageable option.',
+    same_mechanism: '<strong>Status quo bias</strong> (Kahneman 1979): when facing uncertainty, decision-makers tend to prefer inaction or control. New information alone is insufficient if institutional incentives haven\'t changed.',
+    changed_from: {
+      b: { verdict: 'You shifted toward control after seeing the data.', mechanism: '<strong>Reactance</strong> (Brehm 1966): increased visibility can paradoxically trigger defensive responses in authority figures. The data felt threatening, not enabling.' },
+      c: { verdict: 'You narrowed your response — quiet fix instead of convening.', mechanism: '<strong>Information overload</strong>: more data without a clear action pathway can cause decision-makers to shrink their scope rather than expand it.' }
+    }
+  },
+  b: {
+    verb: 'Convene around the evidence.',
+    same_narrative: 'You chose the same path — S02\'s evidence layer reinforced what you already suspected.',
+    same_mechanism: '<strong>Social proof</strong> (Cialdini 1984) + <strong>Loss aversion</strong> (Kahneman & Tversky 1979): the aggregate signal made the collective nature undeniable, and the $5.1M framing made inaction feel costly.',
+    changed_from: {
+      a: { verdict: 'You shifted toward deliberation after seeing the data.', mechanism: '<strong>Information effect</strong>: seeing that 70% believed they were alone — but weren\'t — shifted the frame from individual complaint to collective governance problem. This is the mechanism S02 is designed to trigger.' },
+      c: { verdict: 'You widened your response from a quiet fix to open deliberation.', mechanism: '<strong>Descriptive norms</strong> (Cialdini et al. 1990): once collective discomfort is visible, the norm for appropriate institutional response changes. A quiet fix feels inadequate when the scale is public.' }
+    }
+  },
+  c: {
+    verb: 'Quietly fix the coldest room.',
+    same_narrative: 'You chose the same targeted fix — the evidence pointed to spatial clusters, which reinforced a room-by-room response.',
+    same_mechanism: '<strong>Availability heuristic</strong> (Tversky & Kahneman 1974): the most vivid, visible room anchors the response even when systemic patterns exist in the data.',
+    changed_from: {
+      a: { verdict: 'You moved from suppression to targeted repair.', mechanism: '<strong>Anchoring</strong> (Thaler & Sunstein 2008): the spatial data (L03 west cold cluster) created a concrete, actionable anchor that shifted from communication management to physical response.' },
+      b: { verdict: 'You narrowed from convening to a quiet fix.', mechanism: '<strong>Action bias</strong>: visible, specific data (cold cluster in L03 west) made a targeted physical response feel more decisive than open deliberation. The specificity triggered a narrower but faster action pathway.' }
+    }
+  }
+};
+
+// Populate digest with prior choice from §01 game
+function updateDigestPriorChoice() {
+  const el = document.getElementById('digest-prior-choice-display');
+  if (!el) return;
+  if (state && state.picks && state.picks.r1 && state.persona) {
+    const persona = PERSONAS[state.persona];
+    const choiceId = state.picks.r1;
+    const round = ROUNDS.r1;
+    const choice = round.choices.find((c) => c.id === choiceId);
+    const isAligned = choiceId === persona.aligned.r1;
+    el.innerHTML = `
+      <div class="digest-prior-choice">
+        <div class="digest-prior-label">You played as ${persona.name} · Round 1 choice</div>
+        <div class="digest-prior-name">${choice.verb}</div>
+        <div class="digest-prior-credo">${choice.gloss}</div>
+      </div>
+    `;
+  } else {
+    el.innerHTML = '<div class="digest-no-choice">Complete §01 above to see your prior choice here.</div>';
+  }
+}
+
+const rechoiceOptions = document.querySelectorAll('.rechoice-option');
+const rechoiceResult = document.getElementById('rechoice-result');
+let rechoiceState = { picked: null };
+
+rechoiceOptions.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const choice = btn.dataset.choice;
+    rechoiceState.picked = choice;
+    rechoiceOptions.forEach((b) => b.classList.toggle('is-chosen', b.dataset.choice === choice));
+    renderRechoiceResult(choice);
+  });
+});
+
+function renderRechoiceResult(newChoice) {
+  const outcome = RECHOICE_OUTCOMES[newChoice];
+  const priorR1 = state && state.picks && state.picks.r1;
+  const resultVerdict = document.getElementById('result-verdict');
+  const resultStat = document.getElementById('result-stat');
+  const resultMechanism = document.getElementById('result-mechanism');
+
+  let verdictText, statText, mechanismText;
+
+  if (!priorR1) {
+    // No prior choice — just show the choice's plain interpretation
+    verdictText = 'Choice locked in.';
+    statText = '<strong>' + outcome.verb + '</strong> — see how this compares to all prior visitors once §01 is completed.';
+    mechanismText = 'Play §01 first to see if your decision changed between the uninformed and informed states.';
+    resultVerdict.className = 'result-verdict same';
+  } else if (priorR1 === newChoice) {
+    verdictText = 'No shift.';
+    statText = outcome.same_narrative;
+    mechanismText = outcome.same_mechanism;
+    resultVerdict.className = 'result-verdict same';
+  } else {
+    // They changed
+    const changedData = outcome.changed_from[priorR1];
+    verdictText = changedData ? changedData.verdict : 'You changed your decision.';
+    statText = 'You moved from <strong>' + RECHOICE_OUTCOMES[priorR1].verb.replace('.','') + '</strong> to <strong>' + outcome.verb.replace('.','') + '</strong> after seeing the evidence.';
+    mechanismText = changedData ? changedData.mechanism : 'The information changed your institutional calculus.';
+    resultVerdict.className = 'result-verdict changed';
+  }
+
+  resultVerdict.textContent = verdictText;
+  resultStat.innerHTML = statText;
+  resultMechanism.innerHTML = mechanismText;
+  rechoiceResult.classList.add('is-visible');
+}
+
+// Update digest whenever game state changes
+const _origRenderRounds = typeof renderRounds === 'function' ? renderRounds : null;
+
+// =========================================================================
+// Speculative situation curtain
+// =========================================================================
+const speculativeStage = document.getElementById('speculative-stage');
+if (speculativeStage) {
+  const revealSpeculative = () => speculativeStage.classList.add('is-revealed');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    revealSpeculative();
+  } else if ('IntersectionObserver' in window) {
+    const speculativeObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        revealSpeculative();
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.28 });
+    speculativeObserver.observe(speculativeStage);
+  } else {
+    revealSpeculative();
+  }
+}
+
+// =========================================================================
+// Persona game
+// =========================================================================
+const PERSONAS = {
+  crusader:  { name: 'The Crusader',  idTag: 'P1 · 01', icon: 'icon-crusader',  credo: '"I\'ll push the policy through, even if no one likes it."', target: { comfort: 30, energy: 95, voice: 25 }, aligned: { r1: 'a', r2: 'a', r3: 'a' } },
+  organizer: { name: 'The Organizer', idTag: 'P1 · 02', icon: 'icon-organizer', credo: '"We build a coalition the climate can\'t ignore."',          target: { comfort: 60, energy: 75, voice: 95 }, aligned: { r1: 'b', r2: 'c', r3: 'b' } },
+  patron:    { name: 'The Patron',    idTag: 'P2 · 01', icon: 'icon-patron',    credo: '"I decide who deserves to be comfortable here."',           target: { comfort: 35, energy: 20, voice: 15 }, aligned: { r1: 'c', r2: 'a', r3: 'a' } },
+  mediator:  { name: 'The Mediator',  idTag: 'P2 · 02', icon: 'icon-mediator',  credo: '"We negotiate whose body sets the temperature."',           target: { comfort: 80, energy: 50, voice: 80 }, aligned: { r1: 'b', r2: 'b', r3: 'b' } },
+  architect: { name: 'The Architect', idTag: 'P3 · 01', icon: 'icon-architect', credo: '"I shape what the building teaches its occupants."',        target: { comfort: 65, energy: 60, voice: 50 }, aligned: { r1: 'a', r2: 'b', r3: 'c' } },
+  commoner:  { name: 'The Commoner',  idTag: 'P3 · 02', icon: 'icon-commoner',  credo: '"We hold this building in common — heat included."',       target: { comfort: 75, energy: 55, voice: 95 }, aligned: { r1: 'b', r2: 'c', r3: 'b' } }
+};
+
+const ROUNDS = {
+  r1: {
+    label: 'Round 1 · M0 — The trigger',
+    title: 'The dashboard goes public.',
+    speaker: 'Dean · forwarded email',
+    text: 'The first public version of the S02 dashboard is live. A student posts a screenshot beside a parka-in-studio photo and the caption “we pay $90k a year for this.” Within 36 hours, faculty, students, and sustainability staff are all looking at the same evidence for the first time. The Dean asks what should happen next.',
+    choices: [
+      { id: 'a', verb: 'Lock the message down.', gloss: 'Frame the dashboard as confirmation that the building is already broadly within policy. Treat the new visibility as a communications issue to be managed.', delta: { comfort: 0, energy: 30, voice: 0 } },
+      { id: 'b', verb: 'Convene around the evidence.', gloss: 'Use the public dashboard as a shared object. Bring operators, student reps, and leadership into one room and ask what the pattern now makes undeniable.', delta: { comfort: 20, energy: 20, voice: 35 } },
+      { id: 'c', verb: 'Quietly fix the coldest room.', gloss: 'Respond to the most visible room first, but keep the broader dashboard from becoming a school-wide conversation.', delta: { comfort: 15, energy: 5, voice: 5 } }
+    ]
+  },
+  r2: {
+    label: 'Round 2 · M6 — The evaluation',
+    title: 'The feedback starts to cluster.',
+    speaker: 'Ben Szalewicz · monthly ops report',
+    text: 'Six months in, S02 has made cold clusters visible but has not yet decided what they mean. West-facing rooms keep recurring. Some faculty argue the dashboard proves a design flaw; others say it is merely teaching people to complain better. You have budget attention for one move.',
+    choices: [
+      { id: 'a', verb: 'Translate it into policy.', gloss: 'Use the dashboard to argue for a tighter setpoint exception process and keep the response in the register of management and standards.', delta: { comfort: 10, energy: 35, voice: 5 } },
+      { id: 'b', verb: 'Deepen the public feedback loop.', gloss: 'Fund stronger readouts, better aggregation, and recurring review of what the dashboard is actually showing before freezing policy.', delta: { comfort: 30, energy: 20, voice: 30 } },
+      { id: 'c', verb: 'Jump to governance.', gloss: 'Treat the dashboard as sufficient proof that a standing Thermal Council should now own interpretation and next steps.', delta: { comfort: 25, energy: 25, voice: 40 } }
+    ]
+  },
+  r3: {
+    label: 'Round 3 · M18 — The implementation fight',
+    title: 'Phase 4 is on the table.',
+    speaker: 'Dean · annual report prep',
+    text: 'The dashboard and feedback system have worked well enough that actual change is now politically possible. But what counts as change is contested: some want setpoints adjusted, some want room organization rethought, some want the governance structure altered, and some want the dashboard to remain “informational only.” The Dean wants a path forward.',
+    choices: [
+      { id: 'a', verb: 'Implement through authority.', gloss: 'Use the evidence to justify one expert-led change package and close the question down before the coalition fragments.', delta: { comfort: 5, energy: 30, voice: -5 } },
+      { id: 'b', verb: 'Keep implementation public.', gloss: 'Publish who wanted what, which change was adopted, and why. Treat conflict over phase 4 as part of the system rather than proof it failed.', delta: { comfort: 25, energy: 10, voice: 25 } },
+      { id: 'c', verb: 'Turn the findings into redesign.', gloss: 'Treat the dashboard as a brief for spatial and organizational redesign rather than only a setpoint argument.', delta: { comfort: 25, energy: 15, voice: 10 } }
+    ]
+  }
+};
+
+const ENDINGS = {
+  crusader: {
+    title: 'Gund as climate exemplar.',
+    narrative: 'M48. S02 remained in place, but it was ultimately folded into a top-down climate narrative. The dashboard persists as evidence in support of aggressive efficiency policy. Energy use is down sharply and Harvard leadership cites Gund as proof that thermal discipline can be made visible. The cost is that the public signal mostly legitimizes decisions made elsewhere.',
+    stats: [{ lbl: 'Comfort gap', val: '−2.8°F', cls: 'warn' }, { lbl: 'Energy use', val: '−22%', cls: 'good' }, { lbl: 'Voice index', val: 'Low', cls: '' }, { lbl: 'Replicable?', val: 'Yes', cls: 'good' }],
+    winners: 'Office of Sustainability · Harvard E&U · the climate narrative.',
+    losers: 'Students · custodial staff · anyone whose body diverges from policy average.',
+    coda: 'S02 became evidence for authority. The dashboard survived; the commons did not.'
+  },
+  organizer: {
+    title: 'Gund as climate coalition.',
+    narrative: 'M48. S02 matured into a school-wide evidence commons. The dashboard remains public, and a climate coalition now uses it as the basis for cross-role bargaining. Decisions are slower, but the system keeps generating durable consensus because the evidence remains legible to everyone in the room.',
+    stats: [{ lbl: 'Comfort gap', val: '−1.4°F', cls: '' }, { lbl: 'Energy use', val: '−14%', cls: 'good' }, { lbl: 'Voice index', val: 'Very High', cls: 'good' }, { lbl: 'Replicable?', val: 'Yes', cls: 'good' }],
+    winners: 'Students · staff · custodial staff · the coalition form itself.',
+    losers: 'Decision speed · anyone seeking one final answer.',
+    coda: 'S02 rippled outward by making argument continuous rather than episodic.'
+  },
+  patron: {
+    title: 'Gund as selective comfort.',
+    narrative: 'M48. The dashboard stays online but functions mostly as an advisory layer for discretionary comfort fixes. High-status spaces become more comfortable while the public platform remains largely symbolic for everyone else. S02 survives, but mostly as a way to identify where selective intervention should happen.',
+    stats: [{ lbl: 'Comfort gap', val: '−4.0°F', cls: 'warn' }, { lbl: 'Energy use', val: '+3%', cls: 'warn' }, { lbl: 'Voice index', val: 'Low', cls: 'warn' }, { lbl: 'Replicable?', val: 'No', cls: '' }],
+    winners: 'Senior faculty · Dean · donors · prestige spaces.',
+    losers: 'Students · staff · custodial · institutional credibility.',
+    coda: 'The evidence became actionable only for the people already closest to power.'
+  },
+  mediator: {
+    title: 'Gund as negotiated room.',
+    narrative: 'M48. S02 remained the shared substrate, and implementation became a continuing public negotiation. The dashboard is in every lobby, the decision log is visible, and changes in setpoints or room use are justified against evidence that anyone can inspect. The institution learned to live with disagreement in public.',
+    stats: [{ lbl: 'Comfort gap', val: '−1.4°F', cls: 'good' }, { lbl: 'Energy use', val: '−4%', cls: '' }, { lbl: 'Voice index', val: 'High', cls: 'good' }, { lbl: 'Replicable?', val: 'Yes', cls: 'good' }],
+    winners: 'Students · staff · operators · custodial staff.',
+    losers: 'Simplicity · uniformity · easy narratives of optimization.',
+    coda: 'The room did not become harmonious. It became negotiable.'
+  },
+  architect: {
+    title: 'Gund as living curriculum.',
+    narrative: 'M48. The dashboard did more than report building performance; it became an educational device. Studio courses, environmental systems teaching, and spatial redesign work all started from the evidence S02 made public. The building became a pedagogical site where discomfort itself was translated into design briefs.',
+    stats: [{ lbl: 'Comfort gap', val: '−2.0°F', cls: '' }, { lbl: 'Energy use', val: '−7%', cls: '' }, { lbl: 'Voice index', val: 'Med', cls: '' }, { lbl: 'Replicable?', val: 'As pedagogy', cls: 'good' }],
+    winners: 'Faculty · curriculum · the school’s experimental identity.',
+    losers: 'Anyone who wanted comfort to be a service rather than a lesson.',
+    coda: 'S02 became a way for the institution to study itself through the building.'
+  },
+  commoner: {
+    title: 'Gund as commons.',
+    narrative: 'M48. S02 became the evidence layer for a durable thermal commons. The dashboard, voting, and decision records remain public; custodial staff, students, staff, and faculty all participate in interpreting them. The Dean is still present but no longer owns the terms of the conversation. The evidence stayed common long enough for governance to become common too.',
+    stats: [{ lbl: 'Comfort gap', val: '−1.6°F', cls: 'good' }, { lbl: 'Energy use', val: '−5%', cls: '' }, { lbl: 'Voice index', val: 'Very High', cls: 'good' }, { lbl: 'Replicable?', val: 'Hard (cultural)', cls: '' }],
+    winners: 'Custodial staff · staff · students · the commons form itself.',
+    losers: 'Clear executive authority · anyone who wants a single owner.',
+    coda: 'The evidence remained public long enough to redistribute who could decide from it.'
+  }
+};
+
+const state = { persona: null, picks: { r1: null, r2: null, r3: null }, accum: { comfort: 0, energy: 0, voice: 0 } };
+const personaCards = document.querySelectorAll('.persona-card');
+const gameStage = document.getElementById('game-stage');
+const youName = document.getElementById('you-name');
+const youIconUse = document.getElementById('you-icon-use');
+const roundsMount = document.getElementById('rounds-mount');
+const endingBlock = document.getElementById('ending-block');
+const resetBtn = document.getElementById('reset-btn');
+
+window.addEventListener('click', () => {
+  setTimeout(updateDigestPriorChoice, 200);
+});
+updateDigestPriorChoice();
+
+personaCards.forEach((card) => {
+  card.addEventListener('click', () => selectPersona(card.dataset.persona));
+});
+
+function selectPersona(id) {
+  state.persona = id;
+  state.picks = { r1: null, r2: null, r3: null };
+  state.accum = { comfort: 0, energy: 0, voice: 0 };
+  personaCards.forEach((card) => card.classList.toggle('is-selected', card.dataset.persona === id));
+  const persona = PERSONAS[id];
+  youName.textContent = persona.name;
+  youIconUse.setAttribute('href', '#' + persona.icon);
+  gameStage.classList.add('is-active');
+  endingBlock.classList.remove('is-active');
+  endingBlock.innerHTML = '';
+  document.getElementById('tri-target').setAttribute('opacity', '0');
+  document.getElementById('tri-legend').classList.remove('visible');
+  updateTri(0, 0, 0);
+  renderRounds();
+  window.setTimeout(() => gameStage.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+}
+
+function vertex(axis, val) {
+  const ratio = Math.min(100, Math.max(0, val)) / 100;
+  if (axis === 'energy') return [120, 120 - 80 * ratio];
+  if (axis === 'voice') return [120 - 70 * ratio, 120 + 50 * ratio];
+  return [120 + 70 * ratio, 120 + 50 * ratio];
+}
+
+function pointsFor(c, e, v) {
+  const eP = vertex('energy', e);
+  const vP = vertex('voice', v);
+  const cP = vertex('comfort', c);
+  return `${eP[0]},${eP[1]} ${vP[0]},${vP[1]} ${cP[0]},${cP[1]}`;
+}
+
+function updateTri(c, e, v) {
+  document.getElementById('tri-actual').setAttribute('points', pointsFor(c, e, v));
+  document.getElementById('v-comfort').textContent = Math.round(c);
+  document.getElementById('v-energy').textContent = Math.round(e);
+  document.getElementById('v-voice').textContent = Math.round(v);
+}
+
+function renderRounds() {
+  const activeRound = state.picks.r1 == null ? 1 : state.picks.r2 == null ? 2 : state.picks.r3 == null ? 3 : 4;
   let html = '';
-  for (const s of sh) {
-    html += `<tr>
-      <td class="row-label">${s.name}</td>
-      <td class="${scoreClass(s.scores[0])}">${s.scores[0] > 0 ? '+' : ''}${s.scores[0]}</td>
-      <td class="${scoreClass(s.scores[1])} featured-col">${s.scores[1] > 0 ? '+' : ''}${s.scores[1]}</td>
-      <td class="${scoreClass(s.scores[2])}">${s.scores[2] > 0 ? '+' : ''}${s.scores[2]}</td>
-    </tr>`;
+  for (const roundNum of [1, 2, 3]) {
+    if (roundNum > activeRound) break;
+    html += renderRound(roundNum);
   }
-  // totals row
-  const totals = [0,0,0];
-  for (const s of sh) for (let i = 0; i < 3; i++) totals[i] += s.scores[i];
-  html += `<tr class="total">
-    <td class="row-label" style="font-weight: 700;">Coalition total</td>
-    <td class="${scoreClass(totals[0])}">${totals[0]}</td>
-    <td class="${scoreClass(totals[1])} featured-col">+${totals[1]}</td>
-    <td class="${scoreClass(totals[2])}">+${totals[2]}</td>
-  </tr>`;
-  document.getElementById('coalition-body').innerHTML = html;
+  roundsMount.innerHTML = html;
+  roundsMount.querySelectorAll('.choice').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('is-disabled')) return;
+      const round = btn.dataset.round;
+      const choiceId = btn.dataset.choice;
+      const choice = ROUNDS['r' + round].choices.find((entry) => entry.id === choiceId);
+      state.picks['r' + round] = choiceId;
+      state.accum.comfort += choice.delta.comfort;
+      state.accum.energy += choice.delta.energy;
+      state.accum.voice += choice.delta.voice;
+      updateTri(state.accum.comfort, state.accum.energy, state.accum.voice);
+      renderRounds();
+      updateProgress();
+      if (state.picks.r3 != null) window.setTimeout(renderEnding, 450);
+    });
+  });
+  updateProgress();
 }
-renderCoalition();
 
-// ---- WHAT IF sliders + metric updates ----------------------------------
-function whatifUpdate() {
-  const p1 = +document.getElementById('p1').value;
-  const p2 = +document.getElementById('p2').value;
-  const p3 = +document.getElementById('p3').value;
-  document.getElementById('p1-val').textContent = p1;
-  document.getElementById('p2-val').textContent = p2;
-  document.getElementById('p3-val').textContent = p3;
+function renderRound(roundNum) {
+  const round = ROUNDS['r' + roundNum];
+  const persona = PERSONAS[state.persona];
+  const userPick = state.picks['r' + roundNum];
+  const choicesHtml = round.choices.map((choice) => {
+    const isChosen = userPick === choice.id;
+    const isOther = userPick != null && !isChosen;
+    let alignmentBadge = '';
+    if (isChosen) {
+      alignmentBadge = choice.id === persona.aligned['r' + roundNum]
+        ? '<span class="alignment aligned">↳ in character</span>'
+        : '<span class="alignment misaligned">↳ off-character drift</span>';
+    }
+    return `
+      <button class="choice ${isChosen ? 'is-chosen' : ''} ${isOther ? 'is-disabled' : ''}" data-round="${roundNum}" data-choice="${choice.id}">
+        <div class="choice-letter">${choice.id.toUpperCase()}</div>
+        <div class="choice-body">
+          <div class="verb">${choice.verb}</div>
+          <div class="gloss">${choice.gloss}</div>
+          ${alignmentBadge}
+        </div>
+      </button>
+    `;
+  }).join('');
+  return `
+    <div class="round-block">
+      <div class="round-label">${round.label}</div>
+      <div class="round-title">${round.title}</div>
+      <div class="scenario-text"><span class="speaker">${round.speaker}</span>${round.text}</div>
+      <div class="choices">${choicesHtml}</div>
+    </div>
+  `;
+}
 
-  const r = whatifCompute(p1, p2, p3);
-  for (const m of ['M1','M2','M3','M4','M5']) {
-    const [lo, hi, mid] = r[m];
-    const row = document.querySelector(`.metric-row[data-metric="${m}"]`);
-    const min = +row.querySelector('.range-bar').dataset.axisMin;
-    const max = +row.querySelector('.range-bar').dataset.axisMax;
-    const baseline = +row.querySelector('.range-bar').dataset.baseline;
-
-    const fill    = row.querySelector('.range-fill');
-    const current = row.querySelector('.range-current');
-    const numEl   = row.querySelector(`#${m.toLowerCase()}-num`);
-    const rangeEl = row.querySelector(`#${m.toLowerCase()}-range`);
-
-    const loPct  = pctOnAxis(lo, min, max);
-    const hiPct  = pctOnAxis(hi, min, max);
-    const midPct = pctOnAxis(mid, min, max);
-    fill.style.left  = loPct + '%';
-    fill.style.width = (hiPct - loPct) + '%';
-    current.style.left = midPct + '%';
-
-    numEl.textContent   = metricFmt(m, mid);
-    rangeEl.textContent = metricFmt(m, lo) + ' to ' + metricFmt(m, hi);
-  }
-
-  // preset highlight
-  document.querySelectorAll('.preset').forEach(b => {
-    const match = +b.dataset.p1 === p1 && +b.dataset.p2 === p2 && +b.dataset.p3 === p3;
-    b.classList.toggle('is-active', match);
+function updateProgress() {
+  document.querySelectorAll('.round-dot').forEach((dot, idx) => {
+    const roundNum = idx + 1;
+    const picked = state.picks['r' + roundNum] != null;
+    const current = !picked && (roundNum === 1 || state.picks['r' + (roundNum - 1)] != null);
+    dot.classList.toggle('is-done', picked);
+    dot.classList.toggle('is-current', current);
   });
 }
-['p1','p2','p3'].forEach(id => {
-  document.getElementById(id).addEventListener('input', whatifUpdate);
-});
-document.querySelectorAll('.preset').forEach(b => {
-  b.addEventListener('click', () => {
-    document.getElementById('p1').value = b.dataset.p1;
-    document.getElementById('p2').value = b.dataset.p2;
-    document.getElementById('p3').value = b.dataset.p3;
-    whatifUpdate();
+
+function renderEnding() {
+  const ending = ENDINGS[state.persona];
+  const persona = PERSONAS[state.persona];
+  const target = persona.target;
+  document.getElementById('tri-target').setAttribute('points', pointsFor(target.comfort, target.energy, target.voice));
+  document.getElementById('tri-target').setAttribute('opacity', '1');
+  document.getElementById('tri-legend').classList.add('visible');
+  const driftNote =
+    state.picks.r1 === persona.aligned.r1 && state.picks.r2 === persona.aligned.r2 && state.picks.r3 === persona.aligned.r3
+      ? 'You stayed fully in character across all three rounds.'
+      : 'Your path drifted away from this persona in at least one round.';
+  endingBlock.innerHTML = `
+    <div class="ending-eyebrow">M48 · one possible institution</div>
+    <div class="ending-title">${ending.title}</div>
+    <div class="ending-narrative">${ending.narrative}</div>
+    <div class="ending-grid">
+      ${ending.stats.map((stat) => `<div class="ending-stat"><div class="lbl">${stat.lbl}</div><div class="val ${stat.cls}">${stat.val}</div></div>`).join('')}
+    </div>
+    <div class="ending-winners-losers">
+      <div class="wl-block win"><div class="wl-head">Winners</div><div class="wl-body">${ending.winners}</div></div>
+      <div class="wl-block loss"><div class="wl-head">Losers</div><div class="wl-body">${ending.losers}</div></div>
+    </div>
+    <div class="ending-coda">${ending.coda}<span style="display:block;margin-top:8px;color:var(--text-low);font-size:11px;letter-spacing:0.04em;">${driftNote}</span></div>
+    <div class="ending-actions">
+      <button class="btn-primary" id="play-again">↺ Try a different decision-maker</button>
+      <button class="btn-secondary" id="see-futures">↓ Compare all six futures</button>
+    </div>
+  `;
+  endingBlock.classList.add('is-active');
+  document.getElementById('play-again').addEventListener('click', resetGame);
+  document.getElementById('see-futures').addEventListener('click', () => {
+    document.getElementById('gallery-track').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
-});
-whatifUpdate();
-
-// ---- R5 annual consequence ---------------------------------------------
-function renderDecConsequence() {
-  // S02 (recommended)
-  const h = SAMPLE.decision.annual_hours_projected;
-  const value = dollarsFromHours(h);
-  const cost  = SAMPLE.decision.implementation_cost;
-  const roi   = (value / cost).toFixed(0);
-  document.getElementById('dec-hours').textContent = h.toLocaleString() + ' h';
-  document.getElementById('dec-value').textContent = fmtDollars(value);
-  document.getElementById('dec-cost').textContent  = fmtDollars(cost);
-  document.getElementById('dec-roi').textContent   = roi + ' : 1';
-
-  // S03 (full deployment, includes governing)
-  const h3 = SAMPLE.decision.s03_annual_hours_projected;
-  const v3 = dollarsFromHours(h3);
-  const c3 = SAMPLE.decision.s03_implementation_cost;
-  const r3 = (v3 / c3).toFixed(0);
-  document.getElementById('dec-s03-hours').textContent = h3.toLocaleString() + ' h';
-  document.getElementById('dec-s03-value').textContent = fmtDollars(v3);
-  document.getElementById('dec-s03-cost').textContent  = fmtDollars(c3);
-  document.getElementById('dec-s03-roi').textContent   = r3 + ' : 1';
 }
-renderDecConsequence();
+
+function resetGame() {
+  state.persona = null;
+  state.picks = { r1: null, r2: null, r3: null };
+  state.accum = { comfort: 0, energy: 0, voice: 0 };
+  personaCards.forEach((card) => card.classList.remove('is-selected'));
+  gameStage.classList.remove('is-active');
+  endingBlock.classList.remove('is-active');
+  endingBlock.innerHTML = '';
+  document.querySelector('.matrix-frame').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+resetBtn.addEventListener('click', resetGame);
+
+// =========================================================================
+// Annual gallery
+// =========================================================================
+const GALLERY_ORDER = ['crusader', 'organizer', 'patron', 'mediator', 'architect', 'commoner'];
+
+function miniTriangleSVG(target) {
+  const c = target.comfort;
+  const e = target.energy;
+  const v = target.voice;
+  function vert(axis, value) {
+    const ratio = Math.min(100, Math.max(0, value)) / 100;
+    if (axis === 'energy') return [80, 40 - 32 * ratio];
+    if (axis === 'voice') return [80 - 50 * ratio, 40 + 22 * ratio];
+    return [80 + 50 * ratio, 40 + 22 * ratio];
+  }
+  const eP = vert('energy', e);
+  const vP = vert('voice', v);
+  const cP = vert('comfort', c);
+  const points = `${eP[0]},${eP[1]} ${vP[0]},${vP[1]} ${cP[0]},${cP[1]}`;
+  return `<svg class="gc-mini-tri" viewBox="0 0 160 80">
+    <polygon points="80,8 30,62 130,62" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.6"/>
+    <polygon points="${points}" fill="rgba(110,95,184,0.22)" stroke="#6E5FB8" stroke-width="1.6"/>
+    <text x="80" y="6" text-anchor="middle" fill="#99E0B6" font-family="var(--font-h)" font-size="7" font-weight="600" letter-spacing="0.1em">E</text>
+    <text x="22" y="68" text-anchor="middle" fill="#B0A6E8" font-family="var(--font-h)" font-size="7" font-weight="600" letter-spacing="0.1em">V</text>
+    <text x="138" y="68" text-anchor="middle" fill="#E89999" font-family="var(--font-h)" font-size="7" font-weight="600" letter-spacing="0.1em">C</text>
+  </svg>`;
+}
+
+function truncate(text, max) {
+  if (text.length <= max) return text;
+  const cut = text.lastIndexOf(' ', max);
+  return text.slice(0, cut > 0 ? cut : max) + '…';
+}
+
+function renderGallery() {
+  const track = document.getElementById('gallery-track');
+  const dotsMount = document.getElementById('gallery-dots');
+  track.innerHTML = GALLERY_ORDER.map((id, idx) => {
+    const persona = PERSONAS[id];
+    const ending = ENDINGS[id];
+    return `
+      <div class="gallery-card" data-idx="${idx}">
+        <div class="gc-eyebrow">
+          <div class="gc-id-row">
+            <div class="gc-icon-mini"><svg><use href="#${persona.icon}"/></svg></div>
+            <div class="gc-id">${persona.idTag}</div>
+          </div>
+          <div class="gc-time">M48 · year 4</div>
+        </div>
+        <div class="gc-name">${persona.name}</div>
+        <div class="gc-credo">${persona.credo}</div>
+        ${miniTriangleSVG(persona.target)}
+        <div class="gc-narrative"><span class="gc-headline">${ending.title}</span>${truncate(ending.narrative, 240)}</div>
+        <div class="gc-stats">${ending.stats.map((stat) => `<div class="gc-stat"><div class="lbl">${stat.lbl}</div><div class="val ${stat.cls}">${stat.val}</div></div>`).join('')}</div>
+        <div class="gc-coda">${ending.coda}</div>
+      </div>
+    `;
+  }).join('');
+
+  dotsMount.innerHTML = GALLERY_ORDER.map((_, idx) => `<button class="gallery-dot" type="button" data-idx="${idx}" aria-label="Go to future ${idx + 1}"></button>`).join('');
+  document.querySelectorAll('.gallery-dot').forEach((dot) => {
+    dot.addEventListener('click', () => setActiveCard(Number(dot.dataset.idx)));
+  });
+  setActiveCard(0, false);
+}
+
+function setActiveCard(idx, scroll = true) {
+  const cards = document.querySelectorAll('.gallery-card');
+  const dots = document.querySelectorAll('.gallery-dot');
+  cards.forEach((card, cardIdx) => card.classList.toggle('is-center', cardIdx === idx));
+  dots.forEach((dot, dotIdx) => dot.classList.toggle('is-active', dotIdx === idx));
+  if (!scroll) return;
+  const track = document.getElementById('gallery-track');
+  const card = cards[idx];
+  if (!track || !card) return;
+  const targetLeft = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
+  track.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' });
+}
+
+function getCenterCardIdx() {
+  const track = document.getElementById('gallery-track');
+  const trackRect = track.getBoundingClientRect();
+  const center = trackRect.left + trackRect.width / 2;
+  const cards = track.querySelectorAll('.gallery-card');
+  let bestIdx = 0;
+  let bestDist = Infinity;
+  cards.forEach((card, idx) => {
+    const rect = card.getBoundingClientRect();
+    const dist = Math.abs((rect.left + rect.width / 2) - center);
+    if (dist < bestDist) {
+      bestDist = dist;
+      bestIdx = idx;
+    }
+  });
+  return bestIdx;
+}
+
+renderGallery();
+
+document.getElementById('gal-prev').addEventListener('click', () => {
+  const current = getCenterCardIdx();
+  setActiveCard((current - 1 + GALLERY_ORDER.length) % GALLERY_ORDER.length);
+});
+document.getElementById('gal-next').addEventListener('click', () => {
+  const current = getCenterCardIdx();
+  setActiveCard((current + 1) % GALLERY_ORDER.length);
+});
+
+let galleryDebounce = null;
+document.getElementById('gallery-track').addEventListener('scroll', () => {
+  window.clearTimeout(galleryDebounce);
+  galleryDebounce = window.setTimeout(() => {
+    const idx = getCenterCardIdx();
+    document.querySelectorAll('.gallery-card').forEach((card, cardIdx) => card.classList.toggle('is-center', cardIdx === idx));
+    document.querySelectorAll('.gallery-dot').forEach((dot, dotIdx) => dot.classList.toggle('is-active', dotIdx === idx));
+  }, 80);
+});
+
 </script>
 
 </body>

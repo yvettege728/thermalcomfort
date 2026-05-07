@@ -108,27 +108,59 @@ function fmtPct(p) {
   return p.toFixed(1) + '%';
 }
 
-// ---- WhatIf scenario model (inherited from v5, metric names updated) ----
+// ---- WhatIf scenario model (4 cumulative phases for decision mode) -------
 const baselines = { M1: -4.12, M2: 70, M3: 300, M4: 18, M5: 100 };
 //   M1 °F   M2 isolation %   M3 friction sec   M4 days   M5 idx
 
 const effects = {
-  M1: { p1: [1.5, 2.5],  p2: [1.0, 2.0],  p3: [0.5, 1.0] },
-  M2: { p1: [-15, -25],  p2: [-30, -45],  p3: [-5, -10] },     // isolation drops
-  M3: { p1: [0, 0],      p2: [-200, -290], p3: [-10, -30] },   // friction drops
-  M4: { p1: [-1, -2],    p2: [-9, -13],   p3: [-3, -5] },
-  M5: { p1: [0.5, 1.5],  p2: [-1, -2],    p3: [-3, -8] },
+  // p1 = metric collection
+  // p2 = deploy feedback
+  // p3 = evaluate feedback
+  // p4 = implement change
+  M1: { p1: [0.3, 0.8],   p2: [0.8, 1.6],   p3: [0.6, 1.2],   p4: [1.2, 2.0] },
+  M2: { p1: [-12, -20],   p2: [-18, -30],   p3: [-6, -12],    p4: [-2, -5]  },
+  M3: { p1: [0, -15],     p2: [-120, -210], p3: [-30, -70],   p4: [0, -20]  },
+  M4: { p1: [-0.5, -1.5], p2: [-3, -6],     p3: [-2, -4],     p4: [-4, -8]  },
+  M5: { p1: [0, 0],       p2: [0, 0],       p3: [0, 0],       p4: [-2, -6]  },
 };
 
-function whatifCompute(p1, p2, p3) {
-  const f = [p1/100, p2/100, p3/100];
+const metricLimits = {
+  M1: { min: -6, max: 2 },
+  M2: { min: 0,  max: 100 },
+  M3: { min: 0,  max: 300 },
+  M4: { min: 0,  max: 20 },
+  M5: { min: 80, max: 105 },
+};
+
+function clampMetric(metric, value) {
+  const limits = metricLimits[metric];
+  if (!limits) return value;
+  return Math.max(limits.min, Math.min(limits.max, value));
+}
+
+function whatifCompute(p1, p2, p3, p4) {
+  // Later phases only matter to the degree earlier phases are in place.
+  const effective = [
+    p1 / 100,
+    Math.min(p1, p2) / 100,
+    Math.min(p1, p2, p3) / 100,
+    Math.min(p1, p2, p3, p4) / 100,
+  ];
   const out = {};
-  for (const m of ['M1','M2','M3','M4','M5']) {
+  for (const m of ['M1', 'M2', 'M3', 'M4', 'M5']) {
     const e = effects[m];
-    const lowD  = e.p1[0]*f[0] + e.p2[0]*f[1] + e.p3[0]*f[2];
-    const highD = e.p1[1]*f[0] + e.p2[1]*f[1] + e.p3[1]*f[2];
-    const lo = baselines[m] + Math.min(lowD, highD);
-    const hi = baselines[m] + Math.max(lowD, highD);
+    const lowD =
+      e.p1[0] * effective[0] +
+      e.p2[0] * effective[1] +
+      e.p3[0] * effective[2] +
+      e.p4[0] * effective[3];
+    const highD =
+      e.p1[1] * effective[0] +
+      e.p2[1] * effective[1] +
+      e.p3[1] * effective[2] +
+      e.p4[1] * effective[3];
+    const lo = clampMetric(m, baselines[m] + Math.min(lowD, highD));
+    const hi = clampMetric(m, baselines[m] + Math.max(lowD, highD));
     out[m] = [lo, hi, (lo+hi)/2];
   }
   return out;

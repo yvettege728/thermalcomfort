@@ -3,12 +3,12 @@
    Shared visual system across landing + 3 modes + about
    ========================================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;600;700&display=swap');
 
 :root {
   /* ---- type ---- */
-  --font-display: 'Orbitron', sans-serif;
-  --font-h:       'Rajdhani', sans-serif;
+  --font-display: 'Roboto Mono', monospace;
+  --font-h:       'Roboto Mono', monospace;
   --font-body:    'Inter', sans-serif;
 
   /* ---- brand ---- */
