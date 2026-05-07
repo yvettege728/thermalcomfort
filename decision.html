@@ -2127,10 +2127,83 @@
   <div>Decision view · <a href="decision.html">decision.html</a></div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="shared.js"></script>
 <script>
 mountPillNav('decision');
+
+const SUPABASE_URL = 'https://jgfwqkunbvrkghdqzopv.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpnZndxa3VuYnZya2doZHF6b3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODY2NzYsImV4cCI6MjA5Mzc2MjY3Nn0.UMTOrZ6JhjAz9sddqyH596bgn7Mrc0HPR5gA5kd3Pr4';
+const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+const PERSONA_SUBMISSION_MAP = {
+  crusader:  { personaValue: 'planet', personaMethod: 'authority', personaName: 'Crusader' },
+  organizer: { personaValue: 'planet', personaMethod: 'assembly', personaName: 'Organizer' },
+  patron:    { personaValue: 'comfort', personaMethod: 'authority', personaName: 'Patron' },
+  mediator:  { personaValue: 'comfort', personaMethod: 'assembly', personaName: 'Mediator' },
+  architect: { personaValue: 'building', personaMethod: 'authority', personaName: 'Architect' },
+  commoner:  { personaValue: 'building', personaMethod: 'assembly', personaName: 'Commoner' }
+};
+
+let currentSessionId = sessionStorage.getItem('thermalSessionId');
+
+function choiceToLetter(choiceId) {
+  return typeof choiceId === 'string' ? choiceId.toUpperCase() : null;
+}
+
+async function submitPersonaAndBaseline(personaValue, personaMethod, personaName, baselineChoice) {
+  if (!sb) return;
+
+  const { data, error } = await sb
+    .from('live_sessions')
+    .insert({
+      persona_value: personaValue,
+      persona_method: personaMethod,
+      persona_name: personaName,
+      baseline_choice: baselineChoice,
+      final_choice: null,
+      is_review_session: true
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Insert failed:', error);
+    return;
+  }
+
+  currentSessionId = data.id;
+  sessionStorage.setItem('thermalSessionId', data.id);
+}
+
+async function submitFinalChoice(finalChoice) {
+  if (!sb) return;
+
+  const sessionId = currentSessionId || sessionStorage.getItem('thermalSessionId');
+
+  if (!sessionId) {
+    console.warn('No session id - user skipped section 01?');
+    const { error } = await sb.from('live_sessions').insert({
+      final_choice: finalChoice,
+      is_review_session: true
+    });
+    if (error) console.error('Insert fallback failed:', error);
+    return;
+  }
+
+  const { error } = await sb
+    .from('live_sessions')
+    .update({ final_choice: finalChoice })
+    .eq('id', sessionId);
+
+  if (error) console.error('Update failed:', error);
+}
+
+function resetLiveSessionTracking() {
+  currentSessionId = null;
+  sessionStorage.removeItem('thermalSessionId');
+}
 
 // =========================================================================
 // §03 — Phase timeline + Metrics (S02 only)
@@ -2295,6 +2368,7 @@ rechoiceOptions.forEach((btn) => {
     rechoiceState.picked = choice;
     rechoiceOptions.forEach((b) => b.classList.toggle('is-chosen', b.dataset.choice === choice));
     renderRechoiceResult(choice);
+    submitFinalChoice(choiceToLetter(choice));
   });
 });
 
@@ -2476,6 +2550,7 @@ personaCards.forEach((card) => {
 });
 
 function selectPersona(id) {
+  resetLiveSessionTracking();
   state.persona = id;
   state.picks = { r1: null, r2: null, r3: null };
   state.accum = { comfort: 0, energy: 0, voice: 0 };
@@ -2530,6 +2605,17 @@ function renderRounds() {
       const choiceId = btn.dataset.choice;
       const choice = ROUNDS['r' + round].choices.find((entry) => entry.id === choiceId);
       state.picks['r' + round] = choiceId;
+      if (round === '1' && state.persona) {
+        const personaMeta = PERSONA_SUBMISSION_MAP[state.persona];
+        if (personaMeta) {
+          submitPersonaAndBaseline(
+            personaMeta.personaValue,
+            personaMeta.personaMethod,
+            personaMeta.personaName,
+            choiceToLetter(choiceId)
+          );
+        }
+      }
       state.accum.comfort += choice.delta.comfort;
       state.accum.energy += choice.delta.energy;
       state.accum.voice += choice.delta.voice;
@@ -2622,6 +2708,7 @@ function renderEnding() {
 }
 
 function resetGame() {
+  resetLiveSessionTracking();
   state.persona = null;
   state.picks = { r1: null, r2: null, r3: null };
   state.accum = { comfort: 0, energy: 0, voice: 0 };

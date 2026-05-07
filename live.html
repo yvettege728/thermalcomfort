@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIVE · Thermal Commons Interface</title>
+<link rel="stylesheet" href="shared.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  body { background: var(--bg); color: var(--text-hi); font-family: var(--font-body); padding: 40px; margin: 0; }
+  .live-header { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; border-bottom: 1px solid #333; padding-bottom: 16px; margin-bottom: 32px; }
+  .live-header h1 { font-family: var(--font-display); font-size: 48px; margin: 0; letter-spacing: 0.02em; line-height: 1; text-transform: uppercase; }
+  .live-meta { font-family: var(--font-h); font-size: 12px; color: #888; letter-spacing: 0.08em; text-transform: uppercase; }
+  .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ff5a3c; margin-right: 6px; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; }
+  .panel { background: #0a0a0a; border: 1px solid #222; padding: 32px; }
+  .panel h2 { font-family: var(--font-display); font-size: 28px; margin: 0 0 8px 0; letter-spacing: 0.01em; text-transform: uppercase; }
+  .panel .subtitle { font-size: 12px; color: #888; margin-bottom: 32px; line-height: 1.6; }
+  .ba-row { display: grid; grid-template-columns: 80px 1fr 1fr; gap: 16px; align-items: center; margin-bottom: 20px; }
+  .ba-label { font-family: var(--font-h); font-size: 13px; line-height: 1.4; }
+  .ba-bar-wrap { background: #1a1a1a; height: 32px; position: relative; }
+  .ba-bar { height: 100%; transition: width 0.6s ease; }
+  .ba-bar.before { background: #444; }
+  .ba-bar.after { background: #ff5a3c; }
+  .ba-bar-label { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-family: var(--font-display); font-size: 12px; color: #fff; }
+  .ba-headers { display: grid; grid-template-columns: 80px 1fr 1fr; gap: 16px; font-family: var(--font-h); font-size: 11px; color: #888; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .ba-headers > :first-child { visibility: hidden; }
+  .change-summary { margin-top: 32px; padding-top: 24px; border-top: 1px solid #222; font-size: 14px; line-height: 1.7; }
+  .change-summary .big { font-family: var(--font-display); font-size: 32px; color: #ff5a3c; }
+  .persona-grid { display: grid; grid-template-columns: 100px 1fr 1fr; gap: 8px; margin-top: 16px; }
+  .persona-cell { background: #1a1a1a; padding: 16px; text-align: center; min-height: 80px; display: flex; flex-direction: column; justify-content: center; transition: background 0.6s ease; }
+  .persona-cell.header { background: transparent; font-family: var(--font-h); font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.1em; min-height: auto; padding: 8px 0; }
+  .persona-cell .name { font-family: var(--font-body); font-size: 14px; font-weight: 600; line-height: 1.3; }
+  .persona-cell .count { font-family: var(--font-display); font-size: 24px; color: #ff5a3c; margin-top: 4px; }
+  .row-label { display: flex; align-items: center; font-family: var(--font-h); font-size: 12px; color: #aaa; padding-right: 8px; line-height: 1.4; text-transform: uppercase; }
+  .footer { margin-top: 48px; font-family: var(--font-h); font-size: 11px; color: #666; text-align: center; line-height: 1.6; text-transform: uppercase; letter-spacing: 0.08em; }
+  .footer .caveat { color: #888; font-style: italic; margin-top: 4px; }
+  @media (max-width: 980px) {
+    body { padding: 24px; }
+    .grid { grid-template-columns: 1fr; gap: 24px; }
+    .live-header { flex-direction: column; align-items: flex-start; }
+  }
+  @media (max-width: 720px) {
+    body { padding: 18px; }
+    .live-header h1 { font-size: 36px; }
+    .panel { padding: 20px; }
+    .ba-headers,
+    .ba-row { grid-template-columns: 1fr; gap: 8px; }
+    .ba-headers > :first-child { display: none; }
+    .ba-label { margin-top: 8px; }
+    .persona-grid { grid-template-columns: 1fr 1fr; }
+    .row-label { grid-column: 1 / -1; padding-top: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="live-header">
+  <h1>LIVE · This room, right now</h1>
+  <div class="live-meta">
+    <span class="live-dot"></span>
+    <span id="session-count">0</span> sessions · auto-updating
+  </div>
+</div>
+
+<div class="grid">
+  <div class="panel">
+    <h2>The information effect</h2>
+    <div class="subtitle">How this room would respond — before vs. after seeing the evidence</div>
+    <div class="ba-headers">
+      <div></div>
+      <div>Before info</div>
+      <div>After info</div>
+    </div>
+    <div class="ba-row">
+      <div class="ba-label">A · Lock down</div>
+      <div class="ba-bar-wrap"><div class="ba-bar before" id="bar-A-before" style="width:0%"></div><div class="ba-bar-label" id="lbl-A-before">0%</div></div>
+      <div class="ba-bar-wrap"><div class="ba-bar after" id="bar-A-after" style="width:0%"></div><div class="ba-bar-label" id="lbl-A-after">0%</div></div>
+    </div>
+    <div class="ba-row">
+      <div class="ba-label">B · Convene</div>
+      <div class="ba-bar-wrap"><div class="ba-bar before" id="bar-B-before" style="width:0%"></div><div class="ba-bar-label" id="lbl-B-before">0%</div></div>
+      <div class="ba-bar-wrap"><div class="ba-bar after" id="bar-B-after" style="width:0%"></div><div class="ba-bar-label" id="lbl-B-after">0%</div></div>
+    </div>
+    <div class="ba-row">
+      <div class="ba-label">C · Quiet fix</div>
+      <div class="ba-bar-wrap"><div class="ba-bar before" id="bar-C-before" style="width:0%"></div><div class="ba-bar-label" id="lbl-C-before">0%</div></div>
+      <div class="ba-bar-wrap"><div class="ba-bar after" id="bar-C-after" style="width:0%"></div><div class="ba-bar-label" id="lbl-C-after">0%</div></div>
+    </div>
+    <div class="change-summary">
+      <div><span class="big" id="changed-count">0</span> people changed their answer.</div>
+      <div id="convene-shift" style="margin-top: 12px;">—</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Who is in this room?</h2>
+    <div class="subtitle">Persona distribution across the 2×3 governance space</div>
+    <div class="persona-grid">
+      <div class="persona-cell header"></div>
+      <div class="persona-cell header">Authority</div>
+      <div class="persona-cell header">Assembly</div>
+
+      <div class="row-label">Planet</div>
+      <div class="persona-cell" id="cell-planet-authority">
+        <div class="name">Crusader</div>
+        <div class="count" data-key="planet-authority">0</div>
+      </div>
+      <div class="persona-cell" id="cell-planet-assembly">
+        <div class="name">Organizer</div>
+        <div class="count" data-key="planet-assembly">0</div>
+      </div>
+
+      <div class="row-label">Comfort</div>
+      <div class="persona-cell" id="cell-comfort-authority">
+        <div class="name">Patron</div>
+        <div class="count" data-key="comfort-authority">0</div>
+      </div>
+      <div class="persona-cell" id="cell-comfort-assembly">
+        <div class="name">Mediator</div>
+        <div class="count" data-key="comfort-assembly">0</div>
+      </div>
+
+      <div class="row-label">The building itself</div>
+      <div class="persona-cell" id="cell-building-authority">
+        <div class="name">Architect</div>
+        <div class="count" data-key="building-authority">0</div>
+      </div>
+      <div class="persona-cell" id="cell-building-assembly">
+        <div class="name">Commoner</div>
+        <div class="count" data-key="building-assembly">0</div>
+      </div>
+    </div>
+    <div class="change-summary">
+      <div>This room leans: <span class="big" id="room-lean">—</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  VIS 2478 · Thermal Commons Interface · Yvette Ge
+  <div class="caveat">N is small · this room only · not generalizable · this is the mechanism, demonstrated at room scale</div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://jgfwqkunbvrkghdqzopv.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpnZndxa3VuYnZya2doZHF6b3B2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxODY2NzYsImV4cCI6MjA5Mzc2MjY3Nn0.UMTOrZ6JhjAz9sddqyH596bgn7Mrc0HPR5gA5kd3Pr4';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let allSessions = [];
+
+  async function fetchAll() {
+    const { data, error } = await sb
+      .from('live_sessions')
+      .select('*')
+      .eq('is_review_session', true)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    allSessions = data || [];
+    render();
+  }
+
+  function render() {
+    const total = allSessions.length;
+    document.getElementById('session-count').textContent = total;
+
+    const baselineCounts = { A: 0, B: 0, C: 0 };
+    const finalCounts = { A: 0, B: 0, C: 0 };
+    let baselineTotal = 0;
+    let finalTotal = 0;
+    let changed = 0;
+
+    allSessions.forEach((s) => {
+      if (baselineCounts[s.baseline_choice] !== undefined) {
+        baselineCounts[s.baseline_choice] += 1;
+        baselineTotal += 1;
+      }
+      if (finalCounts[s.final_choice] !== undefined) {
+        finalCounts[s.final_choice] += 1;
+        finalTotal += 1;
+      }
+      if (s.baseline_choice && s.final_choice && s.baseline_choice !== s.final_choice) changed += 1;
+    });
+
+    ['A', 'B', 'C'].forEach((letter) => {
+      const beforePct = baselineTotal ? Math.round((baselineCounts[letter] / baselineTotal) * 100) : 0;
+      const afterPct = finalTotal ? Math.round((finalCounts[letter] / finalTotal) * 100) : 0;
+      document.getElementById(`bar-${letter}-before`).style.width = beforePct + '%';
+      document.getElementById(`bar-${letter}-after`).style.width = afterPct + '%';
+      document.getElementById(`lbl-${letter}-before`).textContent = beforePct + '%';
+      document.getElementById(`lbl-${letter}-after`).textContent = afterPct + '%';
+    });
+
+    document.getElementById('changed-count').textContent = changed;
+
+    const beforeBPct = baselineTotal ? Math.round((baselineCounts.B / baselineTotal) * 100) : 0;
+    const afterBPct = finalTotal ? Math.round((finalCounts.B / finalTotal) * 100) : 0;
+    const shift = afterBPct - beforeBPct;
+    const shiftEl = document.getElementById('convene-shift');
+
+    if (shift > 0) {
+      shiftEl.innerHTML = `<strong>+${shift} percentage points</strong> shifted toward Convene after seeing the data.`;
+    } else if (shift < 0) {
+      shiftEl.innerHTML = `<strong>${shift} pp</strong> shifted away from Convene - information did not move this room toward deliberation.`;
+    } else {
+      shiftEl.innerHTML = 'No net shift toward Convene yet.';
+    }
+
+    const personaCounts = {
+      'planet-authority': 0,
+      'planet-assembly': 0,
+      'comfort-authority': 0,
+      'comfort-assembly': 0,
+      'building-authority': 0,
+      'building-assembly': 0
+    };
+
+    allSessions.forEach((s) => {
+      if (s.persona_value && s.persona_method) {
+        const key = `${s.persona_value}-${s.persona_method}`;
+        if (personaCounts[key] !== undefined) personaCounts[key] += 1;
+      }
+    });
+
+    const max = Math.max(...Object.values(personaCounts), 1);
+    Object.entries(personaCounts).forEach(([key, count]) => {
+      const cell = document.getElementById(`cell-${key}`);
+      const intensity = count / max;
+      cell.style.background = `rgba(255, 90, 60, ${intensity * 0.5})`;
+      cell.querySelector('.count').textContent = count;
+    });
+
+    const personaNames = {
+      'planet-authority': 'Crusader',
+      'planet-assembly': 'Organizer',
+      'comfort-authority': 'Patron',
+      'comfort-assembly': 'Mediator',
+      'building-authority': 'Architect',
+      'building-assembly': 'Commoner'
+    };
+
+    const topEntry = Object.entries(personaCounts).sort((a, b) => b[1] - a[1])[0];
+    if (topEntry && topEntry[1] > 0) {
+      document.getElementById('room-lean').textContent = personaNames[topEntry[0]];
+    } else {
+      document.getElementById('room-lean').textContent = '—';
+    }
+  }
+
+  fetchAll();
+
+  sb.channel('live-sessions-' + Date.now())
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'live_sessions' }, () => fetchAll())
+    .subscribe((status) => {
+      console.log('Realtime status:', status);
+    });
+</script>
+
+</body>
+</html>
