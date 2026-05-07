@@ -665,9 +665,7 @@
 <header class="topbar">
   <div class="brand"><span class="dot"></span> Gund Thermal Commons</div>
   <div class="center" id="mode-switch-mount"></div>
-  <div class="right">
-    <a href="index.html" class="about-link">← Back</a>
-  </div>
+  <div class="right"></div>
 </header>
 
 <nav class="toc-nav" aria-label="Section navigation">
@@ -1611,9 +1609,10 @@
   <div>About</div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="shared.js"></script>
 <script>
-document.getElementById('mode-switch-mount').innerHTML = renderModeSwitch(null);
+mountPillNav('about');
 
 // =========================================================================
 // PLAY-FLOW INTERACTIVE

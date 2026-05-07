@@ -11,9 +11,7 @@
 <header class="topbar">
   <div class="brand"><span class="dot"></span> Gund Thermal Commons</div>
   <div class="center" id="mode-switch-mount"></div>
-  <div class="right">
-    <a href="about.html" class="about-link">About</a>
-  </div>
+  <div class="right"></div>
 </header>
 
 <div class="mode-banner operator">
@@ -195,13 +193,14 @@
   <div>Operator console · <a href="operator.html">operator.html</a></div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="shared.js"></script>
 <script>
 // =========================================================================
 // OPERATOR MODE LOGIC
 // =========================================================================
 
-document.getElementById('mode-switch-mount').innerHTML = renderModeSwitch('operator');
+mountPillNav('operator');
 
 // ---- plan view (migrated from v5, all 5 trays now have data) ------------
 const planBaseFrame = { x: 72, y: 56, width: 856, height: 326 };

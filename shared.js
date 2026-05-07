@@ -192,19 +192,211 @@ function scoreClass(s) {
   return 'score-n2';
 }
 
-// ---- shared utility: render the topbar mode switch ----------------------
-function renderModeSwitch(activeMode) {
-  // activeMode in {'user','operator','decision', null}
-  const modes = [
-    { key: 'user',     label: 'User',     href: 'user.html' },
-    { key: 'operator', label: 'Operator', href: 'operator.html' },
-    { key: 'decision', label: 'Decision', href: 'decision.html' },
-  ];
+// ---- shared utility: render the topbar pill nav -------------------------
+const PILL_NAV_ITEMS = [
+  { key: 'home', label: 'Home', href: 'index.html', ariaLabel: 'Return to landing page' },
+  { key: 'user', label: 'User', href: 'user.html' },
+  { key: 'operator', label: 'Operator', href: 'operator.html' },
+  { key: 'decision', label: 'Decision', href: 'decision.html' },
+  { key: 'about', label: 'About', href: 'about.html' },
+];
+
+function renderPillNav(activeKey) {
   return `
-    <div class="mode-switch">
-      ${modes.map(m => `
-        <a href="${m.href}" class="${m.key === activeMode ? 'active ' + m.key : ''}">${m.label}</a>
-      `).join('')}
+    <div class="pill-nav-container">
+      <nav class="pill-nav" aria-label="Primary navigation">
+        <div class="pill-nav-items desktop-only">
+          <ul class="pill-list" role="menubar">
+            ${PILL_NAV_ITEMS.map((item) => `
+              <li role="none">
+                <a
+                  role="menuitem"
+                  href="${item.href}"
+                  class="pill nav-${item.key}${item.key === activeKey ? ' is-active' : ''}"
+                  aria-label="${item.ariaLabel || item.label}"
+                  ${item.key === activeKey ? 'aria-current="page"' : ''}
+                >
+                  <span class="hover-circle" aria-hidden="true"></span>
+                  <span class="label-stack">
+                    <span class="pill-label">${item.label}</span>
+                    <span class="pill-label-hover" aria-hidden="true">${item.label}</span>
+                  </span>
+                </a>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+
+        <button
+          class="mobile-menu-button mobile-only"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+        >
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </nav>
+
+      <div class="mobile-menu-popover mobile-only" aria-hidden="true">
+        <ul class="mobile-menu-list">
+          ${PILL_NAV_ITEMS.map((item) => `
+            <li>
+              <a
+                href="${item.href}"
+                class="mobile-menu-link nav-${item.key}${item.key === activeKey ? ' is-active' : ''}"
+                ${item.key === activeKey ? 'aria-current="page"' : ''}
+              >
+                ${item.label}
+              </a>
+            </li>
+          `).join('')}
+        </ul>
+      </div>
     </div>
   `;
+}
+
+function initPillNav(root, { ease = 'power2.out', initialLoadAnimation = true } = {}) {
+  if (!root || root.dataset.pillNavReady === 'true') return;
+  root.dataset.pillNavReady = 'true';
+
+  const gsapLib = window.gsap;
+  const desktopPills = Array.from(root.querySelectorAll('.pill-list .pill'));
+  const mobileButton = root.querySelector('.mobile-menu-button');
+  const mobileMenu = root.querySelector('.mobile-menu-popover');
+  const mobileLinks = Array.from(root.querySelectorAll('.mobile-menu-link'));
+  const timelines = [];
+  const activeTweens = [];
+
+  const layout = () => {
+    desktopPills.forEach((pill, index) => {
+      const circle = pill.querySelector('.hover-circle');
+      const label = pill.querySelector('.pill-label');
+      const hoverLabel = pill.querySelector('.pill-label-hover');
+      if (!circle || !label || !hoverLabel) return;
+
+      const rect = pill.getBoundingClientRect();
+      const height = rect.height;
+      circle.style.width = '100%';
+      circle.style.height = '100%';
+      circle.style.left = '0';
+      circle.style.bottom = 'auto';
+
+      if (!gsapLib) return;
+
+      gsapLib.set(circle, {
+        scaleX: 0.92,
+        scaleY: 0,
+        transformOrigin: '50% 100%'
+      });
+      gsapLib.set(label, { y: 0 });
+      gsapLib.set(hoverLabel, { y: height * 0.72, opacity: 0 });
+
+      timelines[index]?.kill();
+      const tl = gsapLib.timeline({ paused: true });
+      tl.to(circle, { scaleX: 1, scaleY: 1, duration: 0.52, ease, overwrite: 'auto' }, 0);
+      tl.to(label, { y: -(height * 0.68), duration: 0.52, ease, overwrite: 'auto' }, 0);
+      tl.to(hoverLabel, { y: 0, opacity: 1, duration: 0.52, ease, overwrite: 'auto' }, 0);
+      timelines[index] = tl;
+    });
+  };
+
+  layout();
+  window.addEventListener('resize', layout);
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(layout).catch(() => {});
+  }
+
+  desktopPills.forEach((pill, index) => {
+    const enter = () => {
+      pill.classList.add('is-hovered');
+      if (!gsapLib || !timelines[index]) return;
+      activeTweens[index]?.kill();
+      activeTweens[index] = timelines[index].tweenTo(timelines[index].duration(), {
+        duration: 0.28,
+        ease,
+        overwrite: 'auto'
+      });
+    };
+
+    const leave = () => {
+      pill.classList.remove('is-hovered');
+      if (!gsapLib || !timelines[index]) return;
+      activeTweens[index]?.kill();
+      activeTweens[index] = timelines[index].tweenTo(0, {
+        duration: 0.2,
+        ease,
+        overwrite: 'auto'
+      });
+    };
+
+    pill.addEventListener('mouseenter', enter);
+    pill.addEventListener('mouseleave', leave);
+  });
+
+  if (gsapLib && initialLoadAnimation) {
+    const navItems = root.querySelector('.pill-nav-items');
+    if (navItems) {
+      gsapLib.fromTo(navItems, { opacity: 0, y: -8 }, {
+        opacity: 1,
+        y: 0,
+        duration: 0.45,
+        ease
+      });
+    }
+  }
+
+  if (mobileButton && mobileMenu) {
+    const lineEls = mobileButton.querySelectorAll('.hamburger-line');
+    let open = false;
+
+    const setState = (nextOpen) => {
+      open = nextOpen;
+      mobileButton.setAttribute('aria-expanded', String(open));
+      mobileMenu.setAttribute('aria-hidden', String(!open));
+      mobileMenu.classList.toggle('is-open', open);
+      mobileButton.classList.toggle('is-open', open);
+
+      if (!gsapLib) return;
+
+      if (open) {
+        gsapLib.to(lineEls[0], { rotation: 45, y: 3, duration: 0.25, ease, overwrite: 'auto' });
+        gsapLib.to(lineEls[1], { rotation: -45, y: -3, duration: 0.25, ease, overwrite: 'auto' });
+        gsapLib.set(mobileMenu, { display: 'block' });
+        gsapLib.fromTo(mobileMenu, { opacity: 0, y: 10 }, {
+          opacity: 1,
+          y: 0,
+          duration: 0.25,
+          ease,
+          overwrite: 'auto'
+        });
+      } else {
+        gsapLib.to(lineEls[0], { rotation: 0, y: 0, duration: 0.2, ease, overwrite: 'auto' });
+        gsapLib.to(lineEls[1], { rotation: 0, y: 0, duration: 0.2, ease, overwrite: 'auto' });
+        gsapLib.to(mobileMenu, {
+          opacity: 0,
+          y: 10,
+          duration: 0.2,
+          ease,
+          overwrite: 'auto',
+          onComplete: () => {
+            if (!open) gsapLib.set(mobileMenu, { display: 'none' });
+          }
+        });
+      }
+    };
+
+    mobileButton.addEventListener('click', () => setState(!open));
+    mobileLinks.forEach((link) => {
+      link.addEventListener('click', () => setState(false));
+    });
+  }
+}
+
+function mountPillNav(activeKey, mountId = 'mode-switch-mount') {
+  const mount = document.getElementById(mountId);
+  if (!mount) return;
+  mount.innerHTML = renderPillNav(activeKey);
+  initPillNav(mount.querySelector('.pill-nav-container'));
 }

@@ -8,21 +8,16 @@
 </head>
 <body>
 
-<header class="topbar">
-  <div class="brand">
-    <span class="dot"></span>
-    Gund Thermal Commons
-  </div>
-  <div class="center">v6 · Spring 2026 · prototype</div>
-  <div class="right">
-    <a href="about.html" class="about-link">About</a>
-  </div>
-</header>
-
 <div class="landing">
+  <div class="landing-prism" aria-hidden="true">
+    <div id="index-prism" class="prism-host"></div>
+    <div class="landing-noise"></div>
+    <div class="landing-vignette"></div>
+  </div>
 
   <div class="landing-hero">
     <h1>Choose your <span class="accent">view</span>.</h1>
+    <div class="tag">A low-friction governance simulation for thermal comfort, signal visibility, and institutional action.</div>
   </div>
 
   <div class="entries">
@@ -54,10 +49,10 @@
     <a class="entry decision" href="decision.html">
       <div>
         <div class="num">03 / Consequence → Action</div>
-        <h2>DECISION</h2>
+        <h2>DECISION-MAKER</h2>
         <div class="role-desc">Dean · Sustainability · Heads</div>
         <p class="body-desc">
-          Decide based on tuition value, not energy alone.
+          Play through a gamified governance model. See how your choices induce different institutional outcomes.
         </p>
       </div>
       <div class="arrow-cta">Enter as Decision-Maker →</div>
@@ -66,11 +61,31 @@
   </div>
 
   <div class="landing-foot">
-    <div>VIS 2478 | Utility Interface Design | Yvette Ge</div>
+    <div>VIS 2478 | Thermal Commons Interface | Yvette Ge</div>
     <div>Mock data · Sim mode</div>
   </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="shared.js"></script>
+<script type="module">
+import { mountPrismField } from './prism.js';
+
+mountPrismField(document.getElementById('index-prism'), {
+  animationType: 'rotate',
+  timeScale: 0.78,
+  height: 3.5,
+  baseWidth: 5.5,
+  scale: 4.1,
+  hueShift: -0.5416,
+  colorFrequency: 1,
+  noise: 0.35,
+  glow: 1,
+  bloom: 1,
+  saturation: 0.86
+});
+</script>
 
 </body>
 </html>

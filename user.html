@@ -11,9 +11,7 @@
 <header class="topbar">
   <div class="brand"><span class="dot"></span> Gund Thermal Commons</div>
   <div class="center" id="mode-switch-mount"></div>
-  <div class="right">
-    <a href="about.html" class="about-link">About</a>
-  </div>
+  <div class="right"></div>
 </header>
 
 <div class="mode-banner user">
@@ -208,13 +206,14 @@
   <div>Reset · <a href="user.html">user.html</a></div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="shared.js"></script>
 <script>
 // =========================================================================
 // USER MODE LOGIC
 // =========================================================================
 
-document.getElementById('mode-switch-mount').innerHTML = renderModeSwitch('user');
+mountPillNav('user');
 
 // ---- vote state ----------------------------------------------------------
 const seedVotes = ['very-cold','cold','cold','very-cold','cold','cold','fine','cold','very-cold','cold','fine','cold'];
