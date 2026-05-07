@@ -2527,6 +2527,7 @@ function renderRounds() {
     btn.addEventListener('click', () => {
       if (btn.classList.contains('is-disabled')) return;
       const round = btn.dataset.round;
+      if (state.picks['r' + round] != null) return;
       const choiceId = btn.dataset.choice;
       const choice = ROUNDS['r' + round].choices.find((entry) => entry.id === choiceId);
       state.picks['r' + round] = choiceId;
