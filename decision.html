@@ -1706,13 +1706,13 @@
           <div class="matrix-row-label">The Planet<span class="telos-sub">we care about the climate</span></div>
           <div class="persona-card" data-persona="crusader">
             <span class="selected-badge">Selected</span>
-            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-crusader"/></svg></div><div class="head-text"><div class="name">The Crusader</div><div class="id-tag">P1 · 01</div></div></div>
-            <div class="credo">"I'll push the policy through, even if no one likes it."</div>
+            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-crusader"/></svg></div><div class="head-text"><div class="name">The Crusader</div><div class="id-tag">Policy believer · top-down push</div></div></div>
+            <div class="credo">"If the policy is right, I will push it through whether or not it is popular."</div>
           </div>
           <div class="persona-card" data-persona="organizer">
             <span class="selected-badge">Selected</span>
-            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-organizer"/></svg></div><div class="head-text"><div class="name">The Organizer</div><div class="id-tag">P1 · 02</div></div></div>
-            <div class="credo">"We build a coalition the climate can't ignore."</div>
+            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-organizer"/></svg></div><div class="head-text"><div class="name">The Organizer</div><div class="id-tag">Grassroots alliance · collective pressure</div></div></div>
+            <div class="credo">"No one gets comfort alone here. We organize enough people to make the signal impossible to ignore."</div>
           </div>
         </div>
 
@@ -1720,13 +1720,13 @@
           <div class="matrix-row-label">Comfort<span class="telos-sub">we care about bodies in the building</span></div>
           <div class="persona-card" data-persona="patron">
             <span class="selected-badge">Selected</span>
-            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-patron"/></svg></div><div class="head-text"><div class="name">The Patron</div><div class="id-tag">P2 · 01</div></div></div>
-            <div class="credo">"I decide who deserves to be comfortable here."</div>
+            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-patron"/></svg></div><div class="head-text"><div class="name">The Patron</div><div class="id-tag">Selective comfort · funded privilege</div></div></div>
+            <div class="credo">"Resources are limited, so someone decides who gets the better environment and who is told to endure."</div>
           </div>
           <div class="persona-card" data-persona="mediator">
             <span class="selected-badge">Selected</span>
-            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-mediator"/></svg></div><div class="head-text"><div class="name">The Mediator</div><div class="id-tag">P2 · 02</div></div></div>
-            <div class="credo">"We negotiate whose body sets the temperature."</div>
+            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-mediator"/></svg></div><div class="head-text"><div class="name">The Mediator</div><div class="id-tag">Conflict broker · negotiated comfort</div></div></div>
+            <div class="credo">"Comfort is never neutral. If you are cold while I am hot, governance means mediating that conflict in public."</div>
           </div>
         </div>
 
@@ -1734,13 +1734,13 @@
           <div class="matrix-row-label">Community<span class="telos-sub">we care about the school as a place</span></div>
           <div class="persona-card" data-persona="architect">
             <span class="selected-badge">Selected</span>
-            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-architect"/></svg></div><div class="head-text"><div class="name">The Architect</div><div class="id-tag">P3 · 01</div></div></div>
-            <div class="credo">"I shape what the building teaches its occupants."</div>
+            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-architect"/></svg></div><div class="head-text"><div class="name">The Architect</div><div class="id-tag">Pedagogical form · building as teacher</div></div></div>
+            <div class="credo">"The building is part of the curriculum. It teaches through the conditions it gives people and the behaviors it makes possible."</div>
           </div>
           <div class="persona-card" data-persona="commoner">
             <span class="selected-badge">Selected</span>
-            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-commoner"/></svg></div><div class="head-text"><div class="name">The Commoner</div><div class="id-tag">P3 · 02</div></div></div>
-            <div class="credo">"We hold this building in common — heat included."</div>
+            <div class="head-row"><div class="persona-icon"><svg><use href="#icon-commoner"/></svg></div><div class="head-text"><div class="name">The Commoner</div><div class="id-tag">Shared stewardship · comfort in common</div></div></div>
+            <div class="credo">"If this building is a commons, then comfort is a shared resource and all of us are responsible for how it is governed."</div>
           </div>
         </div>
       </div>
@@ -2124,7 +2124,7 @@
 </main>
 
 <footer class="foot">
-  <div>VIS 2478 | Utility Interface Design | Yvette Ge</div>
+  <div>VIS 2478 | Thermal Commons Interface | Yvette Ge</div>
   <div>Decision view · <a href="decision.html">decision.html</a></div>
 </footer>
 
@@ -2363,12 +2363,12 @@ if (speculativeStage) {
 // Persona game
 // =========================================================================
 const PERSONAS = {
-  crusader:  { name: 'The Crusader',  idTag: 'P1 · 01', icon: 'icon-crusader',  credo: '"I\'ll push the policy through, even if no one likes it."', target: { comfort: 30, energy: 95, voice: 25 }, aligned: { r1: 'a', r2: 'a', r3: 'a' } },
-  organizer: { name: 'The Organizer', idTag: 'P1 · 02', icon: 'icon-organizer', credo: '"We build a coalition the climate can\'t ignore."',          target: { comfort: 60, energy: 75, voice: 95 }, aligned: { r1: 'b', r2: 'c', r3: 'b' } },
-  patron:    { name: 'The Patron',    idTag: 'P2 · 01', icon: 'icon-patron',    credo: '"I decide who deserves to be comfortable here."',           target: { comfort: 35, energy: 20, voice: 15 }, aligned: { r1: 'c', r2: 'a', r3: 'a' } },
-  mediator:  { name: 'The Mediator',  idTag: 'P2 · 02', icon: 'icon-mediator',  credo: '"We negotiate whose body sets the temperature."',           target: { comfort: 80, energy: 50, voice: 80 }, aligned: { r1: 'b', r2: 'b', r3: 'b' } },
-  architect: { name: 'The Architect', idTag: 'P3 · 01', icon: 'icon-architect', credo: '"I shape what the building teaches its occupants."',        target: { comfort: 65, energy: 60, voice: 50 }, aligned: { r1: 'a', r2: 'b', r3: 'c' } },
-  commoner:  { name: 'The Commoner',  idTag: 'P3 · 02', icon: 'icon-commoner',  credo: '"We hold this building in common — heat included."',       target: { comfort: 75, energy: 55, voice: 95 }, aligned: { r1: 'b', r2: 'c', r3: 'b' } }
+  crusader:  { name: 'The Crusader',  idTag: 'Policy believer · top-down push', icon: 'icon-crusader',  credo: '"If the policy is right, I will push it through whether or not it is popular."', target: { comfort: 30, energy: 95, voice: 25 }, aligned: { r1: 'a', r2: 'a', r3: 'a' } },
+  organizer: { name: 'The Organizer', idTag: 'Grassroots alliance · collective pressure', icon: 'icon-organizer', credo: '"No one gets comfort alone here. We organize enough people to make the signal impossible to ignore."', target: { comfort: 60, energy: 75, voice: 95 }, aligned: { r1: 'b', r2: 'c', r3: 'b' } },
+  patron:    { name: 'The Patron',    idTag: 'Selective comfort · funded privilege', icon: 'icon-patron',    credo: '"Resources are limited, so someone decides who gets the better environment and who is told to endure."', target: { comfort: 35, energy: 20, voice: 15 }, aligned: { r1: 'c', r2: 'a', r3: 'a' } },
+  mediator:  { name: 'The Mediator',  idTag: 'Conflict broker · negotiated comfort', icon: 'icon-mediator',  credo: '"Comfort is never neutral. If you are cold while I am hot, governance means mediating that conflict in public."', target: { comfort: 80, energy: 50, voice: 80 }, aligned: { r1: 'b', r2: 'b', r3: 'b' } },
+  architect: { name: 'The Architect', idTag: 'Pedagogical form · building as teacher', icon: 'icon-architect', credo: '"The building is part of the curriculum. It teaches through the conditions it gives people and the behaviors it makes possible."', target: { comfort: 65, energy: 60, voice: 50 }, aligned: { r1: 'a', r2: 'b', r3: 'c' } },
+  commoner:  { name: 'The Commoner',  idTag: 'Shared stewardship · comfort in common', icon: 'icon-commoner',  credo: '"If this building is a commons, then comfort is a shared resource and all of us are responsible for how it is governed."', target: { comfort: 75, energy: 55, voice: 95 }, aligned: { r1: 'b', r2: 'c', r3: 'b' } }
 };
 
 const ROUNDS = {
