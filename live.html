@@ -11,8 +11,35 @@
   .live-header { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; border-bottom: 1px solid #333; padding-bottom: 16px; margin-bottom: 32px; }
   .live-header h1 { font-family: var(--font-display); font-size: 48px; margin: 0; letter-spacing: 0.02em; line-height: 1; text-transform: uppercase; }
   .live-meta { font-family: var(--font-h); font-size: 12px; color: #888; letter-spacing: 0.08em; text-transform: uppercase; }
+  .live-meta.is-burst { color: #f3c5b8; text-shadow: 0 0 18px rgba(255, 90, 60, 0.24); }
   .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ff5a3c; margin-right: 6px; animation: pulse 1.5s infinite; }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .just-arrived {
+    min-height: 44px;
+    margin: -8px 0 24px;
+    padding: 12px 16px;
+    border-left: 2px solid rgba(255, 90, 60, 0.75);
+    background: linear-gradient(90deg, rgba(255, 90, 60, 0.12) 0%, rgba(255, 90, 60, 0.03) 58%, rgba(255, 90, 60, 0) 100%);
+    color: rgba(245, 245, 240, 0);
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.22s ease, transform 0.22s ease, color 0.22s ease;
+    pointer-events: none;
+  }
+  .just-arrived strong {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: #ffd8cf;
+  }
+  .just-arrived.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    color: rgba(245, 245, 240, 0.94);
+  }
   .grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; }
   .panel { background: #0a0a0a; border: 1px solid #222; padding: 32px; }
   .panel h2 { font-family: var(--font-display); font-size: 28px; margin: 0 0 8px 0; letter-spacing: 0.01em; text-transform: uppercase; }
@@ -63,6 +90,8 @@
     <span id="session-count">0</span> sessions · auto-updating
   </div>
 </div>
+
+<div class="just-arrived" id="just-arrived" aria-live="polite"></div>
 
 <div class="grid">
   <div class="panel">
@@ -149,6 +178,49 @@
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   let allSessions = [];
+  let justArrivedTimer = null;
+  let sessionMetaTimer = null;
+  const sessionCountEl = document.getElementById('session-count');
+  const sessionMetaEl = document.querySelector('.live-meta');
+  const justArrivedEl = document.getElementById('just-arrived');
+  const CHOICE_LABELS = {
+    A: 'Lock down',
+    B: 'Convene',
+    C: 'Quiet fix'
+  };
+
+  function restartArrivalPulse(message) {
+    if (!justArrivedEl) return;
+
+    window.clearTimeout(justArrivedTimer);
+    window.clearTimeout(sessionMetaTimer);
+
+    justArrivedEl.innerHTML = message;
+    justArrivedEl.classList.remove('is-visible');
+    if (sessionMetaEl) sessionMetaEl.classList.remove('is-burst');
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        justArrivedEl.classList.add('is-visible');
+        if (sessionMetaEl) sessionMetaEl.classList.add('is-burst');
+      });
+    });
+
+    justArrivedTimer = window.setTimeout(() => {
+      justArrivedEl.classList.remove('is-visible');
+    }, 1500);
+
+    sessionMetaTimer = window.setTimeout(() => {
+      if (sessionMetaEl) sessionMetaEl.classList.remove('is-burst');
+    }, 950);
+  }
+
+  function announceInsertedSession(row) {
+    if (!row) return;
+    const personaName = row.persona_name || 'Someone';
+    const choiceLabel = CHOICE_LABELS[row.baseline_choice] || 'Arrived';
+    restartArrivalPulse(`&#10024; Someone just chose <strong>${personaName}</strong> &#8594; <strong>${choiceLabel}</strong>`);
+  }
 
   async function fetchAll() {
     const { data, error } = await sb
@@ -168,7 +240,7 @@
 
   function render() {
     const total = allSessions.length;
-    document.getElementById('session-count').textContent = total;
+    sessionCountEl.textContent = total;
 
     const baselineCounts = { A: 0, B: 0, C: 0 };
     const finalCounts = { A: 0, B: 0, C: 0 };
@@ -256,7 +328,11 @@
   fetchAll();
 
   sb.channel('live-sessions-' + Date.now())
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'live_sessions' }, () => fetchAll())
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_sessions' }, (payload) => {
+      announceInsertedSession(payload.new);
+      fetchAll();
+    })
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'live_sessions' }, () => fetchAll())
     .subscribe((status) => {
       console.log('Realtime status:', status);
     });
